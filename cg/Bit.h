@@ -1,7 +1,7 @@
-п»ї#ifndef BIT_H
+#ifndef BIT_H
 #define BIT_H
 
-// РњР°РєСЂРѕСЃС‹ РґР»СЏ СЂР°Р±РѕС‚С‹ СЃ Р±РёС‚Р°РјРё
+// Макросы для работы с битами
 #define SET_BIT(word, bit_flag) \
 	((word) = ((word) | (bit_flag)))
 #define RESET_BIT(word, bit_flag) \
