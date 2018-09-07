@@ -4,7 +4,15 @@
 #include "Object.h"
 #include "Camera.h"
 #include "Transformation.h"
+#include "Bit.h"
 #include <list>
+
+//Общие флаги отсечения
+#define CULL_OBJECT_X 0x0001// Отсечение по оси х
+#define CULL_OBJECT_Y 0x0002 // Отсечение по оси у
+#define CULL_OBJECT_Z 0x0004 // Отсечение по оси г
+#define CULL_OBJECT_XYZ (CULL_OBJECT_X | \
+CULL_OBJECT_Y| CULL_OBJECT_Z)
 
 // плоскость
 class Scene
@@ -20,64 +28,18 @@ public:
 	int fov; // поле зрения, всегда 90
 	int d;   // расстояние до плоскости проекции
 
-    Scene()
-    {
-		ar = 1;
-		fov = 90;
-		d = 1;
-	}
+    Scene();
 
 	// 430
-	void localToWorld()
-	{
-		Point point_tmp;
-		for (Object obj : objects)
-		{
-			obj.vertex_trans.clear();
-			for (Point point : obj.vertex_local)
-			{
-				point_tmp = Point(point.x + obj.center.x,
-					point.y + obj.center.y, point.z + obj.center.z, point.w);
-				obj.vertex_trans.push_back(point_tmp);
-			}
-		}
-	}
+    void localToWorld();
 
 	// 435
-	void worldToCam()
-	{
-		Rotate rotate;
-		RotateOptions ropX(AXIS_X, camera.ang_x, true);
-		RotateOptions ropY(AXIS_Y, camera.ang_y, true);
-		RotateOptions ropZ(AXIS_Z, camera.ang_z, true);
-	
-		MoveOptions mop(camera.point, true);
-		Move move;
-
-		for (Object obj : objects)
-		{
-			for (Point point : obj.vertex_trans)
-			{
-				point = Point(point.x - camera.point.x,
-					point.y - camera.point.y, point.z - camera.point.z, point.w);
-				
-				//YXZ поворот 437
-				Transformation::apply(point, move, mop);
-				Transformation::apply(point, rotate, ropY);
-				Transformation::apply(point, rotate, ropX);
-				Transformation::apply(point, rotate, ropZ);
-			}
-		}
-		Transformation::apply(camera.point, move, mop);
-		Transformation::apply(camera.point, rotate, ropY);
-		Transformation::apply(camera.point, rotate, ropX);
-		Transformation::apply(camera.point, rotate, ropZ);
-	}
+    void worldToCam();
 
 	//450
 	// d - расстояние до камеры
 	/*
-	void camToAxonoetric(int d = 1)
+    void camToAxonometric(int d = 1)
 	{
 		ar ...
 		for (Object obj : objects)
@@ -91,6 +53,31 @@ public:
 	}
 	*/
 
+    // Преобразование точки из мировых координат
+    // в камерные
+    Point cameraTransformation(Point old);
+
+    // Проверка необходимости отсечения по плоскости Z
+    bool cutZ(int culL_flags, Point sphere, Object obj );
+
+    // Проверка необходимости отсечения по плоскости Y
+     bool cutX(int culL_flags, Point sphere, Object obj );
+
+    // Проверка необходимости отсечения по плоскости X
+    bool cutY(int culL_flags, Point sphere, Object obj );
+
+    // Отбраковка объектов, 574
+    // Данная функция отбраковывает объекты,
+    // не входящие в область видимости. При этом
+    // используются параметры камеры и объекта. С помощью
+    // параметра culL_flags определяется, по каким осям
+    // следует производить отсечение- по оси х,у,z или по
+    // всем, для чего все флаги нужно объединить с помощью
+    // побитового оператора ИЛИ. (Установлены дефайны)
+    // Если объект отбраковывается, его состояние изменяется.
+    // В функции предполагается, что и камера, и объект заданы
+    // корректно!
+    void object_culling(int culL_flags);
 };
 
 #endif

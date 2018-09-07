@@ -29,12 +29,10 @@ Point::Point(double a, double b, double c, double d) // конструктор класса
 	init(a, b, c, d);
 }
 
-/*
 Point::Point(Options opt)
 {
 	init(opt[0], opt[1], opt[2], 1);
 }
-*/
 
 Point::Point(Point *point) // конструктор класса
 {
@@ -78,32 +76,3 @@ bool Point::operator!=(const Point& other)noexcept
 {
 	return !isEqual(other);
 }
-
-double Point::localX() const noexcept
-{
-	return x;
-}
-double Point::localY() const noexcept
-{
-	return y;
-}
-double Point::localZ() const noexcept
-{
-	return z;
-}
-/*
-double Point::worldX(Object f) const noexcept
-{
-	return x + f.center.x;
-}
-
-double Point::worldY(Object f) const noexcept
-{
-	return y + f.center.y;
-}
-
-double Point::worldZ(Object f) const noexcept
-{
-	return z + f.center.z;
-}
-*/

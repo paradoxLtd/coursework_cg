@@ -1,10 +1,6 @@
 #ifndef TRANSFORMATION_H
 #define TRANSFORMATION_H
 
-class Point;
-class Vector;
-class Options;
-
 #include "Point.h"
 #include "Vector.h"
 #include "Options.h"

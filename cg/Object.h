@@ -1,13 +1,11 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-class Point;
-class Vector;
 class Triangle;
-class Scene;
 
 #include "Triangle.h"
 #include "Vector.h"
+#include "Bit.h"
 
 #include <cmath>
 
@@ -51,7 +49,7 @@ public:
 	std::list<Point> vertex_trans; // список вершин с преобразованными мировыми координатами
 	int vertices_size; // размер списков
 
-    std::list<Triangle*> polygons; // список полигонов
+    std::list<Triangle> polygons; // список полигонов
 	int polygons_size; // количество полигонов
 
 	static int get_id()
@@ -59,45 +57,14 @@ public:
 		return next_id++;
 	}
 
-	Object()
-	{
-		id = get_id();
-		state = OBJECT_STATE_PASSIVE | OBJECT_STATE_INVISIBLE;
-		attr = 0;
-		avg_radius = 0;
-		max_radius = 0;
-		center = Point();
-		dir = Vector(); ux = Vector(); uy = Vector(); uz = Vector();
-		vertex_local = {};
-		vertex_trans = {};
-		vertices_size = 0;
-		polygons = {};
-		polygons_size = {};
-		name = "no name";
-	}
+    Object();
 
-	void updateRad()
-	{
-		if (vertex_local.size() < 1)
-			return;
+    void updateRad();
 
-        double mx = max_radius * max_radius, curr = 0;
-		double px, py, pz;
-		avg_radius = 0;
-		for (Point p : vertex_local)
-		{
-			px = p.x; py = p.y; pz = p.z;
-            if ((curr = (px * px + py * py + pz * pz)) > mx)
-				mx = curr;
-			avg_radius += curr;
-		}
-		max_radius = sqrt(mx);
-		avg_radius /= vertex_local.size();
-	}
+    void reset();
+
 
 };
-
-int Object::next_id = 0;
 
 // разобраться, как упорядочивать и проверять упорядочивание через список вершин
 // Предлагается через полярные координаты

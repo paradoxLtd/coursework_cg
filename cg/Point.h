@@ -1,9 +1,10 @@
 #ifndef POINT_H
 #define POINT_H
 
+class Options;
+
 #include "Resource.h"
-//#include "Object.h"
-//#include "Options.h"
+#include "Options.h"
 
 #define NO_POINT 0
 
@@ -21,15 +22,7 @@ public:
 	Point(Point *p);
 	Point(const Point &point);
 	Point(double a, double b, double c, double d);
-    //Point(Options ds);
-
-	double localX() const noexcept;
-	double localY() const noexcept;
-	double localZ() const noexcept;
-
-    //double worldX(Object f) const noexcept;
-    //double worldY(Object f) const noexcept;
-    //double worldZ(Object f) const noexcept;
+    Point(Options ds);
 
 	Point(Point &&point) noexcept;
 

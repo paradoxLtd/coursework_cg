@@ -1,6 +1,8 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
+class Point;
+
 #include "Point.h"
 
 class Vector
@@ -15,8 +17,6 @@ public:
 	{
 		x = 0; y = 0; z = 0;
 	}
-
-    Vector(Point &p1, Point &p2) : Vector(){};
 
     Vector(Point p1, Point p2);
 

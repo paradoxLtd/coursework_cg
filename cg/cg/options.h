@@ -1,6 +1,10 @@
 #ifndef OPTIONS_H
 #define OPTIONS_H
 
+class Point;
+
+#include <iostream>
+
 #include "Point.h"
 #include "Vector.h"
 
