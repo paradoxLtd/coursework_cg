@@ -1,9 +1,13 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-//#include "Scene.h"
-//#include "Triangle.h"
-//#include "Vector.h"
+class Point;
+class Vector;
+class Triangle;
+class Scene;
+
+#include "Triangle.h"
+#include "Vector.h"
 
 #include <cmath>
 
@@ -37,7 +41,7 @@ public:
 	std::list<Point> vertex_trans; // список вершин с преобразованными мировыми координатами
 	int vertices_size; // размер списков
 
-	std::list<Triangle> polygons; // список полигонов
+    std::list<Triangle*> polygons; // список полигонов
 	int polygons_size; // количество полигонов
 
 	static int get_id()

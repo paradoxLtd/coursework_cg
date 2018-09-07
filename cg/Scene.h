@@ -1,6 +1,9 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+class Camera;
+class Transformation;
+
 #include "Object.h"
 #include "Camera.h"
 #include "Transformation.h"
@@ -31,10 +34,10 @@ public:
 	void localToWorld()
 	{
 		Point point_tmp;
-		for (Object obj : objects)
+        for (Object obj : objects)
 		{
 			obj.vertex_trans.clear();
-			for (Point point : obj.vertex_local)
+            for (Point point : obj.vertex_local)
 			{
 				point_tmp = Point(point.x + obj.center.x,
 					point.y + obj.center.y, point.z + obj.center.z, point.w);
@@ -42,6 +45,7 @@ public:
 			}
 		}
 	}
+
 
 	// 435
 	void worldToCam()
@@ -77,7 +81,7 @@ public:
 	//450
 	// d - расстояние до камеры
 	/*
-	void camToAxonoetric(int d = 1)
+    void camToAxonometric(int d = 1)
 	{
 		ar ...
 		for (Object obj : objects)
