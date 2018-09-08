@@ -31,7 +31,7 @@ public:
     {
         if (index > 2)
         {
-            std::cout << "Êëàññ Options íå äîïóñêàåò îáğàùåíèå ê ıëåìåíòó ìàññèâà ïàğàìåòğîâ ñ èíäåêñîì áîëüøå 2 ";
+            std::cout << "ĞšĞ»Ğ°ÑÑ Options Ğ½Ğµ Ğ´Ğ¾Ğ¿ÑƒÑĞºĞ°ĞµÑ‚ Ğ¾Ğ±Ñ€Ğ°Ñ‰ĞµĞ½Ğ¸Ğµ Ğº ÑĞ»ĞµĞ¼ĞµĞ½Ñ‚Ñƒ Ğ¼Ğ°ÑÑĞ¸Ğ²Ğ° Ğ¿Ğ°Ñ€Ğ°Ğ¼ĞµÑ‚Ñ€Ğ¾Ğ² Ñ Ğ¸Ğ½Ğ´ĞµĞºÑĞ¾Ğ¼ Ğ±Ğ¾Ğ»ÑŒÑˆĞµ 2 ";
             return params[2];
         }
         return params[index];
@@ -39,7 +39,7 @@ public:
 };
 
 /*
-param[0/1/2] - ñäâèã ïî x/y/z
+param[0/1/2] - ÑĞ´Ğ²Ğ¸Ğ³ Ğ¿Ğ¾ x/y/z
 */
 class MoveOptions : public Options
 {
@@ -50,7 +50,7 @@ public:
 };
 
 /*
-param[0/1/2] - êîıôôèöèåíò ìàñøòàáèğîâàíèÿ x/y/z
+param[0/1/2] - ĞºĞ¾ÑÑ„Ñ„Ğ¸Ñ†Ğ¸ĞµĞ½Ñ‚ Ğ¼Ğ°ÑÑˆÑ‚Ğ°Ğ±Ğ¸Ñ€Ğ¾Ğ²Ğ°Ğ½Ğ¸Ñ x/y/z
 */
 class ScaleOptions : public Options
 {
@@ -60,8 +60,8 @@ public:
 
 
 /*
-param[0] - âûáîğ îñè, x/y/z
-param[1] - óãîë ïîâîğîòà
+param[0] - Ğ²Ñ‹Ğ±Ğ¾Ñ€ Ğ¾ÑĞ¸, x/y/z
+param[1] - ÑƒĞ³Ğ¾Ğ» Ğ¿Ğ¾Ğ²Ğ¾Ñ€Ğ¾Ñ‚Ğ°
 */
 struct RotateOptions : public Options
 {
@@ -70,4 +70,4 @@ public:
     RotateOptions(int choose, double angle, bool in = false);
 };
 
-#endif
+#endif // OPTIONS_H

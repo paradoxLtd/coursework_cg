@@ -19,4 +19,4 @@ private:
     Ui::MainWindow *ui;
 };
 
-#endif
+#endif // MAINWINDOW_H

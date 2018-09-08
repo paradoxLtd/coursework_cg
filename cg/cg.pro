@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2018-09-07T14:59:36
+# Project created by QtCreator 2018-09-09T00:13:18
 #
 #-------------------------------------------------
 
@@ -25,29 +25,30 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    Transforamtion.cpp \
-    Vector.cpp \
-    Point.cpp \
-    Triangle.cpp \
+    indexes.cpp \
     object.cpp \
+    options.cpp \
+    point.cpp \
     scene.cpp \
-    options.cpp
+    transformation.cpp \
+    triangle.cpp \
+    vector.cpp
 
 HEADERS += \
         mainwindow.h \
-    Options.h \
-    Point.h \
-    Bit.h \
-    Triangle.h \
-    Resource.h \
-    Object.h \
-    Scene.h \
-    Transformation.h \
-    Camera.h \
-    TriangleList.h \
-    Vector.h \
-    #all.h
-    loader.h
+    bit.h \
+    camera.h \
+    loader.h \
+    object.h \
+    options.h \
+    point.h \
+    resource.h \
+    scene.h \
+    transformation.h \
+    triangle.h \
+    trianglelist.h \
+    vector.h \
+    indexes.h
 
 FORMS += \
         mainwindow.ui
