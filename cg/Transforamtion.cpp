@@ -79,13 +79,13 @@ Matrix Matrix::multiplicate(Matrix a, Matrix b)
 				ret.matrix[i][j] += a.matrix[i][k] * b.matrix[k][j];
 			}
 		}
-	}
+    }
+    return ret;
 }
 
 Vector Matrix::multiplicate(Vector v, Matrix m)
 {
-	Matrix vec_m(v);
-	Matrix result(multiplicate(vec_m, m));
+    Matrix vec_m(v);
 	Vector vec_v(multiplicate(vec_m, m).asVector()); //порядок слева вектор, справа матрица
 	return vec_v;
 }
@@ -169,7 +169,7 @@ Vector Rotate::rotateZ(const Vector &vector, double angle)
 }
 
 Vector Rotate::apply(const Vector &vector, Options &opt){
-	int choose = (int)opt[0];
+    int choose = (int)opt[0];
 	double angle = opt[1];
 	if (opt.inverse)
 		angle *= -1;
@@ -209,5 +209,5 @@ Point Transformation::apply(Point &point,
     Vector vk;
     Vector v(point, p);
 	Vector after = act.apply(v, opt);
-	return v.asPoint();
+    return after.asPoint();
 }

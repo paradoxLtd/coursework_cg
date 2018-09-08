@@ -30,7 +30,8 @@ SOURCES += \
     Point.cpp \
     Triangle.cpp \
     object.cpp \
-    scene.cpp
+    scene.cpp \
+    options.cpp
 
 HEADERS += \
         mainwindow.h \

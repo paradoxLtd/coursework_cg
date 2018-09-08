@@ -5,13 +5,13 @@
 void Triangle::copy(const Triangle& triangle) noexcept
 {
 
-    this->object = triangle.object; // СѓРєР°Р·Р°С‚РµР»СЊ РЅР° СЃРїРёСЃРѕРє РІРµСЂС€РёРЅ
-    this-> indexes[0] = triangle.indexes[0]; // 3 РёРЅРґРµРєСЃР° РґР»СЏ РІС‹Р±РѕСЂР° 3-РµС… С‚РѕС‡РµРє
+    this->object = triangle.object; // указатель на список вершин
+    this-> indexes[0] = triangle.indexes[0]; // 3 индекса для выбора 3-ех точек
     this->indexes[1] = triangle.indexes[1];
     this->indexes[2] = triangle.indexes[2];
-    this->state = triangle.state; // СЃРѕСЃС‚РѕСЏРЅРёРµ РїРѕР»РёРіРѕРЅР° - Р°РєС‚РёРІРЅС‹Р№, РѕС‚СЃРµС‡РµРЅРЅС‹Р№ Рё С‚.Рґ.
-    this->attr = triangle.attr; // С„РёР·РёС‡РµСЃРєРёРµ СЃРІРѕР№СЃС‚РІР° - РїСЂРµРґСЃС‚Р°РІР»СЏРµС‚ РёР· СЃРµР±СЏ СЂСЏРґ С„Р»Р°РіРѕРІ, С‚Р°РєРёС… РєР°Рє РїСЂРѕР·СЂР°С‡РЅРѕСЃС‚СЊ, СЃРїРѕСЃРѕР±РЅРѕСЃС‚СЊ РѕС‚СЂР°Р¶Р°С‚СЊ С†РІРµС‚
-    this->color = triangle.color; // С†РІРµС‚
+    this->state = triangle.state; // состояние полигона - активный, отсеченный и т.д.
+    this->attr = triangle.attr; // физические свойства - представляет из себя ряд флагов, таких как прозрачность, способность отражать цвет
+    this->color = triangle.color; // цвет
 }
 
 void Triangle::destroy() noexcept
@@ -22,13 +22,13 @@ void Triangle::destroy() noexcept
 Triangle::Triangle(Object* obj, int i1, int i2, int i3,
                    int st, int a, QColor col)
 {
-    this->object = obj; // СѓРєР°Р·Р°С‚РµР»СЊ РЅР° СЃРїРёСЃРѕРє РІРµСЂС€РёРЅ
-    this->indexes[0] = i1; // 3 РёРЅРґРµРєСЃР° РґР»СЏ РІС‹Р±РѕСЂР° 3-РµС… С‚РѕС‡РµРє
+    this->object = obj; // указатель на список вершин
+    this->indexes[0] = i1; // 3 индекса для выбора 3-ех точек
     this->indexes[1] = i2;
     this->indexes[2] = i3;
-    this->state = st; // СЃРѕСЃС‚РѕСЏРЅРёРµ РїРѕР»РёРіРѕРЅР° - Р°РєС‚РёРІРЅС‹Р№, РѕС‚СЃРµС‡РµРЅРЅС‹Р№ Рё С‚.Рґ.
-    this->attr = a; // С„РёР·РёС‡РµСЃРєРёРµ СЃРІРѕР№СЃС‚РІР° - РїСЂРµРґСЃС‚Р°РІР»СЏРµС‚ РёР· СЃРµР±СЏ СЂСЏРґ С„Р»Р°РіРѕРІ, С‚Р°РєРёС… РєР°Рє РїСЂРѕР·СЂР°С‡РЅРѕСЃС‚СЊ, СЃРїРѕСЃРѕР±РЅРѕСЃС‚СЊ РѕС‚СЂР°Р¶Р°С‚СЊ С†РІРµС‚
-    this->color = col; // С†РІРµС‚
+    this->state = st; // состояние полигона - активный, отсеченный и т.д.
+    this->attr = a; // физические свойства - представляет из себя ряд флагов, таких как прозрачность, способность отражать цвет
+    this->color = col; // цвет
 }
 
 Triangle::Triangle(const Triangle &triangle)
@@ -56,19 +56,94 @@ Triangle& Triangle::operator=(Triangle&& other)noexcept
 	return *this;
 }
 
-/*
+// 581 Получить вектор нормали
+Vector Triangle::getNormal(std::list<Point> vertix)
+const noexcept
+{
+    // Векторы плоскости, которые векторно умножатся
+    // и дадут вектор нормали.
+    Vector u, v, n;
+
+    // 3 точки полигона, задающие плоскости
+    Point p0, p1, p2;
+
+    // индекс и счетчик количества найденных точек
+    int i = 0, kol = 0;
+
+    // https://metanit.com/cpp/tutorial/7.3.php
+     for (auto  it = vertix.begin();
+          it != vertix.end(); ++it)
+     {
+         if (i == indexes[0])
+         {
+             p0 = *it;
+             kol++;
+         }
+
+         if (i == indexes[1])
+         {
+             p1 = *it;
+             kol++;
+         }
+
+         if (i == indexes[2])
+         {
+             p2 = *it;
+             kol++;
+         }
+
+         if (kol == 3)
+            it = vertix.end();
+         i++;
+     }
+
+    // Обход вершин осуществляется по часовой стрелке,
+    // так что u=pO->p1, v=p0->p2, n=u*v
+
+    u = Vector(p0, p1);
+    v = Vector(p0, p2);
+    n = Vector::vectorMultiplication(u, v);
+
+    return n;
+}
+// нормаль для исходного полигона
+Vector Triangle::normalOrigin() const noexcept
+{
+    return getNormal(object->vertex_local);
+}
+
+// нормаль для измененного полигона(после преобразо
+// ваний из одних координат в другие)
+Vector Triangle::normalTrans() const noexcept
+{
+    return getNormal(object->vertex_trans);
+}
+
+// Сравнение полигонов
 bool Triangle::isEqual(
 	const Triangle &O) noexcept
 {
-	if (points.size == O.points.size)
-	{
-		for (Point p1 : points; )
-		{
+    bool boolObject = this->object == O.object;
+    bool boolIndexes = true;
+    for (int i = 0; i < 3; i++)
+    {
+        if (this->indexes[i] == O.indexes[i])
+        {
+            boolIndexes = false;
+            break;
+        }
+    }
 
-		}
-	}
-	return 0;
-	return ((this->A == O.A) && (this->B == O.B) && (this->C == O.C));
+    bool boolInfo = (
+                (this->state == O.state)
+                &&
+                (this->attr == O.attr)
+                &&
+                (this->color == O.color)
+                );
+
+    return (boolObject && boolIndexes && boolInfo);
+
 }
 
 bool Triangle::operator==(const Triangle& other)noexcept
@@ -80,4 +155,3 @@ bool Triangle::operator!=(const Triangle& other)noexcept
 {
 	return !isEqual(other);
 }
-*/

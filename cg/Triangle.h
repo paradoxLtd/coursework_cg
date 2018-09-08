@@ -11,24 +11,24 @@ class Object;
 
 // 754
 //Состояния объектов
-#define POLYNOM_STATE_NULL 0x0000
-#define POLYNOM_STATE_ACTIVE 0x0001
-#define POLYNOM_STATE_CLIPPED 0x0002
-#define POLYNOM_STATE_BACKFACE 0x0004
+#define POLYGON_STATE_NULL 0x0000
+#define POLYGON_STATE_ACTIVE 0x0001
+#define POLYGON_STATE_CLIPPED 0x0002
+#define POLYGON_STATE_BACKFACE 0x0004
 
-#define POLYNOM_ATTR_2SIDED 0x0001
-#define POLYNOM_ATTR_TRANSPARENT 0x0002
-#define POLYNOM_ATTR_8BITCOLOR 0x0004
-#define POLYNOM_ATTR_RGB16 0x0008
-#define POLYNOM_ATTR_RGB24 0x0010
+#define POLYGON_ATTR_2SIDED 0x0001
+#define POLYGON_ATTR_TRANSPARENT 0x0002
+#define POLYGON_ATTR_8BITCOLOR 0x0004
+#define POLYGON_ATTR_RGB16 0x0008
+#define POLYGON_ATTR_RGB24 0x0010
 
-#define POLYNOM_SHADE_MODE_PURE 0x0020
-#define POLYNOM_SHADE_MODE_CONSTANT 0x0020
-#define POLYNOM_SHADE_MODE_FLAT 0x0040
-#define POLYNOM_SHADE_MODE_GOURAUD 0x0080
-#define POLYNOM_SHADE_MODE_PHONG 0x0100
-#define POLYNOM_SHADE_MODE_FASTPHONG 0x0100
-#define POLYNOM_SHADE_MODE_TEXTURE 0x0200
+#define POLYGON_SHADE_MODE_PURE 0x0020
+#define POLYGON_SHADE_MODE_CONSTANT 0x0020
+#define POLYGON_SHADE_MODE_FLAT 0x0040
+#define POLYGON_SHADE_MODE_GOURAUD 0x0080
+#define POLYGON_SHADE_MODE_PHONG 0x0100
+#define POLYGON_SHADE_MODE_FASTPHONG 0x0100
+#define POLYGON_SHADE_MODE_TEXTURE 0x0200
 
 class Triangle
 {
@@ -38,11 +38,14 @@ private:
 
 	void destroy() noexcept;
 
-public:
-	//std::list<Point> points;
+    // Определение нормали, не для внешнего использования
+    // Используйте один из двух публичных методов
+    Vector getNormal(std::list<Point> vertix) const noexcept;
 
+public:
 	Object *object; // указатель на список вершин
 	int indexes[3]; // 3 индекса для выбора 3-ех точек
+    Vector normal;
 
 	int state; // состояние полигона - активный, отсеченный и т.д.
 	int attr; // физические свойства - представляет из себя ряд флагов, таких как прозрачность, способность отражать цвет
@@ -72,6 +75,13 @@ public:
 	bool operator==(const Triangle &B)noexcept;
 
 	bool operator!=(const Triangle &B)noexcept;
+
+    // нормаль для исходного полигона
+    Vector normalOrigin() const noexcept;
+
+    // нормаль для измененного полигона(после преобразо
+    // ваний из одних координат в другие)
+    Vector normalTrans() const noexcept;
 };
 
 #endif

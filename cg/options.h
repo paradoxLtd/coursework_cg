@@ -18,20 +18,20 @@ class Options
 public:
     double params[3];
     bool inverse;
-    Options() {};
+    Options() {}
     Options(double a, double b, double c)
     {
         params[0] = a;
         params[1] = b;
         params[2] = c;
         inverse = false;
-    };
+    }
 
     double& operator[] (int index)
     {
         if (index > 2)
         {
-            std::cout << "ĞšĞ»Ğ°ÑÑ Options Ğ½Ğµ Ğ´Ğ¾Ğ¿ÑƒÑĞºĞ°ĞµÑ‚ Ğ¾Ğ±Ñ€Ğ°Ñ‰ĞµĞ½Ğ¸Ğµ Ğº ÑĞ»ĞµĞ¼ĞµĞ½Ñ‚Ñƒ Ğ¼Ğ°ÑÑĞ¸Ğ²Ğ° Ğ¿Ğ°Ñ€Ğ°Ğ¼ĞµÑ‚Ñ€Ğ¾Ğ² Ñ Ğ¸Ğ½Ğ´ĞµĞºÑĞ¾Ğ¼ Ğ±Ğ¾Ğ»ÑŒÑˆĞµ 2 ";
+            std::cout << "Êëàññ Options íå äîïóñêàåò îáğàùåíèå ê ıëåìåíòó ìàññèâà ïàğàìåòğîâ ñ èíäåêñîì áîëüøå 2 ";
             return params[2];
         }
         return params[index];
@@ -39,93 +39,35 @@ public:
 };
 
 /*
-param[0/1/2] - ÑĞ´Ğ²Ğ¸Ğ³ Ğ¿Ğ¾ x/y/z
+param[0/1/2] - ñäâèã ïî x/y/z
 */
 class MoveOptions : public Options
 {
 public:
-    MoveOptions()
-    {
-        params[0] = 0;
-        params[1] = 0;
-        params[2] = 0;
-        inverse = false;
-    }
+    MoveOptions();
 
-    MoveOptions(Point p)
-    {
-        params[0] = p.x;
-        params[1] = p.y;
-        params[2] = p.z;
-        inverse = false;
-    }
-    MoveOptions(Point p, bool in)
-    {
-        params[0] = p.x;
-        params[1] = p.y;
-        params[2] = p.z;
-        inverse = in;
-    }
+    MoveOptions(Point *p, bool inv = false);
 };
 
+/*
+param[0/1/2] - êîıôôèöèåíò ìàñøòàáèğîâàíèÿ x/y/z
+*/
 class ScaleOptions : public Options
 {
 public:
-    ScaleOptions()
-    {
-        params[0] = 1;
-        params[1] = 1;
-        params[2] = 1;
-        inverse = false;
-    }
+    ScaleOptions();
 };
+
+
 /*
-param[0/1/2] - ĞºĞ¾ÑÑ„Ñ„Ğ¸Ñ†Ğ¸ĞµĞ½Ñ‚ Ğ¼Ğ°ÑÑˆÑ‚Ğ°Ğ±Ğ¸Ñ€Ğ¾Ğ²Ğ°Ğ½Ğ¸Ñ x/y/z
+param[0] - âûáîğ îñè, x/y/z
+param[1] - óãîë ïîâîğîòà
 */
-
-
 struct RotateOptions : public Options
 {
 public:
-    RotateOptions()
-    {
-        params[0] = NOTHING;
-        params[1] = 0;
-        params[2] = 0;
-        inverse = false;
-    }
-    RotateOptions(int choose, double angle, bool in = false)
-    {
-        params[2] = 0;
-        params[1] = angle;
-        params[0] = NOTHING;
-        switch (choose)
-        {
-        case AXIS_X:
-        {
-            params[0] = AXIS_X;
-            break;
-        }
-        case AXIS_Y:
-        {
-            params[0] = AXIS_Y;
-            break;
-        }
-        case AXIS_Z:
-        {
-            params[0] = AXIS_Z;
-            break;
-        }
-        default:
-            std::cout << "Ğ£ĞºĞ°Ğ·Ğ°Ğ½Ğ° Ğ½ĞµÑÑƒÑ‰ĞµÑÑ‚Ğ²ÑƒÑÑ‰Ğ°Ñ Ğ¾ÑÑŒ Ğ¿Ğ¾Ğ²Ğ¾Ñ€Ğ¾Ñ‚Ğ°" << choose;
-            params[1] = 0;
-        }
-        inverse = in;
-    }
+    RotateOptions();
+    RotateOptions(int choose, double angle, bool in = false);
 };
-/*
-param[0] - Ğ²Ñ‹Ğ±Ğ¾Ñ€ Ğ¾ÑĞ¸, x/y/z
-param[1] - ÑƒĞ³Ğ¾Ğ» Ğ¿Ğ¾Ğ²Ğ¾Ñ€Ğ¾Ñ‚Ğ°
-*/
 
 #endif

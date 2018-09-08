@@ -2,18 +2,18 @@
 
 void Object::reset()
 {
-        // РЎР±СЂРѕСЃРёРј С„Р»Р°Рі РѕР±СЉРµРєС‚Р°, СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёР№ РѕС‚Р±СЂР°РєРѕРІРєРµ
+        // Сбросим флаг объекта, соответствующий отбраковке
         RESET_BIT(this->state, OBJECT_STATE_CULLED);
 
-        // РўРµРїРµСЂСЊ СЃРґРµР»Р°РµРј С‚Рѕ Р¶Рµ СЃР°РјРѕРµ РґР»СЏ С„Р»Р°РіРѕРІ РѕС‚СЃРµС‡РµРЅРёСЏ Рё
-        // РѕР±СЂР°С‚РЅС‹С… РїРѕРІРµСЂС…РЅРѕСЃС‚РµР№ РјРЅРѕРіРѕСѓРіРѕР»СЊРЅРёРєРѕРІ
+        // Теперь сделаем то же самое для флагов отсечения и
+        // обратных поверхностей многоугольников
         for (Triangle pol : polygons)
         {
-            // Р•СЃР»Рё С‚СЂРµСѓРіРѕР»СЊРЅРёРє РІРёРґРµРЅ
-            if (!(pol.state &  POLYNOM_STATE_ACTIVE))
+            // Если треугольник виден
+            if (!(pol.state &  POLYGON_STATE_ACTIVE))
                 continue;
-            RESET_BIT(pol.state, POLYNOM_STATE_CLIPPED);
-            RESET_BIT(pol.state, POLYNOM_STATE_BACKFACE);
+            RESET_BIT(pol.state, POLYGON_STATE_CLIPPED);
+            RESET_BIT(pol.state, POLYGON_STATE_BACKFACE);
         }
 }
 
@@ -52,5 +52,4 @@ void Object::updateRad()
     max_radius = sqrt(mx);
     avg_radius /= vertex_local.size();
 }
-
 int Object::next_id = 0;
