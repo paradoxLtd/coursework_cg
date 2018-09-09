@@ -55,7 +55,7 @@ Triangle& Triangle::operator=(Triangle&& other)noexcept
 }
 
 // 581 Получить вектор нормали
-Vector Triangle::getNormal(std::list<Point> vertix)
+Vector Triangle::getNormal(std::vector<Point> &vertix)
 const noexcept
 {
     // Векторы плоскости, которые векторно умножатся

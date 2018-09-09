@@ -45,17 +45,17 @@ public:
     // Локальные оси для отслеживания ориентации объекта (обновляются
     // автоматически при вызове функции поворота)
 
-    std::list<Point> vertex_local; // список вершин с локальными координатами
-    std::list<Point> vertex_trans; // список вершин с преобразованными мировыми координатами
+    std::vector<Point> vertex_local; // список вершин с локальными координатами
+    std::vector<Point> vertex_trans; // список вершин с преобразованными мировыми координатами
     int vertices_size; // размер списков
 
     // std::list<Point> normal;
     // std::list<Point> normal_trans;
 
-    std::list<Point> texture_coords;
-    std::list<Point> texture_coords_trans;
+    std::vector<Point> texture_coords;
+    std::vector<Point> texture_coords_trans;
 
-    std::list<Triangle> polygons; // список полигонов
+    std::vector<Triangle> polygons; // список полигонов
     int polygons_size; // количество полигонов
 
     static int get_id()

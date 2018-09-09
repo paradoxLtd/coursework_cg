@@ -20,7 +20,8 @@ Camera &Camera::operator =(const Camera &c)
     return *this;
 }
 
-void Camera::_init(int attr, Point &position, Vector &u, Vector &v, Vector &n, Point &target, double n_plane, double f_plane, double viewp_w, double viewp_h)
+void Camera::_init(int attr, Point &position, Vector &u, Vector &v, Vector &n, Point &target,
+                   double n_plane, double f_plane, double viewp_w, double viewp_h)
 {
     this->attr = attr;
     this->position = position;
@@ -136,7 +137,7 @@ void Camera::build_cam_matrix()
 
     this->mcam = Matrix::multiplicate(t_matrix, uvn_matrix);
 
-    //c568, там приводится сверический режим и обычный
+    //c568, там приводится сферический режим и обычный
     //пока для простоты (возможно и не понадобится сферический) реализуем простой режим
 
 }

@@ -42,7 +42,7 @@ private:
 
     // Определение нормали, не для внешнего использования
     // Используйте один из двух публичных методов
-    Vector getNormal(std::list<Point> vertix) const noexcept;
+    Vector getNormal(std::vector<Point> &vertix) const noexcept;
 
 public:
     Object *object; // указатель на объект

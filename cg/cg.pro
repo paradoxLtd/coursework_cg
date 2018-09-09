@@ -34,7 +34,8 @@ SOURCES += \
     triangle.cpp \
     vector.cpp \
     camera.cpp \
-    plane.cpp
+    plane.cpp \
+    matrix.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -51,7 +52,8 @@ HEADERS += \
     trianglelist.h \
     vector.h \
     indexes.h \
-    plane.h
+    plane.h \
+    matrix.h
 
 FORMS += \
         mainwindow.ui

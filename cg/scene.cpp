@@ -230,9 +230,6 @@ void Scene::removeBackSurfaces()
     // Первая точка
     Point p0;
 
-    // Итератор движения по списку вершин
-    std::list<Point>::iterator it;
-
     // Вектор нормали и вектор, направленный в точку наблюдения
     Vector n, view;
 
@@ -268,9 +265,7 @@ void Scene::removeBackSurfaces()
 
             // Получаем точку плоскости - она же
             // начало вектора нормали
-            it = obj.vertex_trans.begin();
-            std::advance(it, pol.indexes_vert[0]);
-            p0 = *it;
+            p0 = obj.vertex_trans[pol.indexes_vert[0]];
 
             // Вектор направленный от начала
 
@@ -293,4 +288,46 @@ void Scene::removeBackSurfaces()
             }
         }
     }
+}
+
+
+void camToAxonometricAndScreenObject(Object *obj, Camera *cam)
+{
+    // ПРИМЕЧАНИЕ. В этой функции не используются матрицы.
+    // Функция преобразует объект, заданный в координатах
+    // камеры, в экранные координаты на основе параметров
+    // камеры. Функция работает только с вершинами,
+    // содержащимися в массиве vlist_trans[}. Кроме прочего,
+    // функция меняет направление оси у, поэтому
+    // генерируемые ею координаты являются экранными,
+    // готовыми для визуализации
+
+
+    // Примечание он пишет что матрицами не так производительно
+    float alpha = (0.5*cam->viewplane_width - 0.5);
+    float beta = (0.5*cam->viewplane_height - 0.5);
+
+    for (int i = 0; i < obj->vertices_size; i++)
+    {
+        double z = obj->vertex_trans[i].z;
+        //obj->vertex_trans[i].x = cam->view_dst_hor * obj->vertex_trans[i].x / z;
+        //obj->vertex_trans[i].y =  cam->view_dst_ver * obj->vertex_trans[i].y * cam->asp_ratio / z;
+        // пока не понял откуда берутся view_dst_hor view_dst_ver в формуле вроде только dist
+        // to axon
+        obj->vertex_trans[i].x = cam->dst * obj->vertex_trans[i].x / z;
+        obj->vertex_trans[i].y =  cam->dst * obj->vertex_trans[i].y * cam->asp_ratio / z;
+
+
+        // to screen
+        obj->vertex_trans[i].x += alpha;
+        obj->vertex_trans[i].y = -obj->vertex_trans[i].y + beta;
+    }
+    /*for (Object obj : objects)
+    {
+        for (Point point : obj.vertex_trans)
+        {
+            point.x = d * point.x / point.z;
+            point.y = d * point.y / point.z;
+        }
+    }*/
 }

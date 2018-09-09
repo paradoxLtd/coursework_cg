@@ -6,6 +6,7 @@ class Point;
 #include "point.h"
 #include "vector.h"
 #include "transformation.h"
+#include "matrix.h"
 #include "plane.h"
 #include <cmath>
 
@@ -33,26 +34,28 @@ public:
     double dst;
     double near_plane, far_plane; // Ближняяи дальние плоскости отсечения
     Point position; //Положение камеры в мировых координатах
+    double view_dst_hor, view_dst_ver;// расстояния по горизонтали и вертикали,
+                                     //используемые при аксонометрическом преобразовании
 
+    double asp_ratio;
 private:
     int state; //Состояние камеры
-    int attr; //атрибутыкамеры
+    int attr; //атрибуты камеры
 
     Vector u, v, n; //Вектора, на которых основана UVN модель камеры
     Point target; // Точка, на которую смотрит камера в модели UVN
-    double view_dst_hor, view_dst_ver;// расстояния по горизонтали и вертикали,
-                                     //используемые при аксонометрическом преобразовании.
+
     double fov; //Field of View, как правило это pi/2 (90 гр), для дальнейшего
                 //простого отсечения
 
     Plane left_plane, right_plane, top_plane, bottom_plane;
 
     double viewport_w, viewport_h, viewport_xc, viewport_yc;
-    double asp_ratio;
+
 
     Matrix mcam; //матрица перехода из коор-т матрицы в координаты камеры
     Matrix mper; //из камеры в аксонометрические
-    Matrix mscr; //изаксонометрических в экранные
+    Matrix mscr; //из аксонометрических в экранные
 
     void _copy(const Camera &c);
 

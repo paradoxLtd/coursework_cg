@@ -21,7 +21,7 @@ private:
 public:
     //HDC hdc;
     double A, B, C, D;
-    std::list<Object> objects;
+    std::vector<Object> objects;
     Camera camera;
 
     int ar;  // соотношение длины и ширины
@@ -36,22 +36,10 @@ public:
     // 435
     void worldToCam();
 
-    //450
+    //450; 583
     // d - расстояние до камеры
-    /*
-    void camToAxonometric(int d = 1)
-    {
-        ar ...
-        for (Object obj : objects)
-        {
-            for (Point point : obj.vertex_trans)
-            {
-                point.x = d * point.x / point.z;
-                point.y = d * point.y / point.z;
-            }
-        }
-    }
-    */
+    // Преобразование в аксонометрические
+    void camToAxonometricAndScreenObject(Object *obj, Camera *cam);
 
     // Преобразование точки из мировых координат
     // в камерные

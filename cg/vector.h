@@ -13,7 +13,7 @@ class Vector
 private:
 
 public:
-    double x, y, z;
+    double x, y, z, w;
 
     /*Конструкторы */
     Vector()
