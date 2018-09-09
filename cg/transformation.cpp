@@ -1,4 +1,4 @@
-#include "Transformation.h"
+#include "transformation.h"
 #include <cmath>
 
 Matrix::Matrix()
@@ -61,6 +61,18 @@ Matrix::Matrix(Vector a)
     }
 }
 
+Matrix& Matrix::operator = (const Matrix &m)
+{
+    std::copy(&m.matrix[0][0], &m.matrix[0][0] + SIZE * SIZE, &this->matrix[0][0]);
+    return *this;
+}
+
+Matrix & Matrix::operator=(Matrix&& m)
+{
+    std::move(&m.matrix[0][0], &m.matrix[0][0] + SIZE * SIZE, &this->matrix[0][0]);
+    return *this;
+}
+
 Vector Matrix::asVector() const
 {
     Vector ret;
@@ -88,6 +100,19 @@ Vector Matrix::multiplicate(Vector v, Matrix m)
     Matrix vec_m(v);
     Vector vec_v(multiplicate(vec_m, m).asVector()); //порядок слева вектор, справа матрица
     return vec_v;
+}
+
+void Matrix::eye()
+{
+    double m[SIZE][SIZE] =
+    {
+        { 1, 0, 0, 0 },
+        { 0, 1, 0, 0 },
+        { 0, 0, 1, 0 },
+        { 0, 0, 0, 1 }
+    };
+
+    std::copy(&m[0][0], &m[0][0] + SIZE * SIZE, &this->matrix[0][0]);
 }
 
 Vector Move::apply(const Vector &vector, Options &opt)
@@ -211,3 +236,4 @@ Point Transformation::apply(Point &point,
     Vector after = act.apply(v, opt);
     return after.asPoint();
 }
+

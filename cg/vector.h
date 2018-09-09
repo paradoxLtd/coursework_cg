@@ -3,7 +3,10 @@
 
 class Point;
 
-#include "Point.h"
+#include "point.h"
+#include <cmath>
+
+#define EPS 1e-6
 
 class Vector
 {
@@ -49,6 +52,8 @@ public:
         const Vector &vector2) noexcept;
 
     Vector operator*(const Vector &v1) noexcept;
+
+    void normalize();
 
     Point asPoint();
 };

@@ -3,8 +3,8 @@
 
 class Options;
 
-#include "Resource.h"
-#include "Options.h"
+#include "resource.h"
+#include "options.h"
 
 #define NO_POINT 0
 

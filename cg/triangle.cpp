@@ -1,4 +1,4 @@
-#include "Triangle.h"
+#include "triangle.h"
 #include <iostream>
 
 Triangle::Triangle(Object* ob, Indexes &v, Indexes &vt,

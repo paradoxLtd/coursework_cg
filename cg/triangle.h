@@ -7,8 +7,8 @@
 class Object;
 
 #include "indexes.h"
-#include "Point.h"
-#include "Object.h"
+#include "point.h"
+#include "object.h"
 
 // 754
 //Состояния объектов

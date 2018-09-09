@@ -4,8 +4,8 @@
 #include <list>
 #include <QColor>
 
-#include "Point.h"
-#include "Object.h"
+#include "point.h"
+#include "object.h"
 
 // Перед отсечениями сливаем все многоугольники в общий котел
 class TriangleInList

@@ -1,4 +1,4 @@
-#include "Point.h"
+#include "point.h"
 #include <iostream>
 
 void Point::init(double a, double b, double c, double d)

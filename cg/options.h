@@ -5,8 +5,8 @@ class Point;
 
 #include <iostream>
 
-#include "Point.h"
-#include "Vector.h"
+#include "point.h"
+#include "vector.h"
 
 #define AXIS_X 101
 #define AXIS_Y 102

@@ -1,10 +1,10 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include "Object.h"
-#include "Camera.h"
-#include "Transformation.h"
-#include "Bit.h"
+#include "object.h"
+#include "camera.h"
+#include "transformation.h"
+#include "bit.h"
 #include <list>
 
 //Общие флаги отсечения

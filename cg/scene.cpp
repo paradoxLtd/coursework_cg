@@ -1,4 +1,4 @@
-#include "Scene.h"
+#include "scene.h"
 
 void Scene::localToWorld()
 {
@@ -21,7 +21,7 @@ Point Scene::cameraTransformation(Point old)
     Point ret(old);
 
     // Создаем настроки для преобразования точки
-    Rotate rotate;
+    /*Rotate rotate;
     RotateOptions ropX(AXIS_X, camera.ang_x, true);
     RotateOptions ropY(AXIS_Y, camera.ang_y, true);
     RotateOptions ropZ(AXIS_Z, camera.ang_z, true);
@@ -35,12 +35,12 @@ Point Scene::cameraTransformation(Point old)
     Transformation::apply(ret, rotate, ropX);
     Transformation::apply(ret, rotate, ropZ);
 
-    return ret;
+    return ret;*/
 }
 
 void Scene::worldToCam()
 {
-    Rotate rotate;
+    /*Rotate rotate;
     RotateOptions ropX(AXIS_X, camera.ang_x, true);
     RotateOptions ropY(AXIS_Y, camera.ang_y, true);
     RotateOptions ropZ(AXIS_Z, camera.ang_z, true);
@@ -65,7 +65,9 @@ void Scene::worldToCam()
     Transformation::apply(camera.point, move, mop);
     Transformation::apply(camera.point, rotate, ropY);
     Transformation::apply(camera.point, rotate, ropX);
-    Transformation::apply(camera.point, rotate, ropZ);
+    Transformation::apply(camera.point, rotate, ropZ);*/
+
+
 }
 
 Scene::Scene()
@@ -79,8 +81,8 @@ Scene::Scene()
 bool Scene::cutZ(int culL_flags, Point sphere, Object obj )
 {
     // Координаты плоскостей отсечения камеры
-    double farZ = camera.far_clip_z;
-    double nearZ = camera.near_clip_z;
+    double farZ = camera.far_plane;
+    double nearZ = camera.near_plane;
 
     // Радиус сферы и z-координата центра сферы
     double rad = obj.max_radius;
@@ -115,7 +117,7 @@ bool Scene::cutX(int culL_flags, Point sphere, Object obj )
 
     // Ширина обзора камеры и дистанция до плоскости
     double width = camera.viewplane_width;
-    double dist = camera.view_dist;
+    double dist = camera.dst;
 
     // Координаты центра сферы
     double sX = sphere.x;
@@ -149,7 +151,7 @@ bool Scene::cutY(int culL_flags, Point sphere, Object obj )
 
     // Высота обзора камеры и дистанция до плоскости
     double height = camera.viewplane_height;
-    double dist = camera.view_dist;
+    double dist = camera.dst;
 
     // Координаты центра сферы
     double sY = sphere.y;
@@ -271,8 +273,12 @@ void Scene::removeBackSurfaces()
             p0 = *it;
 
             // Вектор направленный от начала
+
+
+            /*Здесь я точно не уверен, что тут подразумевалось*/
+            /*Это в точку, где находится камера???*/
             // вектора нормали в точку камеры
-            view = Vector(p0, camera.point);
+            view = Vector(p0, camera.position);
 
             // Скалярное произведение
             dp = Vector::scalarMultiplication(n, view);

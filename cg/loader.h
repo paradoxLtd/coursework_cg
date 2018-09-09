@@ -7,9 +7,9 @@
 #include <fstream>
 #include <sstream>
 
-#include "Transformation.h"
-#include "Object.h"
-#include "Bit.h"
+#include "transformation.h"
+#include "object.h"
+#include "bit.h"
 
 // Маска извлечения цвета в формате RGB или в виде индекса
 #define PLX_RGB_MASK 0x8000

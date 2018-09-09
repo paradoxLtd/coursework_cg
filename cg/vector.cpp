@@ -1,4 +1,4 @@
-#include "Vector.h"
+#include "vector.h"
 #include <iostream>
 
 Vector::Vector(Point p1, Point p2)
@@ -114,5 +114,16 @@ bool Vector::operator!=(const Vector& other)noexcept
 Point Vector::asPoint()
 {
     return Point(x, y, z, 1);
+}
+
+void Vector::normalize()
+{
+    double denom = this->x * this->x + this->y * this->y + this->z * this->z;
+
+    if (fabs(denom) > EPS) {
+        this->x /= denom;
+        this->y /= denom;
+        this->z /= denom;
+    }
 }
 

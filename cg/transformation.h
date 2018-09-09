@@ -2,9 +2,9 @@
 #define TRANSFORMATION_H
 
 
-#include "Point.h"
-#include "Vector.h"
-#include "Options.h"
+#include "point.h"
+#include "vector.h"
+#include "options.h"
 #include <iostream>
 
 #define SIZE 4
@@ -54,7 +54,11 @@ public:
     Matrix(double m[SIZE][SIZE]);
     Matrix(Vector a);
 
+    Matrix & operator = (const Matrix &m);
+    Matrix & operator=(Matrix&& m);
+
     Vector asVector() const;
+    void eye();
 
     static Matrix multiplicate(Matrix a, Matrix b);
     static Vector multiplicate(Vector v, Matrix m);
