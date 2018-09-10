@@ -5,9 +5,10 @@ void Scene::localToWorld()
     Point point_tmp;
     for (Object obj : objects)
     {
-        obj.vertex_trans.clear();
+       // obj.vertex_trans.clear();
         /*Я тут не совсем понял, вначале очищается список,
         а потом по нему происходит итерация???*/
+        /*Переделать*/
         for (Point point : obj.vertex_trans)
         {
             point_tmp = Point(point.x + obj.center.x,
@@ -17,57 +18,34 @@ void Scene::localToWorld()
     }
 }
 
-Point Scene::cameraTransformation(Point old)
+void Scene::worldToCam(Camera &cam)
 {
-    // Копия точки
-    Point ret(old);
-
-    // Создаем настроки для преобразования точки
-    /*Rotate rotate;
-    RotateOptions ropX(AXIS_X, camera.ang_x, true);
-    RotateOptions ropY(AXIS_Y, camera.ang_y, true);
-    RotateOptions ropZ(AXIS_Z, camera.ang_z, true);
-
-    MoveOptions mop(&camera.point, true);
-    Move move;
-
-    // Применяем матрицы преобразований
-    Transformation::apply(ret, move, mop);
-    Transformation::apply(ret, rotate, ropY);
-    Transformation::apply(ret, rotate, ropX);
-    Transformation::apply(ret, rotate, ropZ);
-
-    return ret;*/
-}
-
-void Scene::worldToCam()
-{
-    /*Rotate rotate;
-    RotateOptions ropX(AXIS_X, camera.ang_x, true);
-    RotateOptions ropY(AXIS_Y, camera.ang_y, true);
-    RotateOptions ropZ(AXIS_Z, camera.ang_z, true);
-
-    MoveOptions mop(&camera.point, true);
-    Move move;
+    cam.build_cam_matrix();
 
     for (Object obj : objects)
     {
         for (Point point : obj.vertex_trans)
         {
-            point = Point(point.x - camera.point.x,
-                point.y - camera.point.y, point.z - camera.point.z, point.w);
-
-            //YXZ поворот 437
-            Transformation::apply(point, move, mop);
-            Transformation::apply(point, rotate, ropY);
-            Transformation::apply(point, rotate, ropX);
-            Transformation::apply(point, rotate, ropZ);
+            point = Matrix::multiplicate(old, cam.mcam);
         }
+
+        for (Point point : texture_coords)
+        {
+            point = Matrix::multiplicate(old, cam.mcam);
+        }
+
+        for (Point point : texture_coords_trans)
+        {
+            point = Matrix::multiplicate(old, cam.mcam);
+        }
+
+        obj.center = Matrix::multiplicate(obj.center, cam.mcam);
+        obj.dir = Matrix::multiplicate(obj.dir, cam.mcam);
+        obj.ux = Matrix::multiplicate(obj.ux, cam.mcam);
+        obj.uy = Matrix::multiplicate(obj.uy, cam.mcam);
+        obj.uz = Matrix::multiplicate(obj.uz, cam.mcam);
     }
-    Transformation::apply(camera.point, move, mop);
-    Transformation::apply(camera.point, rotate, ropY);
-    Transformation::apply(camera.point, rotate, ropX);
-    Transformation::apply(camera.point, rotate, ropZ);*/
+
 }
 
 Scene::Scene()
@@ -199,8 +177,8 @@ void Scene::removeObject(int culL_flags)
     {
         // Получаем центр объекта и расстояние до наиболее
         // удаленной точке, принимаемое за радиус окружности
-        sphere_center = cameraTransformation(obj.center);
-
+        //sphere_center = cameraTransformation(obj.center);
+        sphere_center = obj.center;
         // Отбраковываем по оси z
         if (cutZ(culL_flags, sphere_center, obj))
             continue;

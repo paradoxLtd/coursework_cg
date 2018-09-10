@@ -55,7 +55,6 @@ public:
 
     // Преобразование точки из мировых координат
     // в камерные
-    Point cameraTransformation(Point old);
 
     // Проверка необходимости отсечения по плоскости Z
     bool cutZ(int culL_flags, Point sphere, Object obj );
