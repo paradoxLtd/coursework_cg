@@ -1,10 +1,16 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
+#include <iostream>
+#include <cmath>
+
 class Point;
 
 #include "Point.h"
 
+#define EPS 1e-6
+
+// Прошло проверки, не изменялось, 10.09.18
 class Vector
 {
 private:
@@ -19,6 +25,8 @@ public:
     }
 
     Vector(Point p1, Point p2);
+
+    Vector(Vector v1, Vector v2);
 
     Vector(double x1, double y1, double z1,
         double x2, double y2, double z2);
@@ -51,6 +59,13 @@ public:
     Vector operator*(const Vector &v1) noexcept;
 
     Point asPoint();
+
+    friend std::ostream& operator<<(std::ostream& os,
+                                    const Vector& p);
+
+    void normalize();
+
+    static void debug();
 };
 
 #endif // VECTOR_H

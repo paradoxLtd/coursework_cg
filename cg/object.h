@@ -8,6 +8,7 @@ class Triangle;
 #include "Bit.h"
 
 #include <cmath>
+#include <vector>
 
 // 754
 //Состояния объектов
@@ -15,6 +16,7 @@ class Triangle;
 #define OBJECT_STATE_ACTIVE 0x0001
 #define OBJECT_STATE_VISIBLE 0x0002
 #define OBJECT_STATE_CULLED 0x0004
+#define OBJECT_STATE_ERROR 0x0008
 
 // Текстуры
 // Однокаркасный
@@ -27,7 +29,16 @@ class Triangle;
 class Object
 {
 private:
-
+    void create(std::vector<Point> vertex_local = {},
+                std::vector<Point> texture_coords = {},
+                Vector ux = Vector(1, 0, 0),
+                Vector uy = Vector(0, 1, 0),
+                Vector uz = Vector(0, 0, 1),
+                Vector dir = Vector(1, 0, 0),
+                Point center = Point(),
+                int attr = 0,
+               int state = OBJECT_STATE_ACTIVE,
+               const char *Name = "no name");
 public:
     // 478
     int id; //Числовой идентификатор объекта
@@ -45,29 +56,50 @@ public:
     // Локальные оси для отслеживания ориентации объекта (обновляются
     // автоматически при вызове функции поворота)
 
-    std::list<Point> vertex_local; // список вершин с локальными координатами
-    std::list<Point> vertex_trans; // список вершин с преобразованными мировыми координатами
-    int vertices_size; // размер списков
+    std::vector<Point> vertex_local; // список вершин с локальными координатами
+    std::vector<Point> vertex_trans; // список вершин с преобразованными мировыми координатами
 
     // std::list<Point> normal;
     // std::list<Point> normal_trans;
 
-    std::list<Point> texture_coords;
-    std::list<Point> texture_coords_trans;
+    std::vector<Point> texture_coords;
+    std::vector<Point> texture_coords_trans;
 
-    std::list<Triangle> polygons; // список полигонов
-    int polygons_size; // количество полигонов
+    std::vector<Triangle> polygons; // список полигонов
 
     static int get_id()
     {
         return next_id++;
     }
 
-    Object();
+    Object(std::vector<Point> vertex_local = {},
+            std::vector<Point> texture_coords = {},
+            Vector ux = Vector(1, 0, 0),
+            Vector uy = Vector(0, 1, 0),
+            Vector uz = Vector(0, 0, 1),
+            Vector dir = Vector(1, 0, 0),
+            Point center = Point(),
+            int attr = 0,
+           int state = OBJECT_STATE_ACTIVE,
+           const char *Name = "no name");
 
+    // Посчитать радиус и запомнить его в классе
     void updateRad();
 
+    // Сбросить состояния всех полинонов
     void reset();
+
+    // Приравнять резервный массив вершин к исходному
+    void saveVertixes();
+
+    // Приравнять резервный массив текстур к исходному
+    void saveTextures();
+
+    // Допустим объект задан пустым, так как было
+    // неизвестно количество вершин и они динамически
+    // добавились. Update обновит вектора-копии и
+    // посчитает радиусы
+    void update();
 
 };
 

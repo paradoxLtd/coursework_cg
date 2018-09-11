@@ -8,6 +8,7 @@ class Options;
 
 #define NO_POINT 0
 
+// Прошло проверки, не изменялось, 09.09.18
 class Point
 {
     void create();
@@ -21,8 +22,8 @@ public:
 
     Point(Point *p);
     Point(const Point &point);
-    Point(double a, double b, double c, double d);
-    Point(Options ds);
+    Point(double a, double b, double c, double d = 1);
+    Point(Options opt);
 
     Point(Point &&point) noexcept;
 
@@ -35,6 +36,11 @@ public:
     bool operator==(const Point& other)noexcept;
 
     bool operator!=(const Point& other)noexcept;
+
+    friend std::ostream& operator<<(std::ostream& os,
+                                    const Point& p);
+
+    static void debug();
 };
 
 #endif // POINT_H

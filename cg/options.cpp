@@ -8,7 +8,24 @@ MoveOptions::MoveOptions()
     this->inverse = false;
 }
 
+MoveOptions::MoveOptions(double a, double b,
+                         double c, bool inv)
+{
+    this->params[0] = a;
+    this->params[1] = b;
+    this->params[2] = c;
+    this->inverse = inv;
+}
+
 MoveOptions::MoveOptions(Point *p, bool inv)
+{
+    this->params[0] = p->x;
+    this->params[1] = p->y;
+    this->params[2] = p->z;
+    this->inverse = inv;
+}
+
+MoveOptions::MoveOptions(const Point *p, bool inv)
 {
     this->params[0] = p->x;
     this->params[1] = p->y;

@@ -1,9 +1,19 @@
 #include "Object.h"
 
+void Object::saveVertixes()
+{
+    vertex_trans = vertex_local;
+}
+
+void Object::saveTextures()
+{
+    texture_coords = texture_coords_trans;
+}
+
 void Object::reset()
 {
         // Сбросим флаг объекта, соответствующий отбраковке
-        RESET_BIT(this->state, OBJECT_STATE_CULLED);
+        this->state = OBJECT_STATE_ACTIVE;
 
         // Теперь сделаем то же самое для флагов отсечения и
         // обратных поверхностей многоугольников
@@ -17,27 +27,46 @@ void Object::reset()
         }
 }
 
-Object::Object()
+void Object::create(std::vector<Point> vertex_local,
+             std::vector<Point> texture_coords,
+             Vector ux, Vector uy, Vector uz,
+             Vector dir, Point center, int attr,
+            int state, const char *name)
 {
-    id = get_id();
-    state = OBJECT_STATE_NULL;
-    attr = 0;
-    avg_radius = 0;
-    max_radius = 0;
-    center = Point();
-    dir = Vector(); ux = Vector(); uy = Vector(); uz = Vector();
-    vertex_local = {};
-    vertex_trans = {};
-    vertices_size = 0;
-    polygons = {};
-    polygons_size = {};
-    name = "no name";
+    this->id = get_id();
+    this->state = state;
+    this->attr = attr;
+    this->center = center;
+    this->dir = Vector(1, 0, 0);
+    this->ux =  Vector(1, 0, 0);
+    this->uy =  Vector(0, 1, 0);
+    this->uz =  Vector(0, 0, 1);
+    this->vertex_local = vertex_local;
+    this->vertex_trans = vertex_local;
+    this->texture_coords = texture_coords;
+    this->texture_coords_trans = texture_coords;
+    this->polygons = polygons;
+    this->name = name;
+
+    // Получаем avg_radius и max_radius
+    updateRad();
 }
+
+Object::Object(std::vector<Point> v1,
+             std::vector<Point> v2,
+             Vector ux, Vector uy, Vector uz,
+             Vector dir, Point center, int attr,
+            int state, const char *name)
+ {
+    create(v1, v2, ux, uy, uz, dir, center, attr, state, name);
+ }
 
 void Object::updateRad()
 {
-    if (vertex_local.size() < 1)
+    if (vertex_local.size() < 3)
+    {
         return;
+    }
 
     double mx = max_radius * max_radius, curr = 0;
     double px, py, pz;
@@ -52,4 +81,13 @@ void Object::updateRad()
     max_radius = sqrt(mx);
     avg_radius /= vertex_local.size();
 }
+
+void Object::update()
+{
+    reset();
+    saveVertixes();
+    saveTextures();
+    updateRad();
+}
+
 int Object::next_id = 0;

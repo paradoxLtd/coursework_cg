@@ -3,12 +3,14 @@
 
 #include <list>
 #include <QColor>
+#include <iostream>
 
 class Object;
 
 #include "indexes.h"
 #include "Point.h"
 #include "Object.h"
+#include "errors.h"
 
 // 754
 //Состояния объектов
@@ -32,6 +34,7 @@ class Object;
 #define POLYGON_SHADE_MODE_FASTPHONG 0x0100
 #define POLYGON_SHADE_MODE_TEXTURE 0x0200
 
+// Прошло проверки, не изменялось, 11.09.18
 class Triangle
 {
 private:
@@ -42,7 +45,7 @@ private:
 
     // Определение нормали, не для внешнего использования
     // Используйте один из двух публичных методов
-    Vector getNormal(std::list<Point> vertix) const noexcept;
+    Vector getNormal(std::vector<Point> vertix) const noexcept;
 
 public:
     Object *object; // указатель на объект
@@ -59,8 +62,8 @@ public:
 
     /*Конструкторы */
 
-    Triangle(Object* ob, Indexes &v,
-             Indexes &vt, /*Indexes &vn,*/
+    Triangle(Object* ob, Indexes v,
+             Indexes vt, /*Indexes &vn,*/
              int st = POLYGON_STATE_ACTIVE,
              int attr = POLYGON_ATTR_NULL,
              QColor color = Qt::white);
@@ -78,12 +81,13 @@ public:
 
     bool operator!=(const Triangle &B)noexcept;
 
-    // нормаль для исходного полигона
-    Vector normalOrigin() const noexcept;
-
     // нормаль для измененного полигона(после преобразо
     // ваний из одних координат в другие)
     Vector normalTrans() const noexcept;
+
+    friend std::ostream& operator<<(std::ostream& os,
+                                    const Triangle& p);
+    static void debug();
 };
 
 #endif // TRIANGLE_H

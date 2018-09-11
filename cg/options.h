@@ -46,7 +46,13 @@ class MoveOptions : public Options
 public:
     MoveOptions();
 
+    MoveOptions(double dx, double dy, double dz,
+                bool inv = false);
+
     MoveOptions(Point *p, bool inv = false);
+
+    // Для корректной работы ObjectList.cameraTransformation
+    MoveOptions(const Point *p, bool inv = false);
 };
 
 /*

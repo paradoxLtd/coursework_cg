@@ -1,11 +1,25 @@
 #include "mainwindow.h"
 #include <QApplication>
+#include <Windows.h>
+
+#include <QTextStream>
+#include <QTextCodec>
+
+#include "Triangle.h"
+
+
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
+    //setlocale(LC_ALL, "Russian");
 
-    return a.exec();
+    //QApplication a(argc, argv);
+
+    //MainWindow w;
+    //w.show();
+
+    Triangle::debug();
+
+    return 0;
+    //return a.exec();
 }

@@ -5,6 +5,7 @@
 #include "Point.h"
 #include "Vector.h"
 #include "Options.h"
+#include "Matrix.h"
 #include <iostream>
 
 #define SIZE 4
@@ -42,22 +43,15 @@ public:
         Action &act, Options &opt);
     static Point apply(Point &point,
         Action &act, Options &opt);
-};
-
-class Matrix
-{
-public:
-    double matrix[SIZE][SIZE];
-    Matrix();
-    Matrix(const Matrix &a);
-    Matrix(Matrix &&a);
-    Matrix(double m[SIZE][SIZE]);
-    Matrix(Vector a);
-
-    Vector asVector() const;
-
-    static Matrix multiplicate(Matrix a, Matrix b);
-    static Vector multiplicate(Vector v, Matrix m);
+    static Point apply(const Point &point,
+        Action &act, Options &opt);
+    static Point fullTransform(Point p, MoveOptions &mop,
+                               RotateOptions &rop,
+                               ScaleOptions &sop)
+    {
+        std::cout << "oops";
+        return Point();
+    }
 };
 
 #endif // TRANSFORMATION_H

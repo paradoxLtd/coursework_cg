@@ -76,3 +76,11 @@ bool Point::operator!=(const Point& other)noexcept
 {
     return !isEqual(other);
 }
+
+ std::ostream& operator<<(std::ostream& os,
+                                 const Point& p)
+{
+    os << "\n Point: x: " << p.x << ", y: " << p.y <<
+                 ", z: " << p.z << ", w:" << p.w;
+    return os;
+}

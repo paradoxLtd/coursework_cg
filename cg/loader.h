@@ -10,6 +10,8 @@
 #include "Transformation.h"
 #include "Object.h"
 #include "Bit.h"
+#include "resource.h"
+#include "Scene.h"
 
 // Маска извлечения цвета в формате RGB или в виде индекса
 #define PLX_RGB_MASK 0x8000
@@ -243,6 +245,7 @@ class Loader
 
 class Loader
 {
+public:
     void message(char *filename, const char* text,
         const int err)
     {
@@ -295,9 +298,31 @@ class Loader
                 object->polygons.push_back(tr);
             }
         }
+
         object->updateRad();
         in.close();
-        return 0;
+        return NOERROR;
+    }
+
+    // Загрузить все объекты на сцену, names - список имен
+    int loadAll(Scene scene, char** names, int names_size)
+    {
+        ObjectList objects;
+        int error = NOERROR;
+        for(int i = 0; i < names_size; i++)
+        {
+            // НЕ ВЫНОСИТЬ ОБЪЯВЛЕНИЕ ПЕРЕМЕННОЙ ИЗ ЦИКЛА
+            // иначе функция load будет переопределять
+            // один и тот же объект все время
+            Object object;
+            error = load(&object, names[i]);
+            if (error != NOERROR)
+                break;
+            objects.push(object);
+        }
+        if (error == NOERROR)
+            scene.objects = objects;
+        return error;
     }
 };
 

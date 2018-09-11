@@ -32,7 +32,14 @@ SOURCES += \
     scene.cpp \
     transformation.cpp \
     triangle.cpp \
-    vector.cpp
+    vector.cpp \
+    objectlist.cpp \
+    camera.cpp \
+    point_debug.cpp \
+    vector_debug.cpp \
+    matrix.cpp \
+    plane.cpp \
+    triangle_debug.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -48,7 +55,12 @@ HEADERS += \
     triangle.h \
     trianglelist.h \
     vector.h \
-    indexes.h
+    indexes.h \
+    objectlist.h \
+    debug.h \
+    matrix.h \
+    plane.h \
+    errors.h
 
 FORMS += \
         mainwindow.ui

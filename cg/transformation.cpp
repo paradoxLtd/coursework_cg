@@ -1,95 +1,6 @@
 #include "Transformation.h"
 #include <cmath>
 
-Matrix::Matrix()
-{
-    for (int i = 0; i < SIZE; i++)
-    {
-        for (int j = 0; j < SIZE; j++)
-        {
-            this->matrix[i][j] = 0;
-        }
-    }
-}
-
-Matrix::Matrix(double m[SIZE][SIZE])
-{
-    for (int i = 0; i < SIZE; i++)
-    {
-        for (int j = 0; j < SIZE; j++)
-        {
-            this->matrix[i][j] = m[i][j];
-        }
-    }
-}
-
-Matrix::Matrix(const Matrix &m)
-{
-    for (int i = 0; i < SIZE; i++)
-    {
-        for (int j = 0; j < SIZE; j++)
-        {
-            this->matrix[i][j] = m.matrix[i][j];
-        }
-    }
-}
-
-Matrix::Matrix(Matrix &&m)
-{
-    for (int i = 0; i < SIZE; i++)
-    {
-        for (int j = 0; j < SIZE; j++)
-        {
-            this->matrix[i][j] = m.matrix[i][j];
-        }
-    }
-}
-
-Matrix::Matrix(Vector a)
-{
-    this->matrix[0][0] = a.x;
-    this->matrix[0][1] = a.y;
-    this->matrix[0][2] = a.z;
-    this->matrix[0][3] = 1;
-
-    for (int i = 1; i < SIZE; i++)
-    {
-        for (int j = 0; j < SIZE; j++)
-        {
-            this->matrix[i][j] = 0;
-        }
-    }
-}
-
-Vector Matrix::asVector() const
-{
-    Vector ret;
-    ret.x = this->matrix[0][0];
-    ret.y = this->matrix[0][1];
-    ret.z = this->matrix[0][2];
-    return ret;
-}
-
-Matrix Matrix::multiplicate(Matrix a, Matrix b)
-{
-    Matrix ret;
-    for (int i = 0; i < SIZE; i++) {
-        for (int j = 0; j < SIZE; j++) {
-            for (int k = 0; k < SIZE; k++) {
-                ret.matrix[i][j] += a.matrix[i][k] * b.matrix[k][j];
-            }
-        }
-    }
-    return ret;
-}
-
-Vector Matrix::multiplicate(Vector v, Matrix m)
-{
-    Matrix vec_m(v);
-    Vector vec_v(multiplicate(vec_m, m).asVector()); //порядок слева вектор, справа матрица
-    return vec_v;
-}
-
 Vector Move::apply(const Vector &vector, Options &opt)
 {
     double x = opt[0], y = opt[1], z = opt[2];
@@ -203,6 +114,16 @@ Vector Transformation::apply(const Vector &vector,
 }
 
 Point Transformation::apply(Point &point,
+     Action &act, Options &opt)
+{
+    Point p;
+    Vector vk;
+    Vector v(point, p);
+    Vector after = act.apply(v, opt);
+    return after.asPoint();
+}
+
+Point Transformation::apply(const Point &point,
      Action &act, Options &opt)
 {
     Point p;
