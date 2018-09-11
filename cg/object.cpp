@@ -82,6 +82,39 @@ void Object::updateRad()
     avg_radius /= vertex_local.size();
 }
 
+// Проецирование на плоскость
+// https://stackoverflow.com/questions/9605556/how-to-project-a-point-onto-a-plane-in-3d/9605695#9605695
+Point Object::project(Point p)
+{
+    Vector normal(uz);
+    Vector v(center, p);
+    double dist = Vector::scalarMultiplication(v, normal);
+    double xx, yy, zz;
+    xx = p.x - dist * normal.x;
+    yy = p.y - dist * normal.y;
+    zz = p.z - dist * normal.z;
+    return Point(xx, yy, zz);
+}
+
+#include <map>
+// http://rsdn.org/forum/cpp/1995781.all
+
+// Отсортировать вершины по\против часовой
+// https://stackoverflow.com/questions/6880899/sort-a-set-of-3-d-points-in-clockwise-counter-clockwise-order
+void Object::sort()
+{
+    std::vector<std::pair<double, int>> angles;
+    Point projected;
+    int i = 0;
+    for (Point p : vertex_local)
+    {
+        projected = project(p);
+        angles push_back(atan2(projected.y, projected.x), i);
+        i++;
+    }
+
+}
+
 void Object::update()
 {
     reset();
