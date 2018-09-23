@@ -5,7 +5,7 @@
 
 #define IDS_APP_TITLE			103
 
-#define NOERROR
+#define NOERROR 0
 
 #define ERROR_NO_FILE			201
 #define ERROR_WRONG_VERTEX_DESCRIPTOR	202

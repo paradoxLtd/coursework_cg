@@ -10,6 +10,15 @@ class Triangle;
 #include <cmath>
 #include <vector>
 
+// 753
+// Состояние многоугольников и элементов их поверхностей
+#define POLY4DV2_5TATE_NULL OxOOOO
+#define POLY4DV2_STATE_ACTIVE 0x0001
+#define POLY4DV2_STATE_CLIPPED 0x0002
+#define POLY4DV2_STATE_BACKFACE 0x0004
+#define POLY4DV2_STATE_UT 0x0008
+
+
 // 754
 //Состояния объектов
 #define OBJECT_STATE_NULL 0x0000

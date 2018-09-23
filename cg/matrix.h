@@ -2,6 +2,7 @@
 #define MATRIX_H
 #define SIZE 4
 #include "vector.h"
+
 class Matrix
 {
 public:

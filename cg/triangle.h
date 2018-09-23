@@ -68,7 +68,7 @@ public:
              Indexes vt, /*Indexes &vn,*/
              int st = POLYGON_STATE_ACTIVE,
              int attr = POLYGON_ATTR_NULL,
-             QColor color = Qt::white);
+             QColor color = Qt::black);
 
     Triangle(const Triangle &triangle);
     ~Triangle();

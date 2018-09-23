@@ -11,9 +11,9 @@
 // indexes(0,1,2), пишите indexes(1,2,3) - отсчёт с единицы.
 class Indexes
 {
-private:
+public:
     std::vector<int> ind;
-    public:
+
         std::vector<int>::size_type size() const;
 
         void clear();

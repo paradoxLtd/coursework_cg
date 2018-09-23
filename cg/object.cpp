@@ -297,66 +297,6 @@ void Object::sort()
 */
 
 //
-nt levinshtein_damerau_matrix(QString s1, QString s2)
-{
-    //std::cout << "Matrix(Damerau-Levinshtein): \n";
-
-    int len_s1 = s1.length();
-    int len_s2 = s2.length();
-    if (len_s1 == 0)
-        return len_s2;
-    if (len_s2 == 0)
-        return len_s1;
-    int str_matrix1 = (int )malloc((len_s2 + 1)*sizeof(int));
-    int str_matrix2 = (int )malloc((len_s2 + 1)*sizeof(int));
-    int str_matrix3 = (int )malloc((len_s2 + 1)*sizeof(int));
-
-
-    for (int i = 0; i < len_s2 + 1; i++)
-    {
-        str_matrix1[i] = i;
-    }
-    str_matrix2[0] = 1;
-    for (int i = 1; i < len_s2 + 1; i++)
-    {
-        str_matrix2[i] = levinshtein_fill_number(str_matrix2[i - 1], str_matrix1[i - 1], str_matrix1[i], s1[0] == s2[i - 1]);
-    }
-
-    for (int i = 2; i < len_s1 + 1; i++)
-    {
-        str_matrix3[0] = i;
-        str_matrix3[1] = levinshtein_fill_number(str_matrix3[0], str_matrix2[0], str_matrix2[1], s1[i-1] == s2[0]);
-        for (int j = 2; j < len_s2 + 1; j++)
-        {
-            str_matrix3[j] = levinshtein_damerau_fill_number(str_matrix3[j - 1], str_matrix2[j - 1], str_matrix2[j],
-                    str_matrix1[j-2], s2[j - 1] == s1[i - 1],possible_transpos(s1[i - 2], s1[i - 1], s2[j - 2], s2[j - 1]));
-        }
-
-        /*for (int i = 0; i < len_s2 + 1; i++)
-        {
-            std::cout << str_matrix1[i] << " ";
-        }
-        std::cout << "\n";*/
-
-        swap_int_poiter(&str_matrix1, &str_matrix2);
-        swap_int_poiter(&str_matrix2, &str_matrix3);
-    }
-    /*for (int i = 0; i < len_s2 + 1; i++)
-    {
-        std::cout << str_matrix1[i] << " ";
-    }
-    std::cout << "\n";
-    for (int i = 0; i < len_s2 + 1; i++)
-    {
-        std::cout << str_matrix2[i] << " ";
-    }
-    std::cout << "\n";*/
-    int res = str_matrix2[len_s2];
-    free(str_matrix1);
-    free(str_matrix2);
-    free(str_matrix3);
-    return res;
-}
 //
 
 
