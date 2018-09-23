@@ -18,6 +18,8 @@ int &Indexes::operator[](const int index)
 // ОЧЕНЬ ВАЖНО: OBJ начинает отчёт не с нуля, а с единицы
 // из за этого индексы хранят значения на 1 больше настоящих
 // поэтому для корректной работы возвращаем index - 1
+
+
 int Indexes::operator[](const int index) const
 {
     return (ind[index] - 1);

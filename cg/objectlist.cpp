@@ -1,5 +1,5 @@
 #include "objectlist.h"
-
+#include <qDebug>
 void ObjectList::copy(ObjectList list)
 {
    this->objects = list.objects;
@@ -69,36 +69,33 @@ void ObjectList::localToWorld()
     }
 }
 
-void ObjectList::worldToCam(const Camera &camera)
+void ObjectList::worldToCam(Camera &cam)
 {
-    /*
-    Rotate rotate;
-    RotateOptions ropX(AXIS_X, camera.ang_x, true);
-    RotateOptions ropY(AXIS_Y, camera.ang_y, true);
-    RotateOptions ropZ(AXIS_Z, camera.ang_z, true);
-
-    MoveOptions mop(&camera.point, true);
-    Move move;
+    cam.build_cam_matrix();
 
     for (Object obj : objects)
     {
         for (Point point : obj.vertex_trans)
         {
-            point = Point(point.x - camera.point.x,
-                point.y - camera.point.y, point.z - camera.point.z, point.w);
-
-            //YXZ поворот 437
-            Transformation::apply(point, move, mop);
-            Transformation::apply(point, rotate, ropY);
-            Transformation::apply(point, rotate, ropX);
-            Transformation::apply(point, rotate, ropZ);
+            point = Matrix::multiplicate(old, cam.mcam);
         }
+
+        for (Point point : texture_coords)
+        {
+            point = Matrix::multiplicate(old, cam.mcam);
+        }
+
+        for (Point point : texture_coords_trans)
+        {
+            point = Matrix::multiplicate(old, cam.mcam);
+        }
+
+        obj.center = Matrix::multiplicate(obj.center, cam.mcam);
+        obj.dir = Matrix::multiplicate(obj.dir, cam.mcam);
+        obj.ux = Matrix::multiplicate(obj.ux, cam.mcam);
+        obj.uy = Matrix::multiplicate(obj.uy, cam.mcam);
+        obj.uz = Matrix::multiplicate(obj.uz, cam.mcam);
     }
-    Transformation::apply(camera.point, move, mop);
-    Transformation::apply(camera.point, rotate, ropY);
-    Transformation::apply(camera.point, rotate, ropX);
-    Transformation::apply(camera.point, rotate, ropZ);
-    */
 }
 
 // Проверка необходимости отсечения по плоскости Z
@@ -316,7 +313,7 @@ void ObjectList::removeBackSurfaces(const Camera &camera)
     }
 }
 
-void camToAxonometricAndScreenObject(Object *obj, Camera *cam)
+void ObjectList::camToAxonometricAndScreenObject(Object *obj, Camera *cam)
 {
     // ПРИМЕЧАНИЕ. В этой функции не используются матрицы.
     // Функция преобразует объект, заданный в координатах
@@ -333,20 +330,27 @@ void camToAxonometricAndScreenObject(Object *obj, Camera *cam)
     float beta = (0.5 * cam->viewplane_height - 0.5);
 
     int vsize = obj->vertex_trans.size();
+    qDebug() << obj->vertex_trans[0].x << " " << obj->vertex_trans[0].y << " " << obj->vertex_trans[0].z;
+    qDebug() << obj->vertex_trans[1].x << " " << obj->vertex_trans[1].y << " " << obj->vertex_trans[1].z;
+    qDebug() << obj->vertex_trans[2].x << " " << obj->vertex_trans[2].y << " " << obj->vertex_trans[2].z;
 
     for (int i = 0; i < vsize; i++)
     {
+
         double z = obj->vertex_trans[i].z;
         //obj->vertex_trans[i].x = cam->view_dst_hor * obj->vertex_trans[i].x / z;
         //obj->vertex_trans[i].y =  cam->view_dst_ver * obj->vertex_trans[i].y * cam->asp_ratio / z;
         // пока не понял откуда берутся view_dst_hor view_dst_ver в формуле вроде только dist
         // to axon
-        obj->vertex_trans[i].x = cam->dst * obj->vertex_trans[i].x / z;
-        obj->vertex_trans[i].y =  cam->dst * obj->vertex_trans[i].y * cam->asp_ratio / z;
-
+        if (z != 0)
+        {
+            obj->vertex_trans[i].x = cam->dst * obj->vertex_trans[i].x / z;
+            obj->vertex_trans[i].y =  cam->dst * obj->vertex_trans[i].y * cam->asp_ratio / z;
+        }
 
         // to screen
         obj->vertex_trans[i].x += alpha;
         obj->vertex_trans[i].y = -obj->vertex_trans[i].y + beta;
+        qDebug() << obj->vertex_trans[i].x << " " << obj->vertex_trans[i].y << " " << obj->vertex_trans[i].z;
     }
 }

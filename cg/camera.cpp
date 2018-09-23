@@ -1,8 +1,8 @@
 #include "camera.h"
+#include <qDebug>
 
-
-Camera::Camera(int attr, Point &position, Vector &u, Vector &v, Vector &n,
-               Point &target, double n_plane, double f_plane,
+Camera::Camera(int attr, Point position, Vector u, Vector v, Vector n,
+               Point target, double n_plane, double f_plane,
                double viewp_w, double viewp_h)
 {
     _init(attr, position, u, v, n, target, n_plane, f_plane, viewp_w, viewp_h);
@@ -28,6 +28,7 @@ void Camera::_init(int attr, Point &position, Vector &u, Vector &v, Vector &n, P
     this->u = u;
     this->v = v;
     this->n = n;
+
     this->target = target;
     this->near_plane = n_plane;
     this->far_plane = f_plane;
@@ -68,6 +69,7 @@ void Camera::_init(int attr, Point &position, Vector &u, Vector &v, Vector &n, P
     // Нижняя плоскость отсечения
     vn = Vector(0., 1., -1.);// Плоскость y=z
     this->bottom_plane = Plane(origin, vn, true);
+    qDebug() << "sosi bibu";
 }
 
 void Camera::_copy(const Camera &c)

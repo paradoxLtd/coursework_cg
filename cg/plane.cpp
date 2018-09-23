@@ -1,7 +1,8 @@
 #include "plane.h"
-
+#include <qDebug>
 Plane::Plane(Point &point, Vector &n, bool normalize)
 {
+    qDebug() << "pizdec nahoi blyat";
     this->p = point;
     this->n = n;
     this->normalize = normalize;
@@ -26,7 +27,7 @@ Plane::Plane(Plane &&p)
     this->normalize = p.normalize;
 
     //p.n = nullptr;
-    p.p = nullptr;
+    //p.p = nullptr;
     p.normalize = false;
 }
 
@@ -45,9 +46,9 @@ Plane& Plane::operator=(Plane &&p)
     this->n = p.n;
     this->normalize = p.normalize;
 
-    p.p = nullptr;
+    //p.p = nullptr;
     //p.n = nullptr;
-    p.normalize = false;
+    //p.normalize = false;
 
     return *this;
 }

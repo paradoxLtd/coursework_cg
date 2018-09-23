@@ -67,7 +67,7 @@ public:
     // 435
     // Преобразование точки из мировых координат
     // в камерные
-    void worldToCam(const Camera &camera);
+    void worldToCam(Camera &camera);
 
     //450; 583
     // d - расстояние до камеры

@@ -13,9 +13,10 @@ void Drawer::draw_object(Object &obj)
             (obj.polygons[poly].state & POLY4DV2_STATE_CLIPPED) ||
             (obj.polygons[poly].state & POLY4DV2_STATE_BACKFACE))
             continue;
-        int vindex_0 = obj.polygons[poly].indexes_vert.ind[0];
-        int vindex_1 = obj.polygons[poly].indexes_vert.ind[1];
-        int vindex_2 = obj.polygons[poly].indexes_vert.ind[2];
+        int vindex_0 = obj.polygons[poly].indexes_vert[0];
+        int vindex_1 = obj.polygons[poly].indexes_vert[1];
+        int vindex_2 = obj.polygons[poly].indexes_vert[2];
+
         this->draw_line(obj.vertex_trans[vindex_0].x,
                         obj.vertex_trans[vindex_0].y,
                         obj.vertex_trans[vindex_1].x,

@@ -15,10 +15,10 @@
 class Camera
 {
 public:
-    Camera() = default;
-    Camera(int attr, Point &position, Vector &u, Vector &v, Vector &n,
-           Point &target, double n_plane, double f_plane,
-           double viewp_w, double viewp_h);
+    //Camera() = default;
+    Camera(int attr = 0, Point position = Point(0,0,-100,1), Vector u = Vector(0,0,0), Vector v = Vector(0,0,0), Vector n = Vector(0,0,0),
+           Point target = Point(0,0,0,1), double n_plane = 50, double f_plane = 500,
+           double viewp_w = 600, double viewp_h = 600);
 
     Camera(const Camera &c);
     //Camera(Camera &&c);
@@ -36,7 +36,7 @@ public:
                                      //используемые при аксонометрическом преобразовании
 
     double asp_ratio;
-private:
+
     int state; //Состояние камеры
     int attr; //атрибуты камеры
 
@@ -47,6 +47,8 @@ private:
                 //простого отсечения
 
     Plane left_plane, right_plane, top_plane, bottom_plane;
+    Plane boris;
+    Point borispol;
 
     double viewport_w, viewport_h, viewport_xc, viewport_yc;
 
