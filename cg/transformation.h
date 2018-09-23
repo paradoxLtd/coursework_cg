@@ -2,10 +2,10 @@
 #define TRANSFORMATION_H
 
 
-#include "Point.h"
-#include "Vector.h"
-#include "Options.h"
-#include "Matrix.h"
+#include "point.h"
+#include "vector.h"
+#include "options.h"
+#include "matrix.h"
 #include <iostream>
 
 #define SIZE 4
@@ -52,6 +52,7 @@ public:
         std::cout << "oops";
         return Point();
     }
+    
 };
 
 #endif // TRANSFORMATION_H

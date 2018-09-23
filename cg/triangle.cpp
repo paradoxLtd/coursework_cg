@@ -142,6 +142,17 @@ bool Triangle::operator!=(const Triangle& other)noexcept
     return !isEqual(other);
 }
 
+// Получить массив точек
+std::vector<Point> Triangle::getPoints()
+{
+    std::vector<Point> for_return;
+    std::vector<Point> take_from = object->vertex_local;
+    for (int i = 0; i < indexes_vert.size(); i++)
+    {
+        for_return.push_back(take_from[i]);
+    }
+}
+
 std::ostream& operator<<(std::ostream& os,
                                 const Triangle& tr)
 {

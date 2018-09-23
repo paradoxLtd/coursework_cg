@@ -5,7 +5,7 @@
 #include <QTextStream>
 #include <QTextCodec>
 
-#include "Triangle.h"
+#include "Object.h"
 
 
 
@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     //MainWindow w;
     //w.show();
 
-    Triangle::debug();
+    Object::debug();
 
     return 0;
     //return a.exec();

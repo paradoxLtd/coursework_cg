@@ -4,6 +4,7 @@
 #include <list>
 #include <QColor>
 #include <iostream>
+#include <vector>
 
 class Object;
 
@@ -34,7 +35,8 @@ class Object;
 #define POLYGON_SHADE_MODE_FASTPHONG 0x0100
 #define POLYGON_SHADE_MODE_TEXTURE 0x0200
 
-// Прошло проверки, не изменялось, 11.09.18
+// Прошло проверки, 11.09.18 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// изменено - отдебажить std::Vector<Point> getPoints();
 class Triangle
 {
 private:
@@ -87,6 +89,9 @@ public:
 
     friend std::ostream& operator<<(std::ostream& os,
                                     const Triangle& p);
+    // Получить массив точек
+    std::vector<Point> getPoints();
+
     static void debug();
 };
 

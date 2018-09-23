@@ -39,7 +39,9 @@ SOURCES += \
     vector_debug.cpp \
     matrix.cpp \
     plane.cpp \
-    triangle_debug.cpp
+    triangle_debug.cpp \
+    object_debug.cpp \
+    loader.cpp
 
 HEADERS += \
         mainwindow.h \

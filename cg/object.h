@@ -41,7 +41,7 @@ private:
                const char *Name = "no name");
 
     // Спроецировать точку на плоскость xy
-    Point project(Point p)
+    //Point project(Point p)
 
 public:
     // 478
@@ -107,6 +107,10 @@ public:
     // добавились. Update обновит вектора-копии и
     // посчитает радиусы
     void update();
+
+    std::vector<int> jarvis();
+
+    static void debug();
 
 };
 
