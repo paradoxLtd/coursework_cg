@@ -20,8 +20,7 @@ Camera &Camera::operator =(const Camera &c)
     return *this;
 }
 
-void Camera::_init(int attr, Point &position, Vector &u, Vector &v, Vector &n, Point &target,
-                   double n_plane, double f_plane, double viewp_w, double viewp_h)
+void Camera::_init(int attr, Point &position, Vector &u, Vector &v, Vector &n, Point &target, double n_plane, double f_plane, double viewp_w, double viewp_h)
 {
     this->attr = attr;
     this->position = position;
@@ -50,24 +49,23 @@ void Camera::_init(int attr, Point &position, Vector &u, Vector &v, Vector &n, P
     this->dst = 0.5 * this->viewplane_width * tg;
 
     //Будем исходить из позиции, что  fov равен 90 для упрощения работы с отсечениями
-    Point origin = Point(0, 0, 0, 1);
-    Vector vn;
 
+    //Плоскости по желанию
+    //Если они будут использоваться, то для них нужно будет производить преобразования
+    /*Point origin = Point(0, 0, 0, 1);
+    Vector vn;
     // Правая плоскость отсечения
     vn = Vector(1., 0., -1.); // Плоскость x=z
     this->right_plane = Plane(origin, vn, true);
-
     //Левая плоскость отсечения
     vn = Vector(-1., 0., -1.); // Плоскость -x=z
     this->left_plane = Plane(origin, vn, true);
-
     // Верхняя плоскость отсечения
     vn = Vector(0., 1., -1.);// Плоскость y=z
     this->top_plane = Plane(origin, vn, true);
-
     // Нижняя плоскость отсечения
     vn = Vector(0., 1., -1.);// Плоскость y=z
-    this->bottom_plane = Plane(origin, vn, true);
+    this->bottom_plane = Plane(origin, vn, true);*/
 }
 
 void Camera::_copy(const Camera &c)
@@ -108,7 +106,7 @@ void Camera::build_cam_matrix()
     double mtx_t[SIZE][SIZE] = {
         {1, 0, 0, 0},
         {0, 1, 0, 0},
-        {0, 0, 0, 1},
+        {0, 0, 1, 0},
         {-this->position.x, -this->position.y, -this->position.z, 1}
     };
 
@@ -117,10 +115,10 @@ void Camera::build_cam_matrix()
 
     //Этот кусок кода на случай если мы не передаем в камеру вектора uvn
     //а хотим их вычислить
-    /*this->n = Vector(this->target, this->position);
+    this->n = Vector(this->target, this->position);
     this->v = Vector(0, 1, 0);
     this->u = v * n;
-    this->v = n * u;*/
+    this->v = n * u;
 
     this->v.normalize();
     this->u.normalize();
@@ -137,7 +135,7 @@ void Camera::build_cam_matrix()
 
     this->mcam = Matrix::multiplicate(t_matrix, uvn_matrix);
 
-    //c568, там приводится сферический режим и обычный
+    //c568, там приводится сверический режим и обычный
     //пока для простоты (возможно и не понадобится сферический) реализуем простой режим
 
 }

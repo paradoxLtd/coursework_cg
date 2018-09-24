@@ -7,6 +7,7 @@ void Point::init(double a, double b, double c, double d)
     y = b;
     z = c;
     w = d;
+    name = "Point";
 }
 
 void Point::init(const Point& p)
@@ -19,14 +20,11 @@ void Point::create()
     init(0, 0, 0, 1);
 }
 
-Point::Point() // конструктор класса
+// конструктор класса
+Point::Point(double x, double y,
+             double z, double w)
 {
-    create();
-}
-
-Point::Point(double a, double b, double c, double d) // конструктор класса
-{
-    init(a, b, c, d);
+    init(x, y, z, w);
 }
 
 Point::Point(Options opt)
@@ -34,7 +32,8 @@ Point::Point(Options opt)
     init(opt[0], opt[1], opt[2], 1);
 }
 
-Point::Point(Point *point) // конструктор класса
+// конструктор класса
+Point::Point(Point *point)
 {
     init(*point);
 }
@@ -45,42 +44,84 @@ Point::Point(const Point &point)
     init(point);
 }
 
+// конструктор переопределения
 Point::Point(Point &&point) noexcept
 {
     init(point);
 }
 
-Point& Point::operator=(const Point& other) noexcept
+// Переопределение = для копирования
+Point& Point::operator=
+(const Point& other) noexcept
 {
     init(other);
     return *this;
 }
 
-Point& Point::operator=(Point&& other)noexcept
+// Переопределение = для перемещения
+Point& Point::operator=
+(Point&& other) noexcept
 {
     init(other);
     return *this;
 }
 
-bool Point::isEqual(const Point &B)noexcept
+// Сравнение точек
+bool Point::isEqual(const Point &B)
+noexcept
 {
-    return((this->x == B.x) && (this->y == B.y) && (this->z == B.z));
+    return(
+                (this->x == B.x)
+                &&
+                (this->y == B.y)
+                &&
+                (this->z == B.z)
+                );
 }
 
-bool Point::operator==(const Point& other)noexcept
+// Переопределение оператора ==
+bool Point::operator==
+(const Point& other)noexcept
 {
     return isEqual(other);
 }
 
-bool Point::operator!=(const Point& other)noexcept
+// Переопределение оператора !=
+bool Point::operator!=
+(const Point& other)noexcept
 {
     return !isEqual(other);
 }
 
- std::ostream& operator<<(std::ostream& os,
-                                 const Point& p)
+// Переопределение +
+Point &Point::operator +(Point &p)
 {
-    os << "\n Point: x: " << p.x << ", y: " << p.y <<
-                 ", z: " << p.z << ", w:" << p.w;
+    this->x += p.x;
+    this->y += p.y;
+    this->z += p.z;
+
+    return  *this;
+}
+
+// Переопределение +=
+Point &Point::operator+=(Point &p)
+{
+    this->x += p.x;
+    this->y += p.y;
+    this->z += p.z;
+
+    return  *this;
+}
+
+// переопределение вывода
+std::ostream& operator<<
+(std::ostream& os, const Point& p)
+{
+     os << "\n" << p.name <<
+           "(x: " << p.x <<
+           ", y: " << p.y <<
+           ", z: " << p.z <<
+           ", w: " << p.w <<
+           ")";
     return os;
 }

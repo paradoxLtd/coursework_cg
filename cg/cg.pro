@@ -41,7 +41,9 @@ SOURCES += \
     plane.cpp \
     triangle_debug.cpp \
     object_debug.cpp \
-    loader.cpp
+    loader.cpp \
+    loader_debug.cpp \
+    drawer.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -62,7 +64,8 @@ HEADERS += \
     debug.h \
     matrix.h \
     plane.h \
-    errors.h
+    errors.h \
+    drawer.h
 
 FORMS += \
         mainwindow.ui

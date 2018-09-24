@@ -16,94 +16,91 @@ ObjectList::ObjectList(ObjectList &&list)
     list.objects.clear();
 }
 
-ObjectList& ObjectList::operator=(const ObjectList& list)
+ObjectList& ObjectList::operator=
+    (const ObjectList& list)
 {
     copy(list);
+    return *this;
 };
 
-ObjectList& ObjectList::operator=(ObjectList&& list)
+ObjectList& ObjectList::operator=
+    (ObjectList&& list)
 {
     copy(list);
     list.objects.clear();
+    return *this;
 }
 
 // Заведомо сюда не включены преобразования для
 // точек текстур, ТОЛЬКО ДЛЯ ВЕРШИН
-void ObjectList::prepareForConveyor(MoveOptions mop,
-                                    RotateOptions rop,
-                                    ScaleOptions sop)
+void ObjectList::prepareForConveyor
+    (MoveOptions mop,
+     RotateOptions rop,
+     ScaleOptions sop)
 {
     for (Object obj : objects)
     {
         // обновление радиусов, сброс статусов(отсечен)
         // копирование исходных массивов в основные
         obj.update();
-        // преобразования над трансформированными координатами
-        for (Point point : obj.vertex_trans)
-        {
-            Transformation::fullTransform(point,
-                                          mop, rop,
-                                          sop);
-        }
+        Transformation::fullTransform(obj, mop, rop, sop);
     }
 }
 
+// Вместо objectlist.objects.push_back(...)
+// теперь objectlist.push(...)
 void ObjectList::push(Object &obj)
 {
    objects.push_back(obj);
    size++;
 }
 
+// Преобразование локальных координат
+// к мировым
 void ObjectList::localToWorld()
 {
     Point point_tmp;
+    Point center;
     for (Object obj : objects)
     {
-        obj.vertex_trans.clear();
+        center = obj.center;
         for (Point point : obj.vertex_trans)
         {
-            point_tmp = Point(point.x + obj.center.x,
-                point.y + obj.center.y, point.z + obj.center.z, point.w);
-            obj.vertex_trans.push_back(point_tmp);
+            point += center;
         }
     }
 }
 
-void ObjectList::worldToCam(const Camera &camera)
+void ObjectList::worldToCam(Camera &cam)
 {
-    /*
-    Rotate rotate;
-    RotateOptions ropX(AXIS_X, camera.ang_x, true);
-    RotateOptions ropY(AXIS_Y, camera.ang_y, true);
-    RotateOptions ropZ(AXIS_Z, camera.ang_z, true);
+    cam.build_cam_matrix();
 
-    MoveOptions mop(&camera.point, true);
-    Move move;
+       for (Object obj : objects)
+       {
+           for (Point point : obj.vertex_trans)
+           {
+               point = Matrix::multiplicate(
+                           point, cam.mcam);
+           }
 
-    for (Object obj : objects)
-    {
-        for (Point point : obj.vertex_trans)
-        {
-            point = Point(point.x - camera.point.x,
-                point.y - camera.point.y, point.z - camera.point.z, point.w);
+           for (Point point : obj.texture_coords_trans)
+           {
+               point = Matrix::multiplicate(point, cam.mcam);
+           }
 
-            //YXZ поворот 437
-            Transformation::apply(point, move, mop);
-            Transformation::apply(point, rotate, ropY);
-            Transformation::apply(point, rotate, ropX);
-            Transformation::apply(point, rotate, ropZ);
-        }
-    }
-    Transformation::apply(camera.point, move, mop);
-    Transformation::apply(camera.point, rotate, ropY);
-    Transformation::apply(camera.point, rotate, ropX);
-    Transformation::apply(camera.point, rotate, ropZ);
-    */
+           obj.center = Matrix::multiplicate(obj.center, cam.mcam);
+           obj.dir = Matrix::multiplicate(obj.dir, cam.mcam);
+           obj.ux = Matrix::multiplicate(obj.ux, cam.mcam);
+           obj.uy = Matrix::multiplicate(obj.uy, cam.mcam);
+           obj.uz = Matrix::multiplicate(obj.uz, cam.mcam);
+       }
 }
 
 // Проверка необходимости отсечения по плоскости Z
-bool ObjectList::cutZ(int culL_flags, Point &sphere,
-                      Object &obj, const Camera &camera)
+bool ObjectList::cutZ(int culL_flags,
+                      Point &sphere,
+                      Object &obj,
+                      const Camera &camera)
 {
     // Координаты плоскостей отсечения камеры
     double farZ = camera.far_plane;

@@ -41,6 +41,12 @@ class Triangle
 {
 private:
 
+    void init(Object* ob, Indexes v,
+              Indexes vt, /*Indexes &vn,*/
+              int st = POLYGON_STATE_ACTIVE,
+              int attr = POLYGON_ATTR_NULL,
+              QColor color = Qt::white);
+
     void copy(const Triangle& triangle) noexcept;
 
     void destroy() noexcept;

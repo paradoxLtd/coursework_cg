@@ -1,28 +1,37 @@
 #include "Triangle.h"
 
-Triangle::Triangle(Object* ob, Indexes v, Indexes vt,
-                   /*Indexes &vn,*/ int s, int a, QColor c)
+void Triangle::init(Object* ob, Indexes v,
+                    Indexes vt, /*Indexes &vn,*/
+                    int s, int a, QColor c)
 {
     this->object = ob;
     this->indexes_vert = v;
     this->indexes_text = vt;
     //this->indexes_norm = vn;
-    this->normal = normalTrans();
+    // поскольку в загрузчике Triangle создается пустым без
+    // точек, то посчитать нормаль все равно нельзя
+    //this->normal = normalTrans();
     this->state = s;
     this->attr = a;
     this->color = c;
+
+    this->indexes_vert.name = "Vertex indexes";
+    this->indexes_text.name = "Texture indexes";
+    this->normal.name = "Normal Vector";
 }
 
-void Triangle::copy(const Triangle& triangle) noexcept
+Triangle::Triangle(Object* ob, Indexes v,
+                   Indexes vt, /*Indexes &vn,*/
+                   int s, int a, QColor c)
 {
-    this->object = triangle.object;
-    this->indexes_vert = triangle.indexes_vert;
-    this->indexes_text = triangle.indexes_text;
-    //this->indexes_norm = triangle.indexes_norm;
-    this->normal = normalTrans();
-    this->state = triangle.state;
-    this->attr = triangle.attr;
-    this->color = triangle.color;
+    init(ob, v, vt, s, a, c);
+}
+
+void Triangle::copy(const Triangle& t) noexcept
+{
+    init(t.object, t.indexes_vert,
+         t.indexes_text, t.state,
+         t.attr, t.color);
 }
 
 void Triangle::destroy() noexcept
@@ -151,16 +160,20 @@ std::vector<Point> Triangle::getPoints()
     {
         for_return.push_back(take_from[i]);
     }
+    return for_return;
 }
 
 std::ostream& operator<<(std::ostream& os,
                                 const Triangle& tr)
 {
-    os << "\n Polygon: object's id:" << tr.object->id <<
-          "\n Vertrix indexes" << tr.indexes_vert <<
-          "\n Texture indexes" << tr.indexes_text <<
-          "\n Vector normal" << tr.normal <<
-          "\n state: " << tr.state << ", attr: " << tr.attr;
+    os << "\nPolygon(Objects id:" <<
+          tr.object->id <<
+          ", state: " << tr.state <<
+          ", attr: " << tr.attr <<
+          ")" << tr.indexes_vert <<
+          tr.indexes_text <<
+          tr.normal;
+    return os;
 }
 
 

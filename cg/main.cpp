@@ -5,7 +5,7 @@
 #include <QTextStream>
 #include <QTextCodec>
 
-#include "Object.h"
+#include "Loader.h"
 
 
 
@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     //MainWindow w;
     //w.show();
 
-    Object::debug();
+    Loader::debug();
 
     return 0;
     //return a.exec();

@@ -14,9 +14,12 @@
 #include "Bit.h"
 
 //Общие флаги отсечения
-#define CULL_OBJECT_X 0x0001// Отсечение по оси х
-#define CULL_OBJECT_Y 0x0002 // Отсечение по оси у
-#define CULL_OBJECT_Z 0x0004 // Отсечение по оси г
+// Отсечение по оси х
+#define CULL_OBJECT_X 0x0001
+ // Отсечение по оси у
+#define CULL_OBJECT_Y 0x0002
+// Отсечение по оси z
+#define CULL_OBJECT_Z 0x0004
 #define CULL_OBJECT_XYZ (CULL_OBJECT_X | \
 CULL_OBJECT_Y| CULL_OBJECT_Z)
 
@@ -45,7 +48,8 @@ public:
 
     ObjectList(ObjectList &&objects);
 
-    ObjectList& operator=(const ObjectList& other);
+    ObjectList& operator=
+        (const ObjectList& other);
 
     ObjectList& operator=(ObjectList&& other);
 
@@ -65,14 +69,15 @@ public:
     void localToWorld();
 
     // 435
-    // Преобразование точки из мировых координат
-    // в камерные
-    void worldToCam(const Camera &camera);
+    // Преобразование точки из мировых
+    // координат в камерные
+    void worldToCam(Camera &camera);
 
     //450; 583
     // d - расстояние до камеры
     // Преобразование в аксонометрические
-    void camToAxonometricAndScreenObject(Object *obj, Camera *cam);
+    void camToAxonometricAndScreenObject(
+            Object *obj, Camera *cam);
 
     //450
     // d - расстояние до камеры
@@ -93,26 +98,32 @@ public:
 
     // Преобразование точки из мировых координат
     // в камерные
-    Point cameraTransformation(const Point &old,
-                               const Camera &camera);
+    Point cameraTransformation(
+            const Point &old,
+            const Camera &camera);
 
     // Проверка необходимости отсечения по плоскости Z
     bool cutZ(int culL_flags, Point &sphere,
-              Object &obj, const Camera &camera);
+              Object &obj,
+              const Camera &camera);
 
     // Проверка необходимости отсечения по плоскости Y
      bool cutX(int culL_flags, Point &sphere,
-               Object &obj, const Camera &camera);
+               Object &obj,
+               const Camera &camera);
 
     // Проверка необходимости отсечения по плоскости X
     bool cutY(int culL_flags, Point &sphere,
               Object &obj, const Camera &camera);
 
     // Отбраковка объектов, 574
-    void removeObject(int culL_flags, const Camera &camera);
+    void removeObject(
+            int culL_flags,
+            const Camera &camera);
 
     // Удаление обратных поверхностей(задняя часть куба), 580
-    void removeBackSurfaces(const Camera &camera);
+    void removeBackSurfaces(
+            const Camera &camera);
 
 };
 

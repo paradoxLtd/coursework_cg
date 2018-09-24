@@ -11,7 +11,6 @@ Plane::Plane(Point &point, Vector &n, bool normalize)
     }
 }
 
-
 Plane::Plane(const Plane &p)
 {
     this->p = p.p;

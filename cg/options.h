@@ -15,11 +15,13 @@ class Point;
 
 class Options
 {
-public:
+protected:
     double params[3];
+public:
     bool inverse;
-    Options() {}
-    Options(double a, double b, double c)
+    Options(double a = 0,
+            double b = 0,
+            double c = 0)
     {
         params[0] = a;
         params[1] = b;
@@ -27,14 +29,32 @@ public:
         inverse = false;
     }
 
-    double& operator[] (int index)
+    // для чтения
+    const double& operator[] (int index) const
     {
         if (index > 2)
         {
-            std::cout << "Класс Options не допускает обращение к элементу массива параметров с индексом больше 2 ";
+            std::cout << "Класс Options не допускает"
+                      << " обращение к элементу массива" <<
+                         " параметров с индексом больше 2 ";
             return params[2];
         }
         return params[index];
+    }
+
+    // для записи
+    void set (double meaning, int index)
+    {
+        if (index > 2)
+        {
+            std::cout << "Класс Options не допускает"
+                      << " обращение к элементу массива" <<
+                         " параметров с индексом больше 2 ";
+        }
+        else
+        {
+            params[index] = meaning;
+        }
     }
 };
 

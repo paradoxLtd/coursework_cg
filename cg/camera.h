@@ -2,7 +2,7 @@
 #define CAMERA_H
 
 #include "Point.h"
-#include "Transformation.h"
+#include "transformation.h"
 #include "Options.h"
 #include "plane.h"
 #include "matrix.h"
@@ -36,7 +36,6 @@ public:
                                      //используемые при аксонометрическом преобразовании
 
     double asp_ratio;
-private:
     int state; //Состояние камеры
     int attr; //атрибуты камеры
 
@@ -50,11 +49,10 @@ private:
 
     double viewport_w, viewport_h, viewport_xc, viewport_yc;
 
-
     Matrix mcam; //матрица перехода из коор-т матрицы в координаты камеры
     Matrix mper; //из камеры в аксонометрические
     Matrix mscr; //из аксонометрических в экранные
-
+private:
     void _copy(const Camera &c);
 
     void _init(int attr, Point &position, Vector &u, Vector &v, Vector &n,

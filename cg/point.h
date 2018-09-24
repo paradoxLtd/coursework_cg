@@ -16,29 +16,41 @@ class Point
     void init(const Point &p);
 public:
     double x, y, z, w;
+    std::string name; //для дебагинга
 
     /*Конструкторы */
-    Point();
 
     Point(Point *p);
     Point(const Point &point);
-    Point(double a, double b, double c, double d = 1);
+    Point(double x = 0, double y = 0,
+          double z = 0, double w = 1);
+
     Point(Options opt);
 
     Point(Point &&point) noexcept;
 
-    Point& operator=(const Point& other) noexcept;
+    Point& operator=
+    (const Point& other)noexcept;
 
-    Point& operator=(Point&& other)noexcept;
+    Point& operator=
+    (Point&& other)noexcept;
 
     bool isEqual(const Point &B)noexcept;
 
-    bool operator==(const Point& other)noexcept;
+    bool operator==
+    (const Point& other)noexcept;
 
-    bool operator!=(const Point& other)noexcept;
+    bool operator!=
+    (const Point& other)noexcept;
 
-    friend std::ostream& operator<<(std::ostream& os,
-                                    const Point& p);
+    Point & operator+
+    (Point &other);
+
+    Point & operator+=
+    (Point &other);
+
+    friend std::ostream& operator<<
+    (std::ostream& os, const Point& p);
 
     static void debug();
 };

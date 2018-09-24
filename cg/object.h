@@ -17,6 +17,9 @@ class Triangle;
 #define OBJECT_STATE_VISIBLE 0x0002
 #define OBJECT_STATE_CULLED 0x0004
 #define OBJECT_STATE_ERROR 0x0008
+// подробный вывод информации в std::cout
+// нужен для дебага
+#define OBJECT_DETAILED 0x0010 //16-ичная система же
 
 // Текстуры
 // Однокаркасный
@@ -37,7 +40,7 @@ private:
                 Vector dir = Vector(1, 0, 0),
                 Point center = Point(),
                 int attr = 0,
-               int state = OBJECT_STATE_ACTIVE,
+               int state = OBJECT_STATE_NULL,
                const char *Name = "no name");
 
     // Спроецировать точку на плоскость xy
@@ -84,7 +87,7 @@ public:
             Vector dir = Vector(1, 0, 0),
             Point center = Point(),
             int attr = 0,
-           int state = OBJECT_STATE_ACTIVE,
+           int state = OBJECT_STATE_NULL,
            const char *Name = "no name");
 
     // Посчитать радиус и запомнить его в классе
@@ -109,6 +112,9 @@ public:
     void update();
 
     std::vector<int> jarvis();
+
+    friend std::ostream& operator<<(std::ostream& os,
+                                    const Object& p);
 
     static void debug();
 

@@ -31,11 +31,13 @@ void Indexes::push(int index)
 
 Indexes::Indexes()
 {
-
+    name = "Indexes";
 }
 
 Indexes::Indexes(int a, int b, int c)
 {
+    name = "Indexes";
+
     ind.push_back(a);
     ind.push_back(b);
     ind.push_back(c);
@@ -80,12 +82,13 @@ bool Indexes::operator!=(const Indexes& other)noexcept
     return !isEqual(other);
 }
 
-
+// переопределение вывода
 std::ostream& operator<<(std::ostream& os,
                                 const Indexes& in)
 {
    int s = in.size();
-   os << "\n Indexes: size: " << s << ",consists of:";
+   os <<"\n" << in.name
+     << "(size: " << s << ") consists of:";
    for (int index: in.ind)
    {
          os << " " << index << ",";
