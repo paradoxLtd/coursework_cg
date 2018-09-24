@@ -11,8 +11,10 @@
 // indexes(0,1,2), пишите indexes(1,2,3) - отсчёт с единицы.
 class Indexes
 {
-public:
-    std::vector<int> ind;
+    private:
+        std::vector<int> ind;
+    public:
+        char *name;
 
         std::vector<int>::size_type size() const;
 

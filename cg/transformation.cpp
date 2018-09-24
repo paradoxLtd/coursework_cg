@@ -1,7 +1,11 @@
 #include "Transformation.h"
 #include <cmath>
 
-Vector Move::apply(const Vector &vector, Options &opt)
+// Преобразования над векторами
+
+// Движение
+Vector Move::apply(const Vector &vector,
+                   const Options &opt) const
 {
     double x = opt[0], y = opt[1], z = opt[2];
     if (opt.inverse)
@@ -17,11 +21,13 @@ Vector Move::apply(const Vector &vector, Options &opt)
         { x, y, z, 1 }
     };
 
-    Vector ret(Matrix::multiplicate(vector, move_matrix));
-    return ret;
+    return Vector(
+                Matrix::multiplicate(
+                    vector, move_matrix));
 }
-
-Vector Scale::apply(const Vector &vector, Options &opt)
+// Масштабирование
+Vector Scale::apply(const Vector &vector,
+                    const Options &opt) const
 {
     double x = opt[0], y = opt[1], z = opt[2];
     if (opt.inverse)
@@ -36,11 +42,14 @@ Vector Scale::apply(const Vector &vector, Options &opt)
         { 0, 0, z, 0 },
         { 0, 0, 0, 1 }
     };
-    Vector ret(Matrix::multiplicate(vector, scale_matrix));
-    return ret;
+    return Vector(
+                Matrix::multiplicate(
+                    vector, scale_matrix));
 }
 
-Vector Rotate::rotateX(const Vector &vector, double angle)
+// Устаревшие повороты
+Vector Rotate::rotateX(const Vector &vector,
+                       double angle) const
 {
     double rotate_matrix[SIZE][SIZE] =
     {
@@ -49,11 +58,13 @@ Vector Rotate::rotateX(const Vector &vector, double angle)
         { 0,	-sin(angle),	cos(angle), 0 },
         { 0,	 0,				0,			1 }
     };
-    Vector ret(Matrix::multiplicate(vector, rotate_matrix));
-    return ret;
+    return Vector(
+                Matrix::multiplicate(
+                    vector, rotate_matrix));
 }
 
-Vector Rotate::rotateY(const Vector &vector, double angle)
+Vector Rotate::rotateY(const Vector &vector,
+                       double angle) const
 {
     double rotate_matrix[SIZE][SIZE] =
     {
@@ -62,11 +73,13 @@ Vector Rotate::rotateY(const Vector &vector, double angle)
         { sin(angle), 0,	 cos(angle),  0 },
         { 0,		  0,	 0,			  1 }
     };
-    Vector ret(Matrix::multiplicate(vector, rotate_matrix));
-    return ret;
+    return Vector(
+                Matrix::multiplicate(
+                    vector, rotate_matrix));
 }
 
-Vector Rotate::rotateZ(const Vector &vector, double angle)
+Vector Rotate::rotateZ(const Vector &vector,
+                       double angle) const
 {
     double rotate_matrix[SIZE][SIZE] =
     {
@@ -75,12 +88,14 @@ Vector Rotate::rotateZ(const Vector &vector, double angle)
         { 0,		   0,		   1, 0 },
         { 0,		   0,		   0, 1 }
     };
-    Vector ret(Matrix::multiplicate(vector, rotate_matrix));
-    return ret;
+    return Vector(
+                Matrix::multiplicate(
+                    vector, rotate_matrix));
 }
 
-Vector Rotate::apply(const Vector &vector, Options &opt){
-    int choose = (int)opt[0];
+Vector Rotate::apply(const Vector &vector,
+                     const Options &opt) const{
+    int choose = (int) opt[0];
     double angle = opt[1];
     if (opt.inverse)
         angle *= -1;
@@ -107,14 +122,133 @@ Vector Rotate::apply(const Vector &vector, Options &opt){
     return v;
 }
 
-Vector Transformation::apply(const Vector &vector,
-    Action &act, Options &opt)
+
+// Преобразования над объектами
+
+/*Как на мой взгляд стоит производить преобразования
+К перемещениям стоит добавить также перенос center, а также
+векторов dir, ux, uy, и uz
+В случае поворотов мы получаем приращение для нашего вектора
+dir, соответственно под него также и меняется ux, uy, uz
+Витоге мы имеем начальный базис ux, uy, uz, и новый базис
+ux', uy', uz'. Вычисляем матрицу перехода от старого базиса к
+новому, а после перемножаем все точки на матрицу перехода и получаем
+новые координаты. Если есть альтернативные предложения, то your welcome*/
+
+// Новый поворот объекта
+void Rotate::apply(Object &obj,
+                   const Options &opt) const
+{
+    /*В качестве параметров идут dx,dy,dz для */
+    Vector d_p = Vector(opt[0], opt[1], opt[2]);
+    Vector n_dir = obj.dir + d_p;
+    Vector n_ux = n_dir;
+
+    Vector n_uy = Vector(0, 1, 0);
+    Vector n_uz = n_uy * n_ux;
+    n_uy = n_ux * n_uz;
+
+    n_ux.normalize();
+    n_uy.normalize();
+    n_uz.normalize();
+
+    double mtx[SIZE][SIZE] = {
+        {n_ux.x, n_uy.x, n_uz.x, 0},
+        {n_ux.x, n_uy.x, n_uz.x, 0},
+        {n_ux.x, n_uy.x, n_uz.x, 0},
+        {0, 0, 0, 1}
+    };
+
+    double n_mtx[SIZE][SIZE] = {
+        {obj.ux.x, obj.uy.x, obj.uz.x, 0},
+        {obj.ux.y, obj.uy.y, obj.uz.y, 0},
+        {obj.ux.z, obj.uy.z, obj.uz.z, 0},
+        {0, 0, 0, 1}
+    };
+
+    Matrix inv = Matrix::inv(Matrix(mtx));
+    Matrix n = Matrix(n_mtx);
+
+    Matrix m_tr = Matrix::multiplicate(inv, n);
+
+    for (Point point : obj.vertex_trans)
+    {
+        point = Matrix::multiplicate(point, m_tr);
+    }
+
+    obj.dir = n_dir;
+    obj.ux = n_ux;
+    obj.uy = n_uy;
+    obj.uz = n_uz;
+}
+
+// Движение объекта
+void Move::apply(Object &obj,
+                 const Options &opt) const
+{
+    for (Point point : obj.vertex_trans)
+    {
+        Transformation::transform(point, *this, opt);
+    }
+}
+
+// Масштабирование объекта
+void Scale::apply(Object &obj,
+                  const Options &opt) const
+{
+    for (Point point : obj.vertex_trans)
+    {
+        Transformation::transform(point, *this, opt);
+    }
+}
+
+
+// Преобразования камеры
+
+// Поворот
+void Rotate::apply(Camera &cam,
+                   const Options &opt) const
+{
+    Point p = Point(opt[0], opt[1], opt[2], 1.);
+    cam.target += p;
+    // Для работы с плоскостями также надо производить изменение значений
+}
+
+// Движение
+void Move::apply(
+        Camera &cam, const Options &opt) const
+{
+    Point p = Point(opt[0], opt[1], opt[2], 1.);
+    cam.position += p;
+    cam.target += p;
+
+    // Для работы с плоскостями также надо производить изменение значений
+}
+
+// Масштабирование не задано!
+void Scale::apply(Camera &cam,
+                       const Options &opt) const
+{
+
+    // Для работы с плоскостями также надо производить изменение значений
+}
+
+
+// Применение трансформации
+// к вектору
+Vector Transformation::transform(
+        const Vector &vector,
+        const Action &act,
+        const Options &opt)
 {
     return act.apply(vector, opt);
 }
 
-Point Transformation::apply(Point &point,
-     Action &act, Options &opt)
+// к точке
+Point Transformation::transform(
+        const Point &point,
+        const Action &act,
+        const Options &opt)
 {
     Point p;
     Vector vk;
@@ -123,12 +257,48 @@ Point Transformation::apply(Point &point,
     return after.asPoint();
 }
 
-Point Transformation::apply(const Point &point,
-     Action &act, Options &opt)
+// к камере
+void Transformation::transform(Camera &cam,
+                               const Action &act,
+                               const Options &opt)
 {
-    Point p;
-    Vector vk;
-    Vector v(point, p);
-    Vector after = act.apply(v, opt);
-    return after.asPoint();
+    act.apply(cam, opt);
+}
+
+// к объекту
+void Transformation::transform(Object &obj,
+                               const Action &act,
+                               const Options &opt)
+{
+    act.apply(obj, opt);
+}
+
+// Применение полных преобразований
+
+// к объекту
+void Transformation::fullTransform(Object &object, MoveOptions &mop,
+                               RotateOptions &rop,
+                               ScaleOptions &sop)
+{
+    Move move;
+    Rotate rotate;
+    Scale scale;
+
+    transform(object, move, mop);
+    transform(object, rotate, mop);
+    transform(object, scale, mop);
+}
+
+// к камере
+void Transformation::fullTransform(Camera &camera, MoveOptions &mop,
+                               RotateOptions &rop,
+                               ScaleOptions &sop)
+{
+    Move move;
+    Rotate rotate;
+    Scale scale;
+
+    transform(camera, move, mop);
+    transform(camera, rotate, mop);
+    transform(camera, scale, mop);
 }

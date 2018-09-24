@@ -46,7 +46,13 @@ void Object::create(std::vector<Point> vertex_local,
     this->texture_coords = texture_coords;
     this->texture_coords_trans = texture_coords;
     this->polygons = polygons;
+
     this->name = name;
+    this->center.name = "Center point of Object";
+    this->dir.name = "Direction vector";
+    this->ux.name = "Vector ux";
+    this->uz.name = "Vector uy";
+    this->uy.name = "Vector uz";
 
     // Получаем avg_radius и max_radius
     updateRad();
@@ -296,9 +302,145 @@ void Object::sort()
 // http://www.inf.tsu.ru/library/DiplomaWorks/CompScience/2004/Chadnov/diplom.pdf
 */
 
-//
-//
+/*
+int levinshtein_damerau_matrix(QString s1, QString s2)
+{
+    //std::cout << "Matrix(Damerau-Levinshtein): \n";
 
+    int len_s1 = s1.length();
+    int len_s2 = s2.length();
+    if (len_s1 == 0)
+        return len_s2;
+    if (len_s2 == 0)
+        return len_s1;
+    int str_matrix1 = (int )malloc((len_s2 + 1)*sizeof(int));
+    int str_matrix2 = (int )malloc((len_s2 + 1)*sizeof(int));
+    int str_matrix3 = (int )malloc((len_s2 + 1)*sizeof(int));
+
+
+    for (int i = 0; i < len_s2 + 1; i++)
+    {
+        str_matrix1[i] = i;
+    }
+    str_matrix2[0] = 1;
+    for (int i = 1; i < len_s2 + 1; i++)
+    {
+        str_matrix2[i] = levinshtein_fill_number(str_matrix2[i - 1], str_matrix1[i - 1], str_matrix1[i], s1[0] == s2[i - 1]);
+    }
+
+    for (int i = 2; i < len_s1 + 1; i++)
+    {
+        str_matrix3[0] = i;
+        str_matrix3[1] = levinshtein_fill_number(str_matrix3[0], str_matrix2[0], str_matrix2[1], s1[i-1] == s2[0]);
+        for (int j = 2; j < len_s2 + 1; j++)
+        {
+            str_matrix3[j] = levinshtein_damerau_fill_number(str_matrix3[j - 1], str_matrix2[j - 1], str_matrix2[j],
+                    str_matrix1[j-2], s2[j - 1] == s1[i - 1],possible_transpos(s1[i - 2], s1[i - 1], s2[j - 2], s2[j - 1]));
+        }
+*/
+        /*for (int i = 0; i < len_s2 + 1; i++)
+        {
+            std::cout << str_matrix1[i] << " ";
+        }
+        std::cout << "\n";*/
+/*
+        swap_int_poiter(&str_matrix1, &str_matrix2);
+        swap_int_poiter(&str_matrix2, &str_matrix3);
+    }
+      */
+    /*for (int i = 0; i < len_s2 + 1; i++)
+    {
+        std::cout << str_matrix1[i] << " ";
+    }
+    std::cout << "\n";
+    for (int i = 0; i < len_s2 + 1; i++)
+    {
+        std::cout << str_matrix2[i] << " ";
+    }
+    std::cout << "\n";*/
+        /*
+    int res = str_matrix2[len_s2];
+    free(str_matrix1);
+    free(str_matrix2);
+    free(str_matrix3);
+    return res;
+}
+*/
+
+std::ostream& operator<<(std::ostream& os,
+                                const Object& obj)
+{
+    os << "\n Object: object's id:" << obj.id <<
+          "\n name: " << obj.name;
+    os << "\n states:";
+    if (obj.state & OBJECT_STATE_NULL)
+          os << " not initialize;";
+    if (obj.state & OBJECT_STATE_ACTIVE)
+          os << " ready to render;";
+    if (obj.state & OBJECT_STATE_VISIBLE)
+          os << " visible;";
+    if (obj.state & OBJECT_STATE_CULLED)
+          os << " invisible;";
+    if (obj.state & OBJECT_STATE_ERROR)
+          os << " error;";
+
+    os << "\n average radius: " <<
+          obj.avg_radius;
+
+    os << "\n maximum radius: " <<
+          obj.max_radius;
+    os << obj.center << obj.dir;
+
+    if (obj.state & OBJECT_DETAILED)
+    {
+          os << "\n detailed information;";
+
+         os << "\n physical attributes:";
+         if (obj.attr & OBJECT_SINGLE_FRAME)
+               os << " single frame;";
+         if (obj.attr & OBJECT_MULTIPLE_FRAME)
+               os << " multiple frame;";
+         if (obj.attr & OBJECT_TEXTURE)
+               os << " with textures;";
+
+         os << obj.ux << obj.uy << obj.uz;
+
+         int size_vertex_local = obj.vertex_local.size();
+         os << "\n local vertex";
+         for (int i = 0; i < size_vertex_local; i++)
+         {
+             os << obj.vertex_local[i];
+         }
+
+         int size_vertex_trans = obj.vertex_trans.size();
+         os << "\n trans vertex";
+         for (int i = 0; i < size_vertex_trans; i++)
+         {
+             os << obj.vertex_trans[i];
+         }
+
+         int size_texture_local = obj.texture_coords.size();
+         os << "\n local texture coords";
+         for (int i = 0; i < size_texture_local; i++)
+         {
+             os << obj.texture_coords[i];
+         }
+
+         int size_texture_trans = obj.texture_coords_trans.size();
+         os << "\n trans texture coords";
+         for (int i = 0; i < size_texture_trans; i++)
+         {
+             os << obj.texture_coords_trans[i];
+         }
+
+         int size_polygons = obj.polygons.size();
+         os << "\n polygons";
+         for (int i = 0; i < size_polygons; i++)
+         {
+             os << obj.polygons[i];
+         }
+    }
+}
 
 void Object::update()
 {

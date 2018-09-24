@@ -22,7 +22,7 @@ void Point::debug()
    // Point(Options opt);
    MoveOptions pp(1,2,3);
    Point f(pp);
-   pp[0] = 3;
+   pp.set(3, 0);
    std::cout << f;
 
    // = ==

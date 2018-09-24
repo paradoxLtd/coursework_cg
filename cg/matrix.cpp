@@ -45,13 +45,8 @@ Matrix::Matrix(Matrix &&m)
     }
 }
 
-Matrix::Matrix(Vector a)
+Matrix::Matrix(Point a)
 {
-    this->matrix[0][0] = a.x;
-    this->matrix[0][1] = a.y;
-    this->matrix[0][2] = a.z;
-    this->matrix[0][3] = 1;
-
     for (int i = 1; i < SIZE; i++)
     {
         for (int j = 0; j < SIZE; j++)
@@ -59,6 +54,15 @@ Matrix::Matrix(Vector a)
             this->matrix[i][j] = 0;
         }
     }
+    this->matrix[0][0] = a.x;
+    this->matrix[0][1] = a.y;
+    this->matrix[0][2] = a.z;
+    this->matrix[0][3] = a.w;
+}
+
+Matrix::Matrix(Vector a)
+{
+    Matrix(a.asPoint());
 }
 
 Matrix& Matrix::operator = (const Matrix &m)
@@ -100,6 +104,18 @@ Vector Matrix::multiplicate(Vector v, Matrix m)
     Matrix vec_m(v);
     Vector vec_v(multiplicate(vec_m, m).asVector()); //порядок слева вектор, справа матрица
     return vec_v;
+}
+
+Point Matrix::multiplicate(Point p, Matrix m)
+{
+    Matrix vec_m(p);
+    Vector vec_v(multiplicate(vec_m, m).asVector()); //порядок слева вектор, справа матрица
+    return vec_v.asPoint();
+}
+
+Matrix Matrix::inv(Matrix a)
+{
+    //Нахождение обратной матрицы
 }
 
 void Matrix::eye()

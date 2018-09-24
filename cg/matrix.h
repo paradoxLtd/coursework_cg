@@ -2,7 +2,6 @@
 #define MATRIX_H
 #define SIZE 4
 #include "vector.h"
-
 class Matrix
 {
 public:
@@ -12,6 +11,7 @@ public:
     Matrix(Matrix &&a);
     Matrix(double m[SIZE][SIZE]);
     Matrix(Vector a);
+    Matrix(Point a);
 
     Matrix & operator = (const Matrix &m);
     Matrix & operator=(Matrix&& m);
@@ -21,5 +21,8 @@ public:
 
     static Matrix multiplicate(Matrix a, Matrix b);
     static Vector multiplicate(Vector v, Matrix m);
+    static Point multiplicate(Point p, Matrix m);
+
+    static Matrix inv(Matrix a);
 };
 #endif // MATRIX_H

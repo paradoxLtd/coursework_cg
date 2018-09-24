@@ -6,12 +6,15 @@
 #include <ctype.h>
 #include <fstream>
 #include <sstream>
+#include <direct.h>
+#include <regex>
 
 #include "Transformation.h"
 #include "Object.h"
 #include "Bit.h"
 #include "resource.h"
 #include "Scene.h"
+#include <string>
 
 // Маска извлечения цвета в формате RGB или в виде индекса
 #define PLX_RGB_MASK 0x8000
@@ -245,6 +248,9 @@ class Loader
 
 class Loader
 {
+private:
+    int _load(Object *object, const char* filename);
+    int _loadAll(Scene &scene, std::vector<std::string> names);
 public:
     void message(char *filename, const char* text,
         const int err)
@@ -254,10 +260,14 @@ public:
             ". Код ошибки:" << err;
     }
 
-    int load(Object *object, char* filename);
+    int load(Object *object, const char* filename);
+
+    int load(Object *object, std::string filename);
 
     // Загрузить все объекты на сцену, names - список имен
-    int loadAll(Scene scene, char** names, int names_size);
+    int loadAll(Scene &scene, std::vector<std::string> names);
+
+    static void debug();
 };
 
 #endif // LOADER_H

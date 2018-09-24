@@ -32,12 +32,12 @@ void Object::debug()
     obj1.vertex_local.push_back(v7);
     obj1.vertex_local.push_back(v8);
     obj1.update();
-
+    /*
     std::cout << "\nLook at indexes array:";
     std::vector<int> indexes = obj1.jarvis();
     for (int i = 0; i < indexes.size(); i++)
     {
         std::cout << " " << indexes[i] << ";";
     }
-
+*/
 }

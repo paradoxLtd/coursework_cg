@@ -9,9 +9,9 @@ void Drawer::draw_object(Object &obj)
 {
     for(int poly = 0; poly < obj.polygons.size(); poly++)
     {
-        if (!(obj.polygons[poly].state & POLY4DV2_STATE_ACTIVE) ||
-            (obj.polygons[poly].state & POLY4DV2_STATE_CLIPPED) ||
-            (obj.polygons[poly].state & POLY4DV2_STATE_BACKFACE))
+        if (!(obj.polygons[poly].state & POLYGON_STATE_ACTIVE) ||
+            (obj.polygons[poly].state & POLYGON_STATE_CLIPPED) ||
+            (obj.polygons[poly].state & POLYGON_STATE_BACKFACE))
             continue;
         int vindex_0 = obj.polygons[poly].indexes_vert[0];
         int vindex_1 = obj.polygons[poly].indexes_vert[1];

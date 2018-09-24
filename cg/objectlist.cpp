@@ -1,5 +1,5 @@
 #include "objectlist.h"
-#include <qDebug>
+
 void ObjectList::copy(ObjectList list)
 {
    this->objects = list.objects;
@@ -16,55 +16,57 @@ ObjectList::ObjectList(ObjectList &&list)
     list.objects.clear();
 }
 
-ObjectList& ObjectList::operator=(const ObjectList& list)
+ObjectList& ObjectList::operator=
+    (const ObjectList& list)
 {
     copy(list);
+    return *this;
 };
 
-ObjectList& ObjectList::operator=(ObjectList&& list)
+ObjectList& ObjectList::operator=
+    (ObjectList&& list)
 {
     copy(list);
     list.objects.clear();
+    return *this;
 }
 
 // Заведомо сюда не включены преобразования для
 // точек текстур, ТОЛЬКО ДЛЯ ВЕРШИН
-void ObjectList::prepareForConveyor(MoveOptions mop,
-                                    RotateOptions rop,
-                                    ScaleOptions sop)
+void ObjectList::prepareForConveyor
+    (MoveOptions mop,
+     RotateOptions rop,
+     ScaleOptions sop)
 {
     for (Object obj : objects)
     {
         // обновление радиусов, сброс статусов(отсечен)
         // копирование исходных массивов в основные
         obj.update();
-        // преобразования над трансформированными координатами
-        for (Point point : obj.vertex_trans)
-        {
-            Transformation::fullTransform(point,
-                                          mop, rop,
-                                          sop);
-        }
+        Transformation::fullTransform(obj, mop, rop, sop);
     }
 }
 
+// Вместо objectlist.objects.push_back(...)
+// теперь objectlist.push(...)
 void ObjectList::push(Object &obj)
 {
    objects.push_back(obj);
    size++;
 }
 
+// Преобразование локальных координат
+// к мировым
 void ObjectList::localToWorld()
 {
     Point point_tmp;
+    Point center;
     for (Object obj : objects)
     {
-        obj.vertex_trans.clear();
+        center = obj.center;
         for (Point point : obj.vertex_trans)
         {
-            point_tmp = Point(point.x + obj.center.x,
-                point.y + obj.center.y, point.z + obj.center.z, point.w);
-            obj.vertex_trans.push_back(point_tmp);
+            point += center;
         }
     }
 }
@@ -73,34 +75,32 @@ void ObjectList::worldToCam(Camera &cam)
 {
     cam.build_cam_matrix();
 
-    for (Object obj : objects)
-    {
-        for (Point point : obj.vertex_trans)
-        {
-            point = Matrix::multiplicate(old, cam.mcam);
-        }
+       for (Object obj : objects)
+       {
+           for (Point point : obj.vertex_trans)
+           {
+               point = Matrix::multiplicate(
+                           point, cam.mcam);
+           }
 
-        for (Point point : texture_coords)
-        {
-            point = Matrix::multiplicate(old, cam.mcam);
-        }
+           for (Point point : obj.texture_coords_trans)
+           {
+               point = Matrix::multiplicate(point, cam.mcam);
+           }
 
-        for (Point point : texture_coords_trans)
-        {
-            point = Matrix::multiplicate(old, cam.mcam);
-        }
-
-        obj.center = Matrix::multiplicate(obj.center, cam.mcam);
-        obj.dir = Matrix::multiplicate(obj.dir, cam.mcam);
-        obj.ux = Matrix::multiplicate(obj.ux, cam.mcam);
-        obj.uy = Matrix::multiplicate(obj.uy, cam.mcam);
-        obj.uz = Matrix::multiplicate(obj.uz, cam.mcam);
-    }
+           obj.center = Matrix::multiplicate(obj.center, cam.mcam);
+           obj.dir = Matrix::multiplicate(obj.dir, cam.mcam);
+           obj.ux = Matrix::multiplicate(obj.ux, cam.mcam);
+           obj.uy = Matrix::multiplicate(obj.uy, cam.mcam);
+           obj.uz = Matrix::multiplicate(obj.uz, cam.mcam);
+       }
 }
 
 // Проверка необходимости отсечения по плоскости Z
-bool ObjectList::cutZ(int culL_flags, Point &sphere,
-                      Object &obj, const Camera &camera)
+bool ObjectList::cutZ(int culL_flags,
+                      Point &sphere,
+                      Object &obj,
+                      const Camera &camera)
 {
     // Координаты плоскостей отсечения камеры
     double farZ = camera.far_plane;
@@ -330,19 +330,16 @@ void ObjectList::camToAxonometricAndScreenObject(Object *obj, Camera *cam)
     float beta = (0.5 * cam->viewplane_height - 0.5);
 
     int vsize = obj->vertex_trans.size();
-    qDebug() << obj->vertex_trans[0].x << " " << obj->vertex_trans[0].y << " " << obj->vertex_trans[0].z;
-    qDebug() << obj->vertex_trans[1].x << " " << obj->vertex_trans[1].y << " " << obj->vertex_trans[1].z;
-    qDebug() << obj->vertex_trans[2].x << " " << obj->vertex_trans[2].y << " " << obj->vertex_trans[2].z;
 
     for (int i = 0; i < vsize; i++)
     {
-
         double z = obj->vertex_trans[i].z;
+
         //obj->vertex_trans[i].x = cam->view_dst_hor * obj->vertex_trans[i].x / z;
         //obj->vertex_trans[i].y =  cam->view_dst_ver * obj->vertex_trans[i].y * cam->asp_ratio / z;
         // пока не понял откуда берутся view_dst_hor view_dst_ver в формуле вроде только dist
         // to axon
-        if (z != 0)
+        if (fabs(z) > 0.00001)
         {
             obj->vertex_trans[i].x = cam->dst * obj->vertex_trans[i].x / z;
             obj->vertex_trans[i].y =  cam->dst * obj->vertex_trans[i].y * cam->asp_ratio / z;
@@ -351,6 +348,5 @@ void ObjectList::camToAxonometricAndScreenObject(Object *obj, Camera *cam)
         // to screen
         obj->vertex_trans[i].x += alpha;
         obj->vertex_trans[i].y = -obj->vertex_trans[i].y + beta;
-        qDebug() << obj->vertex_trans[i].x << " " << obj->vertex_trans[i].y << " " << obj->vertex_trans[i].z;
     }
 }

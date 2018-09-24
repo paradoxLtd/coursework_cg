@@ -8,10 +8,8 @@
 class Plane
 {
 public:
-    Plane()
-    {
 
-    };
+    Plane() = default;
     Plane(Point &point, Vector &n, bool normalize);
     Plane(const Plane &p);
 

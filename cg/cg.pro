@@ -42,6 +42,7 @@ SOURCES += \
     triangle_debug.cpp \
     object_debug.cpp \
     loader.cpp \
+    loader_debug.cpp \
     drawer.cpp
 
 HEADERS += \

@@ -7,6 +7,7 @@
 #include "camera.h"
 #include "triangle.h"
 #include "objectlist.h"
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -22,14 +23,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
 }
 
-MainWindow::~MainWindow()
-{
-    delete ui;
-}
-
 void MainWindow::on_pushButton_clicked()
 {
-    Point cam_pos(-100, 0, -100,1);
+    Point cam_pos(-100, -100, -100,1);
     Vector cam_dir(0,0,0);
     Vector vscale(0.5,0.5,0.5);
     Vector vpos(0,0,0);
@@ -62,4 +58,10 @@ void MainWindow::on_pushButton_clicked()
     dr.draw_object(new_obj);
     //QPen mypen(Qt::black);
     //this->graphics_scene->addLine(0, 0, 600, 600, mypen);
+}
+
+
+MainWindow::~MainWindow()
+{
+    delete ui;
 }

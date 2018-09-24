@@ -18,8 +18,6 @@ int &Indexes::operator[](const int index)
 // ОЧЕНЬ ВАЖНО: OBJ начинает отчёт не с нуля, а с единицы
 // из за этого индексы хранят значения на 1 больше настоящих
 // поэтому для корректной работы возвращаем index - 1
-
-
 int Indexes::operator[](const int index) const
 {
     return (ind[index] - 1);
@@ -33,11 +31,13 @@ void Indexes::push(int index)
 
 Indexes::Indexes()
 {
-
+    name = "Indexes";
 }
 
 Indexes::Indexes(int a, int b, int c)
 {
+    name = "Indexes";
+
     ind.push_back(a);
     ind.push_back(b);
     ind.push_back(c);
@@ -82,12 +82,13 @@ bool Indexes::operator!=(const Indexes& other)noexcept
     return !isEqual(other);
 }
 
-
+// переопределение вывода
 std::ostream& operator<<(std::ostream& os,
                                 const Indexes& in)
 {
    int s = in.size();
-   os << "\n Indexes: size: " << s << ",consists of:";
+   os <<"\n" << in.name
+     << "(size: " << s << ") consists of:";
    for (int index: in.ind)
    {
          os << " " << index << ",";
