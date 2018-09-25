@@ -76,7 +76,7 @@ public:
     //450; 583
     // d - расстояние до камеры
     // Преобразование в аксонометрические
-    void camToAxonometricAndScreenObject(Camera *cam);
+    void camToAxonometricAndScreenObject(const Camera &cam);
 
     // Проверка необходимости отсечения по плоскости Z
     bool cutZ(int culL_flags, Point &sphere,

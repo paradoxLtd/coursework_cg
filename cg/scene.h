@@ -13,6 +13,7 @@ public:
     ObjectList objects;
 
     Scene(Camera camera);
+
 };
 
 #endif // SCENE_H
