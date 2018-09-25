@@ -212,6 +212,8 @@ bool ObjectList::cutY(int culL_flags, Point &sphere,
 // В функции предполагается, что и камера, и объект заданы
 // корректно!
 
+// Вызывать после всех преобразований
+
 void ObjectList::removeObject(int culL_flags,
                               const Camera &camera)
 {
@@ -221,10 +223,6 @@ void ObjectList::removeObject(int culL_flags,
     // Проход по всем объектам
     for (Object obj : objects)
     {
-        // Получаем центр объекта и расстояние до наиболее
-        // удаленной точке, принимаемое за радиус окружности
-        // sphere_center = camera.cameraTransformation(obj.center);
-
         // Отбраковываем по оси z
         if (cutZ(culL_flags, sphere_center, obj, camera))
             continue;
@@ -313,7 +311,7 @@ void ObjectList::removeBackSurfaces(const Camera &camera)
     }
 }
 
-void ObjectList::camToAxonometricAndScreenObject(Object *obj, Camera *cam)
+void ObjectList::camToAxonometricAndScreenObject(const Camera &cam)
 {
     // ПРИМЕЧАНИЕ. В этой функции не используются матрицы.
     // Функция преобразует объект, заданный в координатах
@@ -326,27 +324,33 @@ void ObjectList::camToAxonometricAndScreenObject(Object *obj, Camera *cam)
 
 
     // Примечание он пишет что матрицами не так производительно
-    float alpha = (0.5 * cam->viewplane_width - 0.5);
-    float beta = (0.5 * cam->viewplane_height - 0.5);
+    float alpha = (0.5 * cam.viewplane_width - 0.5);
+    float beta = (0.5 * cam.viewplane_height - 0.5);
 
-    int vsize = obj->vertex_trans.size();
+    double z;
+    int vsize;
 
-    for (int i = 0; i < vsize; i++)
+    for (Object obj : objects)
     {
-        double z = obj->vertex_trans[i].z;
+        vsize = obj.vertex_trans.size();
 
-        //obj->vertex_trans[i].x = cam->view_dst_hor * obj->vertex_trans[i].x / z;
-        //obj->vertex_trans[i].y =  cam->view_dst_ver * obj->vertex_trans[i].y * cam->asp_ratio / z;
-        // пока не понял откуда берутся view_dst_hor view_dst_ver в формуле вроде только dist
-        // to axon
-        if (fabs(z) > 0.00001)
+        for (int i = 0; i < vsize; i++)
         {
-            obj->vertex_trans[i].x = cam->dst * obj->vertex_trans[i].x / z;
-            obj->vertex_trans[i].y =  cam->dst * obj->vertex_trans[i].y * cam->asp_ratio / z;
-        }
+            z = obj.vertex_trans[i].z;
 
-        // to screen
-        obj->vertex_trans[i].x += alpha;
-        obj->vertex_trans[i].y = -obj->vertex_trans[i].y + beta;
+            //obj->vertex_trans[i].x = cam->view_dst_hor * obj->vertex_trans[i].x / z;
+            //obj->vertex_trans[i].y =  cam->view_dst_ver * obj->vertex_trans[i].y * cam->asp_ratio / z;
+            // пока не понял откуда берутся view_dst_hor view_dst_ver в формуле вроде только dist
+            // to axon
+            if (fabs(z) > 0.00001)
+            {
+                obj.vertex_trans[i].x = cam.dst * obj.vertex_trans[i].x / z;
+                obj.vertex_trans[i].y =  cam.dst * obj.vertex_trans[i].y * cam.asp_ratio / z;
+            }
+
+            // to screen
+            obj.vertex_trans[i].x += alpha;
+            obj.vertex_trans[i].y = -obj.vertex_trans[i].y + beta;
+        }
     }
 }

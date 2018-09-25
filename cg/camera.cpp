@@ -1,9 +1,13 @@
 #include "camera.h"
 
 
-Camera::Camera(int attr, Point &position, Vector &u, Vector &v, Vector &n,
-               Point &target, double n_plane, double f_plane,
-               double viewp_w, double viewp_h)
+Camera::Camera(int attr, Point position,
+               Vector u, Vector v, Vector n,
+               Point target,
+               double n_plane,
+               double f_plane,
+               double viewp_w,
+               double viewp_h)
 {
     _init(attr, position, u, v, n, target, n_plane, f_plane, viewp_w, viewp_h);
 }
