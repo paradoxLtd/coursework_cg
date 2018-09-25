@@ -313,7 +313,7 @@ void ObjectList::removeBackSurfaces(const Camera &camera)
     }
 }
 
-void camToAxonometricAndScreenObject(Object *obj, Camera *cam)
+void ObjectList::camToAxonometricAndScreenObject(Object *obj, Camera *cam)
 {
     // ПРИМЕЧАНИЕ. В этой функции не используются матрицы.
     // Функция преобразует объект, заданный в координатах
@@ -334,13 +334,16 @@ void camToAxonometricAndScreenObject(Object *obj, Camera *cam)
     for (int i = 0; i < vsize; i++)
     {
         double z = obj->vertex_trans[i].z;
+
         //obj->vertex_trans[i].x = cam->view_dst_hor * obj->vertex_trans[i].x / z;
         //obj->vertex_trans[i].y =  cam->view_dst_ver * obj->vertex_trans[i].y * cam->asp_ratio / z;
         // пока не понял откуда берутся view_dst_hor view_dst_ver в формуле вроде только dist
         // to axon
-        obj->vertex_trans[i].x = cam->dst * obj->vertex_trans[i].x / z;
-        obj->vertex_trans[i].y =  cam->dst * obj->vertex_trans[i].y * cam->asp_ratio / z;
-
+        if (fabs(z) > 0.00001)
+        {
+            obj->vertex_trans[i].x = cam->dst * obj->vertex_trans[i].x / z;
+            obj->vertex_trans[i].y =  cam->dst * obj->vertex_trans[i].y * cam->asp_ratio / z;
+        }
 
         // to screen
         obj->vertex_trans[i].x += alpha;

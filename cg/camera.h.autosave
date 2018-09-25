@@ -42,7 +42,8 @@ public:
     Vector u, v, n; //Вектора, на которых основана UVN модель камеры
     Point target; // Точка, на которую смотрит камера в модели UVN
 
-    double fov; //Field o
+    double fov; //Field of View, как правило это pi/2 (90 гр), для дальнейшего
+                //простого отсечения
 
     Plane left_plane, right_plane, top_plane, bottom_plane;
 

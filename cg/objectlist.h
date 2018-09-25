@@ -78,23 +78,11 @@ public:
     // Преобразование в аксонометрические
     void camToAxonometricAndScreenObject(
             Object *obj, Camera *cam);
+<<<<<<< HEAD
+=======
 
-    //450
-    // d - расстояние до камеры
-    /*
-    void camToAxonometric(int d = 1)
-    {
-        ar ...
-        for (Object obj : objects)
-        {
-            for (Point point : obj.vertex_trans)
-            {
-                point.x = d * point.x / point.z;
-                point.y = d * point.y / point.z;
-            }
-        }
-    }
-    */
+>>>>>>> fda8ebcd0101d695d6bf2f96683f44abc824c00f
+
 
     // Преобразование точки из мировых координат
     // в камерные
