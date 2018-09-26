@@ -63,6 +63,7 @@ void ObjectList::debug()
 
      std::cout << "\n!!!!prepareForConveyor!!!!" << objlist2;
 
+     /*
 
       objlist2.localToWorld();
       std::cout << "\nhere we go peple" << objlist2;
@@ -76,5 +77,6 @@ void ObjectList::debug()
        objlist2.camToAxonometricAndScreenObject(cam);
        std::cout << "\n!!!! Final !!!!" <<
                     objlist2;
+                    */
 
 }

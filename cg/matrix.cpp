@@ -47,6 +47,7 @@ Matrix::Matrix(Matrix &&m)
 
 Matrix::Matrix(Point a)
 {
+    std::cout << "i see " << a;
     for (int i = 1; i < SIZE; i++)
     {
         for (int j = 0; j < SIZE; j++)
@@ -62,7 +63,7 @@ Matrix::Matrix(Point a)
 
 Matrix::Matrix(Vector a)
 {
-    Matrix(a.asPoint());
+    *this = Matrix(a.asPoint());
 }
 
 Matrix& Matrix::operator = (const Matrix &m)
@@ -105,7 +106,8 @@ Matrix Matrix::multiplicate(Matrix a, Matrix b)
 
 Vector Matrix::multiplicate(Vector v, Matrix m)
 {
-    Matrix vec_m(v);
+    Matrix vec_m = Matrix(v);
+    std::cout << "i create it " << vec_m << "cause i" << v;
     Vector vec_v(multiplicate(vec_m, m).asVector()); //порядок слева вектор, справа матрица
     return vec_v;
 }

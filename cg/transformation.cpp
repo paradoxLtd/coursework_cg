@@ -188,7 +188,9 @@ void Move::apply(Object &obj,
 {
     for (Point &point : obj.vertex_trans)
     {
+        std::cout << "i moved before" << point;
         point = Transformation::transform(point, *this, opt);
+         std::cout << "i moved after" << point;
     }
 }
 
@@ -286,11 +288,11 @@ void Transformation::fullTransform(Object &object,
     Scale scale;
 
     transform(object, move, mop);
-    std::cout << "i moved" << object;
-    transform(object, rotate, rop);
-    std::cout << "i rotated" << object;
+    std::cout << "i moved here" << object;
     transform(object, scale, sop);
-    std::cout << "i scaled" << object;
+    std::cout << "i scaled here" << object;
+    transform(object, rotate, rop);
+    std::cout << "i rotated here" << object;
 }
 
 // к камере

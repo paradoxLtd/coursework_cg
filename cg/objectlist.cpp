@@ -60,7 +60,7 @@ void ObjectList::prepareForConveyor
         // обновление радиусов, сброс статусов(отсечен)
         // копирование исходных массивов в основные
         obj.update();
-        //Transformation::fullTransform(obj, mop, rop, sop);
+        Transformation::fullTransform(obj, mop, rop, sop);
     }
 }
 
@@ -73,12 +73,9 @@ void ObjectList::localToWorld()
     for (Object &obj : objects)
     {
         center = obj.center;
-         std::cout << "\n ready" << obj;
         for (Point &point : obj.vertex_trans)
         {
-            std::cout << "\n before" << point;
             point += center;
-            std::cout << "\n after" << point;
         }
     }
 }
