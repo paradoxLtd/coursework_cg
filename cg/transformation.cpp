@@ -13,13 +13,13 @@ Vector Move::apply(const Vector &vector,
         x *= -1; y *= -1; z *= -1;
     }
 
-    double move_matrix[SIZE][SIZE] =
+    Matrix move_matrix(
     {
         { 1, 0, 0, 0 },
         { 0, 1, 0, 0 },
         { 0, 0, 1, 0 },
         { x, y, z, 1 }
-    };
+    });
 
     return Vector(
                 Matrix::multiplicate(
@@ -35,29 +35,28 @@ Vector Scale::apply(const Vector &vector,
         x = 1/x; y = 1/y; z = 1/z;
     }
 
-    double scale_matrix[SIZE][SIZE] =
-    {
+    Matrix scale_matrix({
         { x, 0, 0, 0 },
         { 0, y, 0, 0 },
         { 0, 0, z, 0 },
         { 0, 0, 0, 1 }
-    };
+    });
     return Vector(
                 Matrix::multiplicate(
                     vector, scale_matrix));
 }
 
+/*
 // Устаревшие повороты
 Vector Rotate::rotateX(const Vector &vector,
                        double angle) const
 {
-    double rotate_matrix[SIZE][SIZE] =
-    {
+    Matrix rotate_matrix({
         { 1,	0,				0,			0 },
         { 0,	cos(angle),		sin(angle), 0 },
         { 0,	-sin(angle),	cos(angle), 0 },
         { 0,	 0,				0,			1 }
-    };
+    });
     return Vector(
                 Matrix::multiplicate(
                     vector, rotate_matrix));
@@ -121,7 +120,7 @@ Vector Rotate::apply(const Vector &vector,
     }
     return v;
 }
-
+*/
 
 // Преобразования над объектами
 
@@ -135,10 +134,19 @@ ux', uy', uz'. Вычисляем матрицу перехода от стар�
 новому, а после перемножаем все точки на матрицу перехода и получаем
 новые координаты. Если есть альтернативные предложения, то your welcome*/
 
+Vector Rotate::apply( const Vector &v,
+                    const Options &opt)const
+{
+    // не вызывать
+    return v;
+}
+
 // Новый поворот объекта
 void Rotate::apply(Object &obj,
                    const Options &opt) const
 {
+    if (fabs(opt[0] + opt[1] + opt[2]) < 0.001)
+        return;
     /*В качестве параметров идут dx,dy,dz для */
     Vector d_p = Vector(opt[0], opt[1], opt[2]);
     Vector n_dir = obj.dir + d_p;
@@ -152,24 +160,23 @@ void Rotate::apply(Object &obj,
     n_uy.normalize();
     n_uz.normalize();
 
-    double mtx[SIZE][SIZE] = {
+    Matrix mtx({
         {n_ux.x, n_uy.x, n_uz.x, 0},
         {n_ux.x, n_uy.x, n_uz.x, 0},
         {n_ux.x, n_uy.x, n_uz.x, 0},
         {0, 0, 0, 1}
-    };
+    });
 
-    double n_mtx[SIZE][SIZE] = {
+    Matrix n_mtx({
         {obj.ux.x, obj.uy.x, obj.uz.x, 0},
         {obj.ux.y, obj.uy.y, obj.uz.y, 0},
         {obj.ux.z, obj.uy.z, obj.uz.z, 0},
         {0, 0, 0, 1}
-    };
+    });
 
-    Matrix inv = Matrix::inv(Matrix(mtx));
-    Matrix n = Matrix(n_mtx);
+    Matrix inv = Matrix::inv(mtx);
 
-    Matrix m_tr = Matrix::multiplicate(inv, n);
+    Matrix m_tr = Matrix::multiplicate(inv, n_mtx);
 
     for (Point &point : obj.vertex_trans)
     {
@@ -188,9 +195,7 @@ void Move::apply(Object &obj,
 {
     for (Point &point : obj.vertex_trans)
     {
-        std::cout << "i moved before" << point;
         point = Transformation::transform(point, *this, opt);
-         std::cout << "i moved after" << point;
     }
 }
 
@@ -292,7 +297,9 @@ void Transformation::fullTransform(Object &object,
     transform(object, scale, sop);
     std::cout << "i scaled here" << object;
     transform(object, rotate, rop);
-    std::cout << "i rotated here" << object;
+    std::cout << "i rotated here" << rop[0] <<", " <<
+                 rop[1] << ", " << rop[2]
+              << object;
 }
 
 // к камере

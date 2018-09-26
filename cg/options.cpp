@@ -1,15 +1,10 @@
 #include "Options.h"
 
-MoveOptions::MoveOptions()
-{
-    this->params[0] = 0;
-    this->params[1] = 0;
-    this->params[2] = 0;
-    this->inverse = false;
-}
-
-MoveOptions::MoveOptions(double a, double b,
-                         double c, bool inv)
+void Options::init(
+        double a,
+        double b,
+        double c,
+        bool inv)
 {
     this->params[0] = a;
     this->params[1] = b;
@@ -17,43 +12,42 @@ MoveOptions::MoveOptions(double a, double b,
     this->inverse = inv;
 }
 
+MoveOptions::MoveOptions(double a, double b,
+                         double c, bool inv)
+{
+    init(a, b, c, inv);
+}
+
+/*
 MoveOptions::MoveOptions(Point *p, bool inv)
 {
-    this->params[0] = p->x;
-    this->params[1] = p->y;
-    this->params[2] = p->z;
-    this->inverse = inv;
+    init(p->x, p->y, p->z, inv);
 }
+*/
 
 MoveOptions::MoveOptions(const Point *p, bool inv)
 {
-    this->params[0] = p->x;
-    this->params[1] = p->y;
-    this->params[2] = p->z;
-    this->inverse = inv;
+    init(p->x, p->y, p->z, inv);
 }
 
-ScaleOptions::ScaleOptions()
+ScaleOptions::ScaleOptions(double a,
+                           double b,
+                           double c,
+                           bool inv)
 {
-    this->params[0] = 1;
-    this->params[1] = 1;
-    this->params[2] = 1;
-    this->inverse = false;
+    init(a, b, c, inv);
 }
 
-RotateOptions::RotateOptions()
+RotateOptions::RotateOptions(double a,
+                             double b,
+                             double c,
+                             bool inv)
 {
+    init(a, b, c, inv);
+    /*
     this->params[0] = NOTHING;
-    this->params[1] = 0;
-    this->params[2] = 0;
-    this->inverse = false;
-}
-
-RotateOptions::RotateOptions(int choose, double angle, bool in)
-{
-    this->params[2] = 0;
     this->params[1] = angle;
-    this->params[0] = NOTHING;
+    this->params[2] = 0;
     switch (choose)
     {
     case AXIS_X:
@@ -76,4 +70,54 @@ RotateOptions::RotateOptions(int choose, double angle, bool in)
         this->params[1] = 0;
     }
     this->inverse = in;
+    */
 }
+
+// Переопределение вывода
+std::ostream& operator<<
+    (std::ostream& os, const MoveOptions& opt)
+{
+    os << "\n MoveOptions(dx:" << opt[0] <<
+          ", dy: " << opt[1] <<
+          ", dz: " << opt[2] <<
+          ", inverse: ";
+    if (opt.inverse)
+        os << "true";
+    else
+        os << "false";
+    os << ")\n";
+   return os;
+}
+
+// Переопределение вывода
+std::ostream& operator<<
+    (std::ostream& os, const RotateOptions& opt)
+{
+    os << "\n RotateOptions(rx:" << opt[0] <<
+          ", ry: " << opt[1] <<
+          ", rz: " << opt[2] <<
+          ", inverse: ";
+    if (opt.inverse)
+        os << "true";
+    else
+        os << "false";
+    os << ")\n";
+   return os;
+}
+
+// Переопределение вывода
+std::ostream& operator<<
+    (std::ostream& os, const ScaleOptions& opt)
+{
+    os << "\n ScaleOptions(sx:" << opt[0] <<
+          ", sy: " << opt[1] <<
+          ", sz: " << opt[2] <<
+          ", inverse: ";
+    if (opt.inverse)
+        os << "true";
+    else
+        os << "false";
+    os << ")\n";
+   return os;
+}
+

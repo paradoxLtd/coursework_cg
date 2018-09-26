@@ -71,11 +71,11 @@ bool Point::isEqual(const Point &B)
 noexcept
 {
     return(
-                (fabs (this->x - B.x) > 0.0001)
+                (fabs (this->x - B.x) < 0.0001)
                 &&
-                (fabs(this->y - B.y) > 0.0001)
+                (fabs(this->y - B.y) < 0.0001)
                 &&
-                (fabs(this->z - B.z) > 0.0001)
+                (fabs(this->z - B.z) < 0.0001)
                 );
 }
 
@@ -122,6 +122,6 @@ std::ostream& operator<<
            ", y: " << p.y <<
            ", z: " << p.z <<
            ", w: " << p.w <<
-           ")";
+           ")\n";
     return os;
 }

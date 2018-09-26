@@ -23,6 +23,17 @@ Matrix::Matrix(double m[SIZE][SIZE])
     }
 }
 
+Matrix::Matrix(std::vector<std::vector<double>> matr)
+{
+    for (int i = 0; i < SIZE; i++)
+    {
+        for (int j = 0; j < SIZE; j++)
+        {
+            this->matrix[i][j] = matr[i][j];
+        }
+    }
+}
+
 Matrix::Matrix(const Matrix &m)
 {
     for (int i = 0; i < SIZE; i++)
@@ -121,7 +132,13 @@ Point Matrix::multiplicate(Point p, Matrix m)
 
 Matrix Matrix::inv(Matrix a)
 {
-    //Нахождение обратной матрицы
+    for (int i = 0; i < SIZE; i++)
+    {
+        for (int j = 0; j < SIZE; j++)
+        {
+            a.matrix[i][j] *= -1;
+        }
+    }
     return a;
 }
 

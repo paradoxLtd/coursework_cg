@@ -2,6 +2,8 @@
 #define MATRIX_H
 #define SIZE 4
 #include "vector.h"
+
+#include <vector>
 class Matrix
 {
 public:
@@ -10,6 +12,7 @@ public:
     Matrix(const Matrix &a);
     Matrix(Matrix &&a);
     Matrix(double m[SIZE][SIZE]);
+    Matrix(std::vector<std::vector<double>> matr);
     Matrix(Vector a);
     Matrix(Point a);
 

@@ -165,5 +165,20 @@ void Camera::build_cam_matrix()
 
     //c568, там приводится сверический режим и обычный
     //пока для простоты (возможно и не понадобится сферический) реализуем простой режим
-
 }
+
+// переопределение вывода
+std::ostream& operator<<
+(std::ostream& os, const Camera& p)
+{
+     os << "\n Camera(attributes:" << p.attr <<
+           ", viewplane_width: " << p.viewplane_width <<
+           ", viewplane_height: " << p.viewplane_height <<
+           ", view_dst_hor: " << p.view_dst_hor <<
+           ", view_dst_ver" << p.view_dst_ver <<
+           ", asp_ratio: " << p.asp_ratio <<
+           ")" << p.position << p.u << p.v << p.n <<
+           p.target;
+    return os;
+}
+

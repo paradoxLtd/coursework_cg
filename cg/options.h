@@ -17,16 +17,18 @@ class Options
 {
 protected:
     double params[3];
+    void init(double a = 0,
+              double b = 0,
+              double c = 0,
+              bool inv = false);
 public:
     bool inverse;
     Options(double a = 0,
             double b = 0,
-            double c = 0)
+            double c = 0,
+            bool inv = false)
     {
-        params[0] = a;
-        params[1] = b;
-        params[2] = c;
-        inverse = false;
+        init(a, b, c, inv);
     }
 
     // для чтения
@@ -64,15 +66,16 @@ param[0/1/2] - сдвиг по x/y/z
 class MoveOptions : public Options
 {
 public:
-    MoveOptions();
-
-    MoveOptions(double dx, double dy, double dz,
+    MoveOptions(double dx = 0,
+                double dy = 0,
+                double dz = 0,
                 bool inv = false);
-
-    MoveOptions(Point *p, bool inv = false);
 
     // Для корректной работы ObjectList.cameraTransformation
     MoveOptions(const Point *p, bool inv = false);
+
+    friend std::ostream& operator<<(std::ostream& os,
+                                    const MoveOptions& p);
 };
 
 /*
@@ -81,7 +84,13 @@ param[0/1/2] - коэффициент масштабирования x/y/z
 class ScaleOptions : public Options
 {
 public:
-    ScaleOptions();
+    ScaleOptions(double kx = 1,
+                 double ky = 1,
+                 double kz = 1,
+                 bool inv = false);
+
+    friend std::ostream& operator<<(std::ostream& os,
+                                    const ScaleOptions& p);
 };
 
 
@@ -92,8 +101,13 @@ param[1] - угол поворота
 struct RotateOptions : public Options
 {
 public:
-    RotateOptions();
-    RotateOptions(int choose, double angle, bool in = false);
+    RotateOptions(double dx = 0,
+                 double dy = 0,
+                 double dz = 0,
+                 bool inv = false);
+
+    friend std::ostream& operator<<(std::ostream& os,
+                                    const RotateOptions& p);
 };
 
 #endif // OPTIONS_H

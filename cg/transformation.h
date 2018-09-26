@@ -43,10 +43,10 @@ class Move : public Action
 
 class Rotate : public Action
 {
-private:
-    Vector rotateX(const Vector &v, double angle) const;
-    Vector rotateY(const Vector &v, double angle) const;
-    Vector rotateZ(const Vector &v, double angle) const;
+//private:
+    //Vector rotateX(const Vector &v, double angle) const;
+    //Vector rotateY(const Vector &v, double angle) const;
+    //Vector rotateZ(const Vector &v, double angle) const;
 public:
     Vector apply(
             const Vector &v,
