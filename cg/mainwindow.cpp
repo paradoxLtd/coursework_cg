@@ -31,8 +31,7 @@ void MainWindow::on_pushButton_clicked()
     Vector vscale(0.5,0.5,0.5);
     Vector vpos(0,0,0);
     Vector vrot(0,0,0);
-    Camera cam;
-    qDebug() << cam.position.x;
+
     Point p1(0,50,0,1);
     Point p2(50,-50,0,1);
     Point p3(-50,-50,0,1);
@@ -46,7 +45,6 @@ void MainWindow::on_pushButton_clicked()
 
     Triangle tr(&new_obj,v,vt);
     new_obj.pushPolygon(tr);
-    new_obj.clearPolygons();
 
     /*Point poly_pos(0,0,100,1);
     new_obj.state = POLY4DV2_STATE_ACTIVE;
