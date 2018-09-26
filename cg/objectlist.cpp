@@ -365,13 +365,15 @@ void ObjectList::camToAxonometricAndScreenObject(const Camera &cam)
             // to axon
             if (fabs(z) > 0.00001)
             {
-                point.x = find_dst(cam.position, point) * point.x / z;
-                point.y =  find_dst(cam.position, point) * point.y * cam.asp_ratio / z;
+                point.x = 100 * point.x;// / z;
+                point.y = 100 * point.y * cam.asp_ratio;// / z;
             }
 
             // to screen
             point.x += alpha;
             point.y = -point.y + beta;
+            std::cout << "EBANINA\n";
+            std::cout << point << "\n";
         }
     }
 }

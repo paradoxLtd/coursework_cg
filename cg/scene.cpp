@@ -52,10 +52,10 @@ void Scene::go()
 {
     this->objects.localToWorld();
     this->objects.worldToCam(this->camera);
-    this->objects.camToAxonometricAndScreenObject(
+     this->objects.camToAxonometricAndScreenObject(
                 this->camera);
 
-    this->objects.removeObject(CULL_OBJECT_XYZ,
+   this->objects.removeObject(CULL_OBJECT_XYZ,
                                this->camera);
     this->objects.removeBackSurfaces(this->camera);
 

@@ -10,11 +10,17 @@ void Drawer::draw_objects(const ObjectList &objs)
     int vindex_0, vindex_1, vindex_2;
     int pSize;
 
+
     for(Object obj : objs.objects)
     {
+        //std::cout << obj << "\nfdfdfdfffffffffffffff\n";
+
         pSize = obj.polygons.size();
+        qDebug() << "XUI " << pSize;
+        std::cout << obj.vertex_trans[10];
         for(int poly = 0; poly < pSize; poly++)
         {
+
             if (!(obj.polygons[poly].state & POLYGON_STATE_ACTIVE) ||
                 (obj.polygons[poly].state & POLYGON_STATE_CLIPPED) ||
                 (obj.polygons[poly].state & POLYGON_STATE_BACKFACE))
@@ -22,7 +28,9 @@ void Drawer::draw_objects(const ObjectList &objs)
             vindex_0 = obj.polygons[poly].indexes_vert[0];
             vindex_1 = obj.polygons[poly].indexes_vert[1];
             vindex_2 = obj.polygons[poly].indexes_vert[2];
-            qDebug() << obj.vertex_trans[vindex_0].x << " " << obj.vertex_trans[vindex_0].y;
+            qDebug() << obj.vertex_trans[vindex_0].x << " " << obj.vertex_trans[vindex_0].y << "    "
+                       << obj.vertex_trans[vindex_1].x << " " << obj.vertex_trans[vindex_1].y << "    "
+                       << obj.vertex_trans[vindex_2].x << " " << obj.vertex_trans[vindex_2].y;
             this->draw_line(obj.vertex_trans[vindex_0].x,
                             obj.vertex_trans[vindex_0].y,
                             obj.vertex_trans[vindex_1].x,
@@ -38,6 +46,7 @@ void Drawer::draw_objects(const ObjectList &objs)
                             obj.vertex_trans[vindex_0].x,
                             obj.vertex_trans[vindex_0].y,
                             obj.polygons[poly].color);
+            std::cout << obj.polygons[poly];
         }
     }
 }

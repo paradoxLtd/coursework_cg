@@ -24,5 +24,6 @@ int main(int argc, char *argv[])
 
     //ObjectList::debug();
     //return 0;
+
     return a.exec();
 }

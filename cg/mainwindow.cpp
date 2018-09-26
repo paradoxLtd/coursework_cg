@@ -7,6 +7,7 @@
 #include "Scene.h"
 #include "camera.h"
 #include "triangle.h"
+#include "loader.h"
 #include "objectlist.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -61,10 +62,17 @@ void MainWindow::on_pushButton_clicked()
     Drawer dr(this->graphics_scene);
     dr.draw_object(new_obj);
     */
+    Loader loader;
+    Object object;
+    int err = loader.load(&object, "loader_test_one.obj");
+    SET_BIT(object.state, OBJECT_DETAILED);
+    std::cout << "error:" << err << " and " << object.state << "\n ";
+    std::cout << object;
+
 
 
     Scene scene(this->graphics_scene);
-    scene.pushObject(new_obj);
+    scene.pushObject(object);
     scene.updateCamera();
     scene.draw();
 

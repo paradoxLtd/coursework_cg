@@ -1,4 +1,5 @@
 #include "loader.h"
+#include "qDebug"
 
 //Хранить объекты надо в папке сборки ../cgg/build-cg.../objs/my_file.obj
 int Loader::_load(Object *object, const char* filename)
@@ -16,15 +17,16 @@ int Loader::_load(Object *object, const char* filename)
     strcat (rfilename, "\\objs\\") ;
     strcat (rfilename, filename) ;
     in.open(rfilename, std::ifstream::in);
-
+    qDebug()  << rfilename;
     if (in.fail())
     {
+        qDebug()  << "FFFFFFFFFF";
         return -1;
     }
     std::string line;
 
     // для сохранения индексов точки для массива вершин
-    int index, a, b, c;
+    int index, a, b, c, a1, b1, c1, a2, b2, c2;
     // максив индексов вершин для полигона
     Indexes indexes_texture;
     Indexes indexes_vertex;
@@ -85,15 +87,12 @@ int Loader::_load(Object *object, const char* filename)
             if (std::regex_search (line, std::regex("/") ))
             {
                 // для считывания формата 1/2/3 4/5/6 7/8/9
-                while (iss >> a >> trash >> b >> trash >> c)
-                {
-                    // Запись первой тройки
-                    if (indexes_vertex.size() == 0)
-                        indexes_vertex = Indexes(a,b,c);
-                    // Запись второй тройки
-                    else if (indexes_texture.size() == 0)
-                        indexes_texture = Indexes(a,b,c);
-                }
+                iss >> a >> trash >> b >> trash >> c;
+                iss >> a1 >> trash >> b1 >> trash >> c1;
+                iss >> a2 >> trash >> b2 >> trash >> c2;
+                indexes_vertex = Indexes(a,a1,a2);
+                indexes_texture = Indexes(b,b1,b2);
+
             }
             else
             {

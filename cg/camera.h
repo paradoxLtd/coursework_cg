@@ -15,11 +15,11 @@ class Camera
 {
 public:
     Camera(int attr = 0,
-           Point position = Point(0,0,-100,1),
+           Point position = Point(0,0,-50,1),
            Vector u = Vector(1,0,0),
            Vector v = Vector(0,1,0),
            Vector n = Vector(0,0,1),
-           Point target = Point(0,0,0,1),
+           Point target = Point(1,1,0,1),
            double n_plane = 50,
            double f_plane = 500,
            double viewp_w = 600,
