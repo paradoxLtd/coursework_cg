@@ -143,10 +143,10 @@ void Camera::build_cam_matrix()
 
     //Этот кусок кода на случай если мы не передаем в камеру вектора uvn
     //а хотим их вычислить
-    this->n = Vector(this->target, this->position);
-    this->v = Vector(0, 1, 0);
-    this->u = v * n;
-    this->v = n * u;
+    this->n = Vector(this->target, this->position);//5 5 200
+    this->v = Vector(0, 1, 0); // 0 1 0
+    this->u = v * n; // 200 0 -5
+    this->v = n * u; // -25 40025 -1000
 
     this->v.normalize();
     this->u.normalize();
@@ -160,8 +160,11 @@ void Camera::build_cam_matrix()
     };
 
     Matrix uvn_matrix(mtx_uvn);
-
+    //std::cout << "here build_cam_matrix";
+    //std::cout << t_matrix << std::endl;
+    //std::cout << uvn_matrix << std::endl;
     this->mcam = Matrix::multiplicate(t_matrix, uvn_matrix);
+    //std::cout << this->mcam << std::endl;
 
     //c568, там приводится сверический режим и обычный
     //пока для простоты (возможно и не понадобится сферический) реализуем простой режим

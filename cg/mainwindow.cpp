@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     this->graphics_scene = new QGraphicsScene(ui->graphicsView);
-    ui->graphicsView->setSceneRect(-300, -300, 300, 300);
+    ui->graphicsView->setSceneRect(0, 0, 600, 600);
     ui->graphicsView->setScene(this->graphics_scene);
     ui->graphicsView->setMinimumSize(600, 600);
     ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -62,20 +62,17 @@ void MainWindow::on_pushButton_clicked()
     dr.draw_object(new_obj);
     */
 
+
     Scene scene(this->graphics_scene);
     scene.pushObject(new_obj);
-    /*
-    qDebug() << "\n" << scene.camera.position.x << ", " <<
-                scene.camera.position.y << ", " <<
-                scene.camera.position.z;
-                */
-    scene.updateCamera(MoveOptions(0,0,0));
-    /*
-    qDebug() << "\n" << scene.camera.position.x << ", " <<
-                scene.camera.position.y << ", " <<
-                scene.camera.position.z;
-    */
+    scene.updateCamera();
     scene.draw();
+
+
+    //Drawer dr(this->graphics_scene);
+    //ObjectList objs;
+    //objs.push(new_obj);
+    //dr.draw_objects(objs);
 
     //QPen mypen(Qt::black);
     //this->graphics_scene->addLine(0, 0, 600, 600, mypen);

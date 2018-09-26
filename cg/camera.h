@@ -7,7 +7,7 @@
 #include "matrix.h"
 #include <cmath>
 
-#define VIEWPLANE_WIDTH 2.0
+#define VIEWPLANE_WIDTH 600.0
 #define FOV 90.0
 
 /*Используется камера типа UVN подробнее о ней с551*/

@@ -7,7 +7,7 @@ void Object::saveVertixes()
 
 void Object::saveTextures()
 {
-    texture_coords = texture_coords_trans;
+    texture_coords_trans = texture_coords;
 }
 
 void Object::pushPolygon(Triangle &tr)

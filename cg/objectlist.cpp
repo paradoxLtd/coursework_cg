@@ -320,6 +320,11 @@ void ObjectList::removeBackSurfaces(const Camera &camera)
     }
 }
 
+int find_dst(Point p1, Point p2)
+{
+    return sqrt(pow((p2.x - p1.x),2) + (p2.y - p1.y) * (p2.y - p1.y) + (p2.z - p1.z) * (p2.z - p1.z));
+}
+
 void ObjectList::camToAxonometricAndScreenObject(const Camera &cam)
 {
     // ПРИМЕЧАНИЕ. В этой функции не используются матрицы.
@@ -333,13 +338,14 @@ void ObjectList::camToAxonometricAndScreenObject(const Camera &cam)
 
 
     // Примечание он пишет что матрицами не так производительно
-    double alpha = (0.5 * cam.viewplane_width - 0.5);
-    double beta = (0.5 * cam.viewplane_height - 0.5);
+    //double alpha = (0.5 * cam.viewplane_width - 0.5);
+    //double beta = (0.5 * cam.viewplane_height - 0.5);
 
     // нужно обсуждение, но...
-    //double alpha = (0.5 * cam.viewport_w - 0.5);
-    //double beta = (0.5 * cam.viewport_h - 0.5);
-    int dst = -100; // cam.dst
+
+    double alpha = (0.5 * cam.viewport_w - 0.5);
+    double beta = (0.5 * cam.viewport_h - 0.5);
+    int dst = cam.dst;
     // Добавил чтобы работало
 
     std::cout << "\nalpha " << cam.viewplane_width << ", beta " <<
@@ -359,8 +365,8 @@ void ObjectList::camToAxonometricAndScreenObject(const Camera &cam)
             // to axon
             if (fabs(z) > 0.00001)
             {
-                point.x = dst * point.x / z;
-                point.y =  dst * point.y * cam.asp_ratio / z;
+                point.x = find_dst(cam.position, point) * point.x / z;
+                point.y =  find_dst(cam.position, point) * point.y * cam.asp_ratio / z;
             }
 
             // to screen

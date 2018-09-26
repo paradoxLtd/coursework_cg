@@ -50,6 +50,7 @@ void ObjectList::debug()
 
      std::vector<Point> vertex{p1,p2,p3};
      Object new_obj(vertex);
+     new_obj.center = Point(-30,30,30);
 
      Indexes v(1,2,3);
      Indexes vt(1,2,3);
@@ -63,12 +64,12 @@ void ObjectList::debug()
 
      std::cout << "\n!!!!prepareForConveyor!!!!" << objlist2;
 
-     /*
+
 
       objlist2.localToWorld();
       std::cout << "\nhere we go peple" << objlist2;
 
-      Camera cam = Camera(0, Point(5,5,50));
+      Camera cam = Camera(0, Point(5,5,200));
       objlist2.worldToCam(cam);
 
       std::cout << "\n!!!!worldToCam !!!!" <<
@@ -77,6 +78,6 @@ void ObjectList::debug()
        objlist2.camToAxonometricAndScreenObject(cam);
        std::cout << "\n!!!! Final !!!!" <<
                     objlist2;
-                    */
+
 
 }

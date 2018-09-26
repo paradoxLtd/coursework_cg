@@ -7,8 +7,8 @@ Drawer::Drawer(QGraphicsScene *graphics_scene)
 
 void Drawer::draw_objects(const ObjectList &objs)
 {
-    std::vector<Object>::size_type vindex_0, vindex_1, vindex_2;
-    std::vector<Triangle>::size_type pSize;
+    int vindex_0, vindex_1, vindex_2;
+    int pSize;
 
     for(Object obj : objs.objects)
     {
@@ -22,7 +22,7 @@ void Drawer::draw_objects(const ObjectList &objs)
             vindex_0 = obj.polygons[poly].indexes_vert[0];
             vindex_1 = obj.polygons[poly].indexes_vert[1];
             vindex_2 = obj.polygons[poly].indexes_vert[2];
-
+            qDebug() << obj.vertex_trans[vindex_0].x << " " << obj.vertex_trans[vindex_0].y;
             this->draw_line(obj.vertex_trans[vindex_0].x,
                             obj.vertex_trans[vindex_0].y,
                             obj.vertex_trans[vindex_1].x,
@@ -41,10 +41,13 @@ void Drawer::draw_objects(const ObjectList &objs)
         }
     }
 }
-void Drawer::draw_line(double x1, double y1,
-                       double x2, double y2,
+void Drawer::draw_line(int x1, int y1,
+                       int x2, int y2,
                        QColor color)
 {
     this->graphics_scene->addLine(
-                x1,  y1, x2, y2, QPen(color));
+                x1,  y1, x2, y2, QPen(Qt::black));
+
+
+
 }
