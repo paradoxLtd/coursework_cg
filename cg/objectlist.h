@@ -34,49 +34,6 @@ class ObjectList
 {
 private:
     void copy(ObjectList obj);
-public:
-    std::list<Object> objects;
-    int size;
-
-    ObjectList()
-    {
-        objects = {};
-        size = 0;
-    }
-
-    ObjectList(const ObjectList &objects);
-
-    ObjectList(ObjectList &&objects);
-
-    ObjectList& operator=
-        (const ObjectList& other);
-
-    ObjectList& operator=(ObjectList&& other);
-
-    ~ObjectList()
-    {
-        objects.clear();
-    }
-
-    //538
-    void prepareForConveyor(MoveOptions mop,
-                            RotateOptions rop,
-                            ScaleOptions sop);
-
-    void push(Object &obj);
-
-    // 430
-    void localToWorld();
-
-    // 435
-    // Преобразование точки из мировых
-    // координат в камерные
-    void worldToCam(Camera &camera);
-
-    //450; 583
-    // d - расстояние до камеры
-    // Преобразование в аксонометрические
-    void camToAxonometricAndScreenObject(const Camera &cam);
 
     // Проверка необходимости отсечения по плоскости Z
     bool cutZ(int culL_flags, Point &sphere,
@@ -91,6 +48,51 @@ public:
     // Проверка необходимости отсечения по плоскости X
     bool cutY(int culL_flags, Point &sphere,
               Object &obj, const Camera &camera);
+public:
+    std::list<Object> objects;
+
+    ObjectList(std::list<Object> objs = {})
+    {
+        this->objects = objs;
+    }
+
+    ObjectList(const ObjectList &objects);
+
+    ObjectList(ObjectList &&objects);
+
+    ObjectList& operator=
+        (const ObjectList& other);
+
+    ObjectList& operator=(ObjectList&& other);
+
+    ~ObjectList()
+    {
+        clear();
+    }
+
+     void push(Object &obj);
+
+     int size();
+
+     void clear();
+
+    //538
+    void prepareForConveyor(const MoveOptions &mop,
+                            const RotateOptions &rop,
+                            const ScaleOptions &sop);
+
+    // 430
+    void localToWorld();
+
+    // 435
+    // Преобразование точки из мировых
+    // координат в камерные
+    void worldToCam(Camera &camera);
+
+    //450; 583
+    // d - расстояние до камеры
+    // Преобразование в аксонометрические
+    void camToAxonometricAndScreenObject(const Camera &cam);
 
     // Отбраковка объектов, 574
     void removeObject(

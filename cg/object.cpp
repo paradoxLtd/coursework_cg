@@ -10,6 +10,16 @@ void Object::saveTextures()
     texture_coords = texture_coords_trans;
 }
 
+void Object::pushPolygon(Triangle &tr)
+{
+    this->polygons.push_back(tr);
+}
+
+void Object::clearPolygons()
+{
+    this->polygons.clear();
+}
+
 void Object::reset()
 {
         // Сбросим флаг объекта, соответствующий отбраковке

@@ -86,12 +86,14 @@ public:
                           const Action &act,
                           const Options &opt);
 
-    static void fullTransform(Object &object, MoveOptions &mop,
-                               RotateOptions &rop,
-                               ScaleOptions &sop);
-    static void fullTransform(Camera &cam, MoveOptions &mop,
-                               RotateOptions &rop,
-                               ScaleOptions &sop);
+    static void fullTransform(Object &object,
+                               const MoveOptions &mop,
+                               const RotateOptions &rop,
+                               const ScaleOptions &sop);
+    static void fullTransform(Camera &cam,
+                               const MoveOptions &mop,
+                               const RotateOptions &rop,
+                               const ScaleOptions &sop);
 };
 
 #endif // TRANSFORMATION_H

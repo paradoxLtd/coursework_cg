@@ -29,7 +29,7 @@ public:
     Camera(Camera &&c);
 
     Camera & operator = (const Camera &c);
-    Camera operator = (Camera &&c);
+    Camera & operator = (Camera &&c);
 
     void build_cam_matrix();
 

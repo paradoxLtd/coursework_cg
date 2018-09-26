@@ -17,8 +17,18 @@ Camera::Camera(const Camera &c)
     this->_copy(c);
 }
 
+Camera::Camera(Camera &&c)
+{
+    this->_copy(c);
+}
 
 Camera &Camera::operator =(const Camera &c)
+{
+    this->_copy(c);
+    return *this;
+}
+
+Camera &Camera::operator =(Camera &&c)
 {
     this->_copy(c);
     return *this;

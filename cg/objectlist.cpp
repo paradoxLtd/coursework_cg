@@ -31,12 +31,29 @@ ObjectList& ObjectList::operator=
     return *this;
 }
 
+// Вместо objectlist.objects.push_back(...)
+// теперь objectlist.push(...)
+void ObjectList::push(Object &obj)
+{
+   objects.push_back(obj);
+}
+
+void ObjectList::clear()
+{
+   objects.clear();
+}
+
+int ObjectList::size()
+{
+   return objects.size();
+}
+
 // Заведомо сюда не включены преобразования для
 // точек текстур, ТОЛЬКО ДЛЯ ВЕРШИН
 void ObjectList::prepareForConveyor
-    (MoveOptions mop,
-     RotateOptions rop,
-     ScaleOptions sop)
+    (const MoveOptions &mop,
+     const RotateOptions &rop,
+     const ScaleOptions &sop)
 {
     for (Object obj : objects)
     {
@@ -45,14 +62,6 @@ void ObjectList::prepareForConveyor
         obj.update();
         Transformation::fullTransform(obj, mop, rop, sop);
     }
-}
-
-// Вместо objectlist.objects.push_back(...)
-// теперь objectlist.push(...)
-void ObjectList::push(Object &obj)
-{
-   objects.push_back(obj);
-   size++;
 }
 
 // Преобразование локальных координат

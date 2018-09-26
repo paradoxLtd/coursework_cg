@@ -47,6 +47,35 @@
     // Затенение по Фонгу
 #define PW_SHADE_MODE_PHONG_FUG 0x6000
 
+
+
+class Loader
+{
+private:
+    int _load(Object *object, const char* filename);
+    int _loadAll(Scene &scene, std::vector<std::string> names);
+public:
+    void message(char *filename, const char* text,
+        const int err)
+    {
+        std::cout << "\n Ошибка в файле " <<
+            filename << " при попытке " << text <<
+            ". Код ошибки:" << err;
+    }
+
+    int load(Object *object, const char* filename);
+
+    int load(Object *object, std::string filename);
+
+    // Загрузить все объекты на сцену, names - список имен
+    int loadAll(Scene &scene, std::vector<std::string> names);
+
+    static void debug();
+};
+
+#endif // LOADER_H
+
+
 /*
 class Loader
 {
@@ -245,29 +274,3 @@ class Loader
     }
 };
 */
-
-class Loader
-{
-private:
-    int _load(Object *object, const char* filename);
-    int _loadAll(Scene &scene, std::vector<std::string> names);
-public:
-    void message(char *filename, const char* text,
-        const int err)
-    {
-        std::cout << "\n Ошибка в файле " <<
-            filename << " при попытке " << text <<
-            ". Код ошибки:" << err;
-    }
-
-    int load(Object *object, const char* filename);
-
-    int load(Object *object, std::string filename);
-
-    // Загрузить все объекты на сцену, names - список имен
-    int loadAll(Scene &scene, std::vector<std::string> names);
-
-    static void debug();
-};
-
-#endif // LOADER_H

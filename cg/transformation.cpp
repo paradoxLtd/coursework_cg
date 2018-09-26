@@ -276,9 +276,10 @@ void Transformation::transform(Object &obj,
 // Применение полных преобразований
 
 // к объекту
-void Transformation::fullTransform(Object &object, MoveOptions &mop,
-                               RotateOptions &rop,
-                               ScaleOptions &sop)
+void Transformation::fullTransform(Object &object,
+                                   const MoveOptions &mop,
+                                   const RotateOptions &rop,
+                                   const ScaleOptions &sop)
 {
     Move move;
     Rotate rotate;
@@ -290,9 +291,10 @@ void Transformation::fullTransform(Object &object, MoveOptions &mop,
 }
 
 // к камере
-void Transformation::fullTransform(Camera &camera, MoveOptions &mop,
-                               RotateOptions &rop,
-                               ScaleOptions &sop)
+void Transformation::fullTransform(Camera &camera,
+                                   const MoveOptions &mop,
+                                   const RotateOptions &rop,
+                                   const ScaleOptions &sop)
 {
     Move move;
     Rotate rotate;

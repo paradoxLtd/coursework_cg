@@ -111,6 +111,12 @@ public:
     // посчитает радиусы
     void update();
 
+    // Добавить полигон
+    void pushPolygon(Triangle &tr);
+
+    // Очистить полигоны
+    void clearPolygons();
+
     std::vector<int> jarvis();
 
     friend std::ostream& operator<<(std::ostream& os,

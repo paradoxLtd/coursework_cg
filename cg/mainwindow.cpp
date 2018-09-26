@@ -4,6 +4,7 @@
 #include "drawer.h"
 #include "point.h"
 #include "vector.h"
+#include "Scene.h"
 #include "camera.h"
 #include "triangle.h"
 #include "objectlist.h"
@@ -38,24 +39,36 @@ void MainWindow::on_pushButton_clicked()
     std::vector<Point> vertex{p1,p2,p3};
     Object new_obj(vertex);
     qDebug()  << new_obj.vertex_local[0].x;
+
     Indexes v(1,2,3);
     Indexes vt(1,2,3);
     //qDebug() << "gfgfgfgf";
+
     Triangle tr(&new_obj,v,vt);
-    new_obj.polygons.push_back(tr);
+    new_obj.pushPolygon(tr);
+    new_obj.clearPolygons();
 
     /*Point poly_pos(0,0,100,1);
     new_obj.state = POLY4DV2_STATE_ACTIVE;
     new_obj.attr = 0;
     new_obj*/
+
+    /*
     ObjectList obj_list;
     obj_list.objects.push_back(new_obj);
     obj_list.localToWorld();
     obj_list.worldToCam(cam);
-    obj_list.camToAxonometricAndScreenObject(&new_obj,&cam);
+    obj_list.camToAxonometricAndScreenObject(cam);
 
     Drawer dr(this->graphics_scene);
     dr.draw_object(new_obj);
+    */
+
+    Scene scene(this->graphics_scene);
+    scene.pushObject(new_obj);
+    scene.draw();
+    scene.clearObjects();
+
     //QPen mypen(Qt::black);
     //this->graphics_scene->addLine(0, 0, 600, 600, mypen);
 }
