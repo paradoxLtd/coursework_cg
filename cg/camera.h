@@ -70,6 +70,9 @@ public:
 
     static void debug();
 
+    friend std::ostream& operator<<
+    (std::ostream& os, const Camera& p);
+
 private:
     void _copy(const Camera &c);
 

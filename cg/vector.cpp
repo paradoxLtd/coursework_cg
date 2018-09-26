@@ -182,6 +182,6 @@ std::ostream& operator<<
           "(x: " << p.x <<
           ", y: " << p.y <<
           ", z: " << p.z <<
-          ")";
+          ")=";
    return os;
 }
