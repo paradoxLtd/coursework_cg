@@ -1,6 +1,5 @@
 #include "camera.h"
 
-
 Camera::Camera(int attr, Point position,
                Vector u, Vector v, Vector n,
                Point target,
@@ -9,7 +8,8 @@ Camera::Camera(int attr, Point position,
                double viewp_w,
                double viewp_h)
 {
-    _init(attr, position, u, v, n, target, n_plane, f_plane, viewp_w, viewp_h);
+    _init(attr, position, u, v, n, target,
+          n_plane, f_plane, viewp_w, viewp_h);
 }
 
 Camera::Camera(const Camera &c)
@@ -34,7 +34,14 @@ Camera &Camera::operator =(Camera &&c)
     return *this;
 }
 
-void Camera::_init(int attr, Point &position, Vector &u, Vector &v, Vector &n, Point &target, double n_plane, double f_plane, double viewp_w, double viewp_h)
+// Никто случаем не путает
+// viewport_w, viewport_h c
+// viewplane_width, viewplane_height?
+void Camera::_init(int attr, Point &position,
+                   Vector &u, Vector &v, Vector &n,
+                   Point &target, double n_plane,
+                   double f_plane, double viewp_w,
+                   double viewp_h)
 {
     this->attr = attr;
     this->position = position;
@@ -56,6 +63,7 @@ void Camera::_init(int attr, Point &position, Vector &u, Vector &v, Vector &n, P
     this->mper.eye(); // Эти пока не сильно важны
     this->mscr.eye();
 
+    // Это странно!
     this->viewplane_width = VIEWPLANE_WIDTH;
     this->viewplane_height = VIEWPLANE_WIDTH / this->asp_ratio;
 
@@ -80,6 +88,12 @@ void Camera::_init(int attr, Point &position, Vector &u, Vector &v, Vector &n, P
     // Нижняя плоскость отсечения
     vn = Vector(0., 1., -1.);// Плоскость y=z
     this->bottom_plane = Plane(origin, vn, true);*/
+
+    this->position.name = "Position of camera";
+    this->target.name = "Target point of camera";
+    this->u.name = "Camera U-vector";
+    this->v.name = "Camera V-vector";
+    this->n.name = "Camera N-vector";
 }
 
 void Camera::_copy(const Camera &c)

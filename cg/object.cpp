@@ -84,7 +84,7 @@ void Object::updateRad()
         return;
     }
 
-    double mx = max_radius * max_radius, curr = 0;
+    double mx = 0, curr = 0;
     double px, py, pz;
     avg_radius = 0;
     for (Point p : vertex_local)
@@ -415,40 +415,40 @@ std::ostream& operator<<(std::ostream& os,
 
          os << obj.ux << obj.uy << obj.uz;
 
-         int size_vertex_local = obj.vertex_local.size();
-         os << "\n local vertex";
-         for (int i = 0; i < size_vertex_local; i++)
+         os << "\n local vertex(" <<
+               obj.vertex_local.size() << ")";
+         for (Point point : obj.vertex_local)
          {
-             os << obj.vertex_local[i];
+             os << point;
          }
 
-         int size_vertex_trans = obj.vertex_trans.size();
-         os << "\n trans vertex";
-         for (int i = 0; i < size_vertex_trans; i++)
+         os << "\n local texture coords(" <<
+               obj.texture_coords.size() << ")";
+         for (Point point : obj.texture_coords)
          {
-             os << obj.vertex_trans[i];
+             os << point;
          }
 
-         int size_texture_local = obj.texture_coords.size();
-         os << "\n local texture coords";
-         for (int i = 0; i < size_texture_local; i++)
+         os << "\n trans texture coords(" <<
+               obj.texture_coords_trans.size() << ")";
+         for (Point point : obj.texture_coords_trans)
          {
-             os << obj.texture_coords[i];
+             os << point;
          }
 
-         int size_texture_trans = obj.texture_coords_trans.size();
-         os << "\n trans texture coords";
-         for (int i = 0; i < size_texture_trans; i++)
+         os << "\n polygons(" <<
+               obj.polygons.size() << ")";
+         for (Triangle triangle : obj.polygons)
          {
-             os << obj.texture_coords_trans[i];
+             os << triangle;
          }
+    }
 
-         int size_polygons = obj.polygons.size();
-         os << "\n polygons";
-         for (int i = 0; i < size_polygons; i++)
-         {
-             os << obj.polygons[i];
-         }
+    os << "\n trans vertex(" <<
+          obj.vertex_trans.size() << ")";
+    for (Point point : obj.vertex_trans)
+    {
+        os << point;
     }
 }
 

@@ -67,6 +67,9 @@ public:
     Matrix mcam; //матрица перехода из коор-т матрицы в координаты камеры
     Matrix mper; //из камеры в аксонометрические
     Matrix mscr; //из аксонометрических в экранные
+
+    static void debug();
+
 private:
     void _copy(const Camera &c);
 

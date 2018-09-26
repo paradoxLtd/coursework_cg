@@ -151,6 +151,7 @@ bool Triangle::operator!=(const Triangle& other)noexcept
     return !isEqual(other);
 }
 
+/* Нигде не используется
 // Получить массив точек
 std::vector<Point> Triangle::getPoints()
 {
@@ -162,6 +163,7 @@ std::vector<Point> Triangle::getPoints()
     }
     return for_return;
 }
+*/
 
 std::ostream& operator<<(std::ostream& os,
                                 const Triangle& tr)

@@ -35,13 +35,13 @@ void MainWindow::on_pushButton_clicked()
     Point p1(0,50,0,1);
     Point p2(50,-50,0,1);
     Point p3(-50,-50,0,1);
+
     std::vector<Point> vertex{p1,p2,p3};
     Object new_obj(vertex);
     qDebug()  << new_obj.vertex_local[0].x;
 
     Indexes v(1,2,3);
     Indexes vt(1,2,3);
-    //qDebug() << "gfgfgfgf";
 
     Triangle tr(&new_obj,v,vt);
     new_obj.pushPolygon(tr);
@@ -64,8 +64,18 @@ void MainWindow::on_pushButton_clicked()
 
     Scene scene(this->graphics_scene);
     scene.pushObject(new_obj);
+    /*
+    qDebug() << "\n" << scene.camera.position.x << ", " <<
+                scene.camera.position.y << ", " <<
+                scene.camera.position.z;
+                */
+    scene.updateCamera(MoveOptions(0,0,0));
+    /*
+    qDebug() << "\n" << scene.camera.position.x << ", " <<
+                scene.camera.position.y << ", " <<
+                scene.camera.position.z;
+    */
     scene.draw();
-    scene.clearObjects();
 
     //QPen mypen(Qt::black);
     //this->graphics_scene->addLine(0, 0, 600, 600, mypen);

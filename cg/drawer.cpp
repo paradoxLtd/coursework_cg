@@ -7,10 +7,13 @@ Drawer::Drawer(QGraphicsScene *graphics_scene)
 
 void Drawer::draw_objects(const ObjectList &objs)
 {
-    int vindex_0, vindex_1, vindex_2;
+    std::vector<Object>::size_type vindex_0, vindex_1, vindex_2;
+    std::vector<Triangle>::size_type pSize;
+
     for(Object obj : objs.objects)
     {
-        for(int poly = 0; poly < obj.polygons.size(); poly++)
+        pSize = obj.polygons.size();
+        for(int poly = 0; poly < pSize; poly++)
         {
             if (!(obj.polygons[poly].state & POLYGON_STATE_ACTIVE) ||
                 (obj.polygons[poly].state & POLYGON_STATE_CLIPPED) ||
@@ -38,10 +41,10 @@ void Drawer::draw_objects(const ObjectList &objs)
         }
     }
 }
-
-void Drawer::draw_line(int x1, int y1,
-                       int x2, int y2,
+void Drawer::draw_line(double x1, double y1,
+                       double x2, double y2,
                        QColor color)
 {
-    this->graphics_scene->addLine(x1, y1, x2, y2, QPen(Qt::black));
+    this->graphics_scene->addLine(
+                x1,  y1, x2, y2, QPen(color));
 }

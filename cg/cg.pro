@@ -43,7 +43,10 @@ SOURCES += \
     object_debug.cpp \
     loader.cpp \
     loader_debug.cpp \
-    drawer.cpp
+    drawer.cpp \
+    camera_debug.cpp \
+    objectlist_debug.cpp \
+    scene_debug.cpp
 
 HEADERS += \
         mainwindow.h \

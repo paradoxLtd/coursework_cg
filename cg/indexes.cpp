@@ -1,34 +1,5 @@
 #include "Indexes.h"
 
-std::vector<int>::size_type Indexes::size() const
-{
-    return ind.size();
-}
-
-void Indexes::clear()
-{
-    ind.clear();
-}
-
-int &Indexes::operator[](const int index)
-{
-    return ind[index];
-}
-
-// ОЧЕНЬ ВАЖНО: OBJ начинает отчёт не с нуля, а с единицы
-// из за этого индексы хранят значения на 1 больше настоящих
-// поэтому для корректной работы возвращаем index - 1
-int Indexes::operator[](const int index) const
-{
-    return (ind[index] - 1);
-}
-
-void Indexes::push(int index)
-{
-    ind.push_back(index);
-}
-
-
 Indexes::Indexes()
 {
     name = "Indexes";
@@ -42,7 +13,6 @@ Indexes::Indexes(int a, int b, int c)
     ind.push_back(b);
     ind.push_back(c);
 }
-
 
 Indexes::Indexes(const Indexes &indexes)
 {
@@ -58,6 +28,39 @@ Indexes& Indexes::operator=(const Indexes& indexes)
     this->ind = indexes.ind;
     return *this;
 }
+
+
+std::vector<int>::size_type Indexes::size() const
+{
+    return ind.size();
+}
+
+void Indexes::clear()
+{
+    ind.clear();
+}
+
+int Indexes::operator[](const int index)
+{
+    return (
+                ind[static_cast<std::vector<int>::size_type>
+            (index)] - 1);
+}
+
+// ОЧЕНЬ ВАЖНО: OBJ начинает отчёт не с нуля, а с единицы
+// из за этого индексы хранят значения на 1 больше настоящих
+// поэтому для корректной работы возвращаем index - 1
+int Indexes::operator[](const int index) const
+{
+    return (ind[static_cast<std::vector<int>::size_type>
+            (index)] - 1);
+}
+
+void Indexes::push(int index)
+{
+    ind.push_back(index);
+}
+
 
 Indexes& Indexes::operator=(Indexes&& indexes)
 {
@@ -86,9 +89,8 @@ bool Indexes::operator!=(const Indexes& other)noexcept
 std::ostream& operator<<(std::ostream& os,
                                 const Indexes& in)
 {
-   int s = in.size();
    os <<"\n" << in.name
-     << "(size: " << s << ") consists of:";
+     << "(size: " << in.size() << ") consists of:";
    for (int index: in.ind)
    {
          os << " " << index << ",";

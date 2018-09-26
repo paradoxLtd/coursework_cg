@@ -96,7 +96,7 @@ public:
     friend std::ostream& operator<<(std::ostream& os,
                                     const Triangle& p);
     // Получить массив точек
-    std::vector<Point> getPoints();
+    // std::vector<Point> getPoints();
 
     static void debug();
 };

@@ -43,7 +43,7 @@ void ObjectList::clear()
    objects.clear();
 }
 
-int ObjectList::size()
+int ObjectList::size() const
 {
    return objects.size();
 }
@@ -52,15 +52,15 @@ int ObjectList::size()
 // точек текстур, ТОЛЬКО ДЛЯ ВЕРШИН
 void ObjectList::prepareForConveyor
     (const MoveOptions &mop,
-     const RotateOptions &rop,
-     const ScaleOptions &sop)
+     const ScaleOptions &sop,
+     const RotateOptions &rop)
 {
-    for (Object obj : objects)
+    for (Object &obj : objects)
     {
         // обновление радиусов, сброс статусов(отсечен)
         // копирование исходных массивов в основные
         obj.update();
-        Transformation::fullTransform(obj, mop, rop, sop);
+        //Transformation::fullTransform(obj, mop, rop, sop);
     }
 }
 
@@ -70,12 +70,15 @@ void ObjectList::localToWorld()
 {
     Point point_tmp;
     Point center;
-    for (Object obj : objects)
+    for (Object &obj : objects)
     {
         center = obj.center;
-        for (Point point : obj.vertex_trans)
+         std::cout << "\n ready" << obj;
+        for (Point &point : obj.vertex_trans)
         {
+            std::cout << "\n before" << point;
             point += center;
+            std::cout << "\n after" << point;
         }
     }
 }
@@ -84,30 +87,33 @@ void ObjectList::worldToCam(Camera &cam)
 {
     cam.build_cam_matrix();
 
-       for (Object obj : objects)
+   for (Object &obj : objects)
+   {
+       for (Point &point : obj.vertex_trans)
        {
-           for (Point point : obj.vertex_trans)
-           {
-               point = Matrix::multiplicate(
-                           point, cam.mcam);
-           }
-
-           for (Point point : obj.texture_coords_trans)
-           {
-               point = Matrix::multiplicate(point, cam.mcam);
-           }
-
-           obj.center = Matrix::multiplicate(obj.center, cam.mcam);
-           obj.dir = Matrix::multiplicate(obj.dir, cam.mcam);
-           obj.ux = Matrix::multiplicate(obj.ux, cam.mcam);
-           obj.uy = Matrix::multiplicate(obj.uy, cam.mcam);
-           obj.uz = Matrix::multiplicate(obj.uz, cam.mcam);
+           std::cout << "\nbefore" << point;
+           point = Matrix::multiplicate(
+                       point, cam.mcam);
+            std::cout << "\nafter" << point;
        }
+
+       for (Point &point : obj.texture_coords_trans)
+       {
+           point = Matrix::multiplicate(point, cam.mcam);
+       }
+
+       obj.center = Matrix::multiplicate(obj.center, cam.mcam);
+       obj.dir = Matrix::multiplicate(obj.dir, cam.mcam);
+       obj.ux = Matrix::multiplicate(obj.ux, cam.mcam);
+       obj.uy = Matrix::multiplicate(obj.uy, cam.mcam);
+       obj.uz = Matrix::multiplicate(obj.uz, cam.mcam);
+   }
+   std::cout << *this;
 }
 
 // Проверка необходимости отсечения по плоскости Z
 bool ObjectList::cutZ(int culL_flags,
-                      Point &sphere,
+                      const Point &sphere,
                       Object &obj,
                       const Camera &camera)
 {
@@ -141,7 +147,7 @@ bool ObjectList::cutZ(int culL_flags,
 // область видимости имеет форму прямоугольного
 // параллелепипеда, задача становится тривиальной,
 // однако предположим, что это не так
-bool ObjectList::cutX(int culL_flags, Point &sphere,
+bool ObjectList::cutX(int culL_flags, const Point &sphere,
                       Object &obj, const Camera &camera){
     // Радиус сферы
     double rad = obj.max_radius;
@@ -175,7 +181,7 @@ bool ObjectList::cutX(int culL_flags, Point &sphere,
 }
 
 // По аналогии с X
-bool ObjectList::cutY(int culL_flags, Point &sphere,
+bool ObjectList::cutY(int culL_flags, const Point &sphere,
                       Object &obj, const Camera &camera)
 {
     // Радиус сферы
@@ -230,7 +236,7 @@ void ObjectList::removeObject(int culL_flags,
     Point sphere_center;
 
     // Проход по всем объектам
-    for (Object obj : objects)
+    for (Object &obj : objects)
     {
         // Отбраковываем по оси z
         if (cutZ(culL_flags, sphere_center, obj, camera))
@@ -261,9 +267,6 @@ void ObjectList::removeBackSurfaces(const Camera &camera)
     // Первая точка
     Point p0;
 
-    // Итератор движения по списку вершин
-    std::list<Point>::iterator it;
-
     // Вектор нормали и вектор, направленный в точку наблюдения
     Vector n, view;
 
@@ -271,14 +274,14 @@ void ObjectList::removeBackSurfaces(const Camera &camera)
     double dp;
 
     // Обрабатываем каждый объект сцены
-    for (Object obj : objects)
+    for (Object &obj : objects)
     {
         // Проверяем не отбракован ли объект
         if (obj.state & OBJECT_STATE_CULLED)
             continue;
 
         // Обрабатываем каждый многоугольник каркаса
-        for (Triangle pol : obj.polygons)
+        for (Triangle &pol : obj.polygons)
         {
             // Проверка на корректность
             if ( // Если полигон НЕ активный
@@ -333,19 +336,25 @@ void ObjectList::camToAxonometricAndScreenObject(const Camera &cam)
 
 
     // Примечание он пишет что матрицами не так производительно
-    float alpha = (0.5 * cam.viewplane_width - 0.5);
-    float beta = (0.5 * cam.viewplane_height - 0.5);
+    double alpha = (0.5 * cam.viewplane_width - 0.5);
+    double beta = (0.5 * cam.viewplane_height - 0.5);
+
+    // нужно обсуждение, но...
+    //double alpha = (0.5 * cam.viewport_w - 0.5);
+    //double beta = (0.5 * cam.viewport_h - 0.5);
+    int dst = -100; // cam.dst
+    // Добавил чтобы работало
+
+    std::cout << "\nalpha " << cam.viewplane_width << ", beta " <<
+                cam.viewplane_height << ", cam->dst " << cam.dst;
 
     double z;
-    int vsize;
 
-    for (Object obj : objects)
+    for (Object &obj : objects)
     {
-        vsize = obj.vertex_trans.size();
-
-        for (int i = 0; i < vsize; i++)
+        for (Point &point : obj.vertex_trans)
         {
-            z = obj.vertex_trans[i].z;
+            z = point.z;
 
             //obj->vertex_trans[i].x = cam->view_dst_hor * obj->vertex_trans[i].x / z;
             //obj->vertex_trans[i].y =  cam->view_dst_ver * obj->vertex_trans[i].y * cam->asp_ratio / z;
@@ -353,13 +362,25 @@ void ObjectList::camToAxonometricAndScreenObject(const Camera &cam)
             // to axon
             if (fabs(z) > 0.00001)
             {
-                obj.vertex_trans[i].x = cam.dst * obj.vertex_trans[i].x / z;
-                obj.vertex_trans[i].y =  cam.dst * obj.vertex_trans[i].y * cam.asp_ratio / z;
+                point.x = dst * point.x / z;
+                point.y =  dst * point.y * cam.asp_ratio / z;
             }
 
             // to screen
-            obj.vertex_trans[i].x += alpha;
-            obj.vertex_trans[i].y = -obj.vertex_trans[i].y + beta;
+            point.x += alpha;
+            point.y = -point.y + beta;
         }
     }
+}
+
+// переопределение вывода
+std::ostream& operator<<
+(std::ostream& os, const ObjectList& list)
+{
+     os << "\n ObjectList(size" << list.size() << ")";
+     for (Object obj : list.objects)
+     {
+         os << obj;
+     }
+    return os;
 }

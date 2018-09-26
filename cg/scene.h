@@ -10,8 +10,8 @@ class Scene
 {
 private:
     int ready(const MoveOptions &mop,
-               const RotateOptions &rop,
-               const ScaleOptions &sop);
+              const ScaleOptions &sop,
+              const RotateOptions &rop);
     int steady();
     void go();
 public:
@@ -31,16 +31,22 @@ public:
         this->clearObjects();
     }
 
+    // Примечание
+    // Такой порядок(move, scale, rotate) сделан в связи
+    // с простотой задания настроек. можно запилить
+    // перемещение объекта, не указывая масштабирование и
+    // поворот или указать только перемещение и масштабирование
     int draw(const MoveOptions &mop = MoveOptions(),
-             const RotateOptions &rop = RotateOptions(),
-             const ScaleOptions &sop = ScaleOptions());
+             const ScaleOptions &sop = ScaleOptions(),
+             const RotateOptions &rop = RotateOptions());
 
     void pushObject(Object &obj);
 
-    // Обновление положения камеры
-    void updateCamera(const MoveOptions &mop,
-                       const RotateOptions &rop,
-                       const ScaleOptions &sop);
+    // Обновление положения камеры.
+    void updateCamera(const MoveOptions &mop = MoveOptions(),
+                      const ScaleOptions &sop = ScaleOptions(),
+                      const RotateOptions &rop = RotateOptions()
+                       );
 
     void clearObjects();
 

@@ -71,11 +71,11 @@ bool Point::isEqual(const Point &B)
 noexcept
 {
     return(
-                (this->x == B.x)
+                (fabs (this->x - B.x) > 0.0001)
                 &&
-                (this->y == B.y)
+                (fabs(this->y - B.y) > 0.0001)
                 &&
-                (this->z == B.z)
+                (fabs(this->z - B.z) > 0.0001)
                 );
 }
 

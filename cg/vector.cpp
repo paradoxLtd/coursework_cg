@@ -112,11 +112,11 @@ bool Vector::areEqual(const Vector &A,
     const Vector &B) noexcept
 {
     return (
-                (A.x == B.x)
+                (fabs(A.x - B.x) > 0)
                 &&
-                (A.y == B.y)
+                (fabs(A.y - B.y) > 0)
                 &&
-                (A.z == B.z)
+                (fabs(A.z - B.z) > 0)
            );
 }
 

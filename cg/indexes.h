@@ -14,7 +14,7 @@ class Indexes
     private:
         std::vector<int> ind;
     public:
-        char *name;
+        std::string name;
 
         std::vector<int>::size_type size() const;
 
@@ -22,7 +22,7 @@ class Indexes
 
         void push(int index);
 
-        int &operator[](const int index);
+        int operator[](const int index);
 
         int operator[](const int index) const;
 

@@ -67,13 +67,17 @@ Matrix::Matrix(Vector a)
 
 Matrix& Matrix::operator = (const Matrix &m)
 {
-    std::copy(&m.matrix[0][0], &m.matrix[0][0] + SIZE * SIZE, &this->matrix[0][0]);
+    std::copy(&m.matrix[0][0],
+            &m.matrix[0][0] + SIZE * SIZE,
+            &this->matrix[0][0]);
     return *this;
 }
 
 Matrix & Matrix::operator=(Matrix&& m)
 {
-    std::move(&m.matrix[0][0], &m.matrix[0][0] + SIZE * SIZE, &this->matrix[0][0]);
+    std::move(&m.matrix[0][0],
+            &m.matrix[0][0] + SIZE * SIZE,
+            &this->matrix[0][0]);
     return *this;
 }
 
@@ -116,6 +120,7 @@ Point Matrix::multiplicate(Point p, Matrix m)
 Matrix Matrix::inv(Matrix a)
 {
     //Нахождение обратной матрицы
+    return a;
 }
 
 void Matrix::eye()
@@ -128,5 +133,23 @@ void Matrix::eye()
         { 0, 0, 0, 1 }
     };
 
-    std::copy(&m[0][0], &m[0][0] + SIZE * SIZE, &this->matrix[0][0]);
+    std::copy(
+                &m[0][0],
+            &m[0][0] + SIZE * SIZE,
+            &this->matrix[0][0]);
+}
+
+std::ostream& operator<<(std::ostream& os,
+                                const Matrix& matrix)
+{
+    os << "\nMatrix:";
+    for (int i = 0; i < SIZE; i++)
+    {
+       os << "\n";
+       for (int j = 0; j < SIZE; j++)
+       {
+           os << matrix.matrix[i][j] << "; ";
+       }
+    }
+    return os;
 }

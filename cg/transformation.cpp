@@ -95,7 +95,7 @@ Vector Rotate::rotateZ(const Vector &vector,
 
 Vector Rotate::apply(const Vector &vector,
                      const Options &opt) const{
-    int choose = (int) opt[0];
+    int choose = static_cast<int>(opt[0]);
     double angle = opt[1];
     if (opt.inverse)
         angle *= -1;
@@ -171,7 +171,7 @@ void Rotate::apply(Object &obj,
 
     Matrix m_tr = Matrix::multiplicate(inv, n);
 
-    for (Point point : obj.vertex_trans)
+    for (Point &point : obj.vertex_trans)
     {
         point = Matrix::multiplicate(point, m_tr);
     }
@@ -186,9 +186,9 @@ void Rotate::apply(Object &obj,
 void Move::apply(Object &obj,
                  const Options &opt) const
 {
-    for (Point point : obj.vertex_trans)
+    for (Point &point : obj.vertex_trans)
     {
-        Transformation::transform(point, *this, opt);
+        point = Transformation::transform(point, *this, opt);
     }
 }
 
@@ -196,9 +196,9 @@ void Move::apply(Object &obj,
 void Scale::apply(Object &obj,
                   const Options &opt) const
 {
-    for (Point point : obj.vertex_trans)
+    for (Point &point : obj.vertex_trans)
     {
-        Transformation::transform(point, *this, opt);
+        point = Transformation::transform(point, *this, opt);
     }
 }
 
@@ -286,8 +286,11 @@ void Transformation::fullTransform(Object &object,
     Scale scale;
 
     transform(object, move, mop);
-    transform(object, rotate, mop);
-    transform(object, scale, mop);
+    std::cout << "i moved" << object;
+    transform(object, rotate, rop);
+    std::cout << "i rotated" << object;
+    transform(object, scale, sop);
+    std::cout << "i scaled" << object;
 }
 
 // к камере
@@ -301,6 +304,6 @@ void Transformation::fullTransform(Camera &camera,
     Scale scale;
 
     transform(camera, move, mop);
-    transform(camera, rotate, mop);
-    transform(camera, scale, mop);
+    transform(camera, rotate, rop);
+    transform(camera, scale, sop);
 }

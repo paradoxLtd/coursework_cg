@@ -24,5 +24,9 @@ public:
     static Point multiplicate(Point p, Matrix m);
 
     static Matrix inv(Matrix a);
+
+    friend std::ostream& operator<<(std::ostream& os,
+                                    const Matrix& p);
+
 };
 #endif // MATRIX_H

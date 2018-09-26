@@ -30,23 +30,25 @@ CULL_OBJECT_Y| CULL_OBJECT_Z)
 // 2) преобразование списка-копии
 // 3) передача списка-копии в 3д конвеер
 
+// НЕ ЗАБЫВАТЬ ДОБАВЛЯТЬ & В ЦИКЛЫ ПРОХОДОВ
+
 class ObjectList
 {
 private:
     void copy(ObjectList obj);
 
     // Проверка необходимости отсечения по плоскости Z
-    bool cutZ(int culL_flags, Point &sphere,
+    bool cutZ(int culL_flags, const Point &sphere,
               Object &obj,
               const Camera &camera);
 
     // Проверка необходимости отсечения по плоскости Y
-     bool cutX(int culL_flags, Point &sphere,
+     bool cutX(int culL_flags, const Point &sphere,
                Object &obj,
                const Camera &camera);
 
     // Проверка необходимости отсечения по плоскости X
-    bool cutY(int culL_flags, Point &sphere,
+    bool cutY(int culL_flags, const Point &sphere,
               Object &obj, const Camera &camera);
 public:
     std::list<Object> objects;
@@ -72,14 +74,15 @@ public:
 
      void push(Object &obj);
 
-     int size();
+     int size() const;
 
      void clear();
 
     //538
-    void prepareForConveyor(const MoveOptions &mop,
-                            const RotateOptions &rop,
-                            const ScaleOptions &sop);
+    void prepareForConveyor(
+            const MoveOptions &mop = MoveOptions(),
+            const ScaleOptions &sop = ScaleOptions(),
+            const RotateOptions &rop = RotateOptions());
 
     // 430
     void localToWorld();
@@ -102,6 +105,11 @@ public:
     // Удаление обратных поверхностей(задняя часть куба), 580
     void removeBackSurfaces(
             const Camera &camera);
+
+    friend std::ostream& operator<<
+    (std::ostream& os, const ObjectList& list);
+
+    static void debug();
 
 };
 

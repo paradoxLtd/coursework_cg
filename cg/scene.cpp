@@ -3,7 +3,7 @@
 Scene::Scene(QGraphicsScene* graphics_scene,
              Camera cam)
 {
-    this->camera = Camera();
+    this->camera = cam;
     this->drawer = Drawer(graphics_scene);
 }
 
@@ -21,8 +21,8 @@ void Scene::pushObject(Object &obj)
 
 // Обновление положения камеры
 void Scene::updateCamera(const MoveOptions &mop,
-                  const RotateOptions &rop,
-                  const ScaleOptions &sop)
+                         const ScaleOptions &sop,
+                         const RotateOptions &rop)
 {
     Transformation::fullTransform(this->camera,
                                   mop, rop, sop);
@@ -30,12 +30,12 @@ void Scene::updateCamera(const MoveOptions &mop,
 
 // приведение к исходным значениям и применение преобразовний
 int Scene::ready(const MoveOptions &mop,
-                  const RotateOptions &rop,
-                  const ScaleOptions &sop)
+                 const ScaleOptions &sop,
+                 const RotateOptions &rop)
 {
     if (this->objects.size() == 0)
         return -1;
-    this->objects.prepareForConveyor(mop, rop, sop);
+    this->objects.prepareForConveyor(mop, sop, rop);
     return 0;
 }
 
@@ -64,14 +64,13 @@ void Scene::go()
 
 // Запуск конвейера
 int Scene::draw(const MoveOptions &mop,
-                 const RotateOptions &rop,
-                 const ScaleOptions &sop)
+                const ScaleOptions &sop,
+                const RotateOptions &rop)
 {
-    if (ready(mop, rop, sop) == 0)
+    if (ready(mop, sop, rop) == 0)
     {
         if (steady() == 0)
         {
-            std::cout << "work";
             go();
             return 0;
         }

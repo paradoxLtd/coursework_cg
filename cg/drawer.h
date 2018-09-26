@@ -14,9 +14,9 @@ public:
 private:
     QGraphicsScene* graphics_scene;
 
-    void draw_line(int x1, int y1,
-                   int x2, int y2,
-                   QColor color);
+    void draw_line(double x1, double y1,
+                   double x2, double y2,
+                   QColor color = Qt::black);
 };
 
 #endif // DRAWER_H
