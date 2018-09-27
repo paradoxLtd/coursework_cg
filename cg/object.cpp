@@ -450,6 +450,7 @@ std::ostream& operator<<(std::ostream& os,
     {
         os << point;
     }
+    return os;
 }
 
 void Object::update()

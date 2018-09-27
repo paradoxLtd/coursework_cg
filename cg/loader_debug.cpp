@@ -10,16 +10,16 @@ void Loader::debug()
     std::cout << "error:" << err << " and " << object.state << "\n ";
     std::cout << object;
 
-    err = loader.load(&object, "loader_test_one.obj");
+    err = loader.load(&object, "loader_test_two.obj");
     SET_BIT(object.state, OBJECT_DETAILED);
     std::cout << "\n!!!i try again" << object;
 
-    /* Вызывает ошибку!!!
+
     Camera camera;
-    Scene scene(camera);
+    Scene scene;
     std::vector<std::string> vec;
     vec.push_back("loader_test_one.obj");
     vec.push_back("loader_test_two.obj");
     err = loader.loadAll(scene, vec);
-    */
+
 }

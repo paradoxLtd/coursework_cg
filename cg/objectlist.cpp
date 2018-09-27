@@ -1,8 +1,8 @@
 #include "objectlist.h"
 
-void ObjectList::copy(ObjectList list)
+void ObjectList::copy(const ObjectList &list)
 {
-   this->objects = list.objects;
+    objects = list.objects;
 }
 
 ObjectList::ObjectList(const ObjectList &list)
@@ -12,8 +12,7 @@ ObjectList::ObjectList(const ObjectList &list)
 
 ObjectList::ObjectList(ObjectList &&list)
 {
-    copy(list);
-    list.objects.clear();
+    objects = list.objects;
 }
 
 ObjectList& ObjectList::operator=
@@ -27,7 +26,6 @@ ObjectList& ObjectList::operator=
     (ObjectList&& list)
 {
     copy(list);
-    list.objects.clear();
     return *this;
 }
 

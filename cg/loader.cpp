@@ -20,10 +20,11 @@ int Loader::_load(Object *object, const char* filename)
     qDebug()  << rfilename;
     if (in.fail())
     {
-        qDebug()  << "FFFFFFFFFF";
         return -1;
     }
     std::string line;
+
+    std::cout << "\nlook at me";
 
     // для сохранения индексов точки для массива вершин
     int index, a, b, c, a1, b1, c1, a2, b2, c2;
@@ -92,7 +93,6 @@ int Loader::_load(Object *object, const char* filename)
                 iss >> a2 >> trash >> b2 >> trash >> c2;
                 indexes_vertex = Indexes(a,a1,a2);
                 indexes_texture = Indexes(b,b1,b2);
-
             }
             else
             {
@@ -113,8 +113,10 @@ int Loader::_load(Object *object, const char* filename)
         }
     }
     object->texture_coords = texture;
+    object->vertex_trans = texture;
     //object->normal = normal;
     object->vertex_local = vertex;
+    object->vertex_trans = vertex;
     object->polygons = polygons;
     object->state = OBJECT_STATE_ACTIVE;
     object->updateRad();
@@ -124,22 +126,23 @@ int Loader::_load(Object *object, const char* filename)
 
 int Loader::_loadAll(Scene &scene, std::vector<std::string> names)
 {
-    ObjectList objects;
     int error = 0;
-    int names_size = names.size();
-    for(int i = 0; i < names_size; i++)
+
+    ObjectList objects;
+
+    for (std::string name : names)
     {
         // НЕ ВЫНОСИТЬ ОБЪЯВЛЕНИЕ ПЕРЕМЕННОЙ ИЗ ЦИКЛА
-        // иначе функция load будет переопределять
-        // один и тот же объект все время
+        // иначе все объекты будут с одним id
         Object object;
-        error = load(&object, names[i]);
+        error = load(&object, name);
         if (error != 0)
             break;
         objects.push(object);
     }
     if (error == 0)
         scene.objects = objects;
+
     return error;
 }
 

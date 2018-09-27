@@ -131,15 +131,12 @@ void Camera::_copy(const Camera &c)
 
 void Camera::build_cam_matrix()
 {
-    double mtx_t[SIZE][SIZE] = {
+    Matrix t_matrix({
         {1, 0, 0, 0},
         {0, 1, 0, 0},
         {0, 0, 1, 0},
         {-this->position.x, -this->position.y, -this->position.z, 1}
-    };
-
-    Matrix t_matrix(mtx_t);
-
+    });
 
     //Этот кусок кода на случай если мы не передаем в камеру вектора uvn
     //а хотим их вычислить
@@ -152,19 +149,14 @@ void Camera::build_cam_matrix()
     this->u.normalize();
     this->n.normalize();
 
-    double mtx_uvn[SIZE][SIZE] = {
+    Matrix uvn_matrix({
         { this->u.x, this->v.x, this->n.x, 0 },
         { this->u.y, this->v.y, this->n.y, 0 },
         { this->u.z, this->v.z, this->n.z, 0 },
         { 0, 0, 0, 1 }
-    };
+    });
 
-    Matrix uvn_matrix(mtx_uvn);
-    //std::cout << "here build_cam_matrix";
-    //std::cout << t_matrix << std::endl;
-    //std::cout << uvn_matrix << std::endl;
     this->mcam = Matrix::multiplicate(t_matrix, uvn_matrix);
-    //std::cout << this->mcam << std::endl;
 
     //c568, там приводится сверический режим и обычный
     //пока для простоты (возможно и не понадобится сферический) реализуем простой режим
@@ -181,7 +173,7 @@ std::ostream& operator<<
            ", view_dst_ver" << p.view_dst_ver <<
            ", asp_ratio: " << p.asp_ratio <<
            ")" << p.position << p.u << p.v << p.n <<
-           p.target;
+           p.target << "\n";
     return os;
 }
 

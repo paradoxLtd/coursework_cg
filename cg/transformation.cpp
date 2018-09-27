@@ -293,13 +293,8 @@ void Transformation::fullTransform(Object &object,
     Scale scale;
 
     transform(object, move, mop);
-    std::cout << "i moved here" << object;
     transform(object, scale, sop);
-    std::cout << "i scaled here" << object;
     transform(object, rotate, rop);
-    std::cout << "i rotated here" << rop[0] <<", " <<
-                 rop[1] << ", " << rop[2]
-              << object;
 }
 
 // к камере

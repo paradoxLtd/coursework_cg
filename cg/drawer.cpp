@@ -8,45 +8,38 @@ Drawer::Drawer(QGraphicsScene *graphics_scene)
 void Drawer::draw_objects(const ObjectList &objs)
 {
     int vindex_0, vindex_1, vindex_2;
-    int pSize;
 
+    Point p0, p1, p2;
 
     for(Object obj : objs.objects)
     {
-        //std::cout << obj << "\nfdfdfdfffffffffffffff\n";
-
-        pSize = obj.polygons.size();
-        qDebug() << "XUI " << pSize;
-        std::cout << obj.vertex_trans[10];
-        for(int poly = 0; poly < pSize; poly++)
+        for (Triangle pol:obj.polygons)
         {
 
-            if (!(obj.polygons[poly].state & POLYGON_STATE_ACTIVE) ||
-                (obj.polygons[poly].state & POLYGON_STATE_CLIPPED) ||
-                (obj.polygons[poly].state & POLYGON_STATE_BACKFACE))
+            if (!(pol.state & POLYGON_STATE_ACTIVE) ||
+                (pol.state & POLYGON_STATE_CLIPPED) ||
+                (pol.state & POLYGON_STATE_BACKFACE))
                 continue;
-            vindex_0 = obj.polygons[poly].indexes_vert[0];
-            vindex_1 = obj.polygons[poly].indexes_vert[1];
-            vindex_2 = obj.polygons[poly].indexes_vert[2];
-            qDebug() << obj.vertex_trans[vindex_0].x << " " << obj.vertex_trans[vindex_0].y << "    "
-                       << obj.vertex_trans[vindex_1].x << " " << obj.vertex_trans[vindex_1].y << "    "
-                       << obj.vertex_trans[vindex_2].x << " " << obj.vertex_trans[vindex_2].y;
-            this->draw_line(obj.vertex_trans[vindex_0].x,
-                            obj.vertex_trans[vindex_0].y,
-                            obj.vertex_trans[vindex_1].x,
-                            obj.vertex_trans[vindex_1].y,
-                            obj.polygons[poly].color);
-            this->draw_line(obj.vertex_trans[vindex_1].x,
-                            obj.vertex_trans[vindex_1].y,
-                            obj.vertex_trans[vindex_2].x,
-                            obj.vertex_trans[vindex_2].y,
-                            obj.polygons[poly].color);
-            this->draw_line(obj.vertex_trans[vindex_2].x,
-                            obj.vertex_trans[vindex_2].y,
-                            obj.vertex_trans[vindex_0].x,
-                            obj.vertex_trans[vindex_0].y,
-                            obj.polygons[poly].color);
-            std::cout << obj.polygons[poly];
+
+            vindex_0 = pol.indexes_vert[0];
+            vindex_1 = pol.indexes_vert[1];
+            vindex_2 = pol.indexes_vert[2];
+
+            p0 = obj.vertex_trans[vindex_0];
+            p1 = obj.vertex_trans[vindex_1];
+            p2 = obj.vertex_trans[vindex_2];
+
+            this->draw_line(p0.x, p0.y,
+                            p1.x, p1.y,
+                            pol.color);
+
+            this->draw_line(p1.x, p1.y,
+                            p2.x, p2.y,
+                            pol.color);
+
+            this->draw_line(p2.x, p2.y,
+                            p0.x, p0.y,
+                            pol.color);
         }
     }
 }

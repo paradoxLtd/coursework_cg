@@ -35,7 +35,7 @@ CULL_OBJECT_Y| CULL_OBJECT_Z)
 class ObjectList
 {
 private:
-    void copy(ObjectList obj);
+    void copy(const ObjectList &obj);
 
     // Проверка необходимости отсечения по плоскости Z
     bool cutZ(int culL_flags, const Point &sphere,
@@ -51,11 +51,11 @@ private:
     bool cutY(int culL_flags, const Point &sphere,
               Object &obj, const Camera &camera);
 public:
-    std::list<Object> objects;
+    std::vector<Object> objects;
 
-    ObjectList(std::list<Object> objs = {})
+    ObjectList()
     {
-        this->objects = objs;
+        ;
     }
 
     ObjectList(const ObjectList &objects);
