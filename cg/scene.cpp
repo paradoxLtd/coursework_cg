@@ -1,10 +1,16 @@
-#include "Scene.h"
+#include "scene.h"
 
-Scene::Scene(QGraphicsScene* graphics_scene,
+/*Scene::Scene(QGraphicsScene* graphics_scene,
              Camera cam)
 {
     this->camera = cam;
     this->drawer = Drawer(graphics_scene);
+}*/
+
+Scene::Scene(Bitmap *bitmap, Camera camera)
+{
+    this->camera = camera;
+    this->drawer =  new Drawer(bitmap);
 }
 
 // Очистка объектов со сцены
@@ -24,8 +30,15 @@ void Scene::updateCamera(const MoveOptions &mop,
                          const ScaleOptions &sop,
                          const RotateOptions &rop)
 {
-    Transformation::fullTransform(this->camera,
-                                  mop, rop, sop);
+    /*Transformation::fullTransform(this->camera,
+                                  mop, rop, sop);*/
+    this->camera.build_cam_matrix();
+}
+
+void Scene::updateScene()
+{
+    this->clear();
+    this->draw();
 }
 
 // приведение к исходным значениям и применение преобразовний
@@ -42,7 +55,7 @@ int Scene::ready(const MoveOptions &mop,
 // проверка на ошибки
 int Scene::steady()
 {
-    int error = 0;
+    int error = 0; //Что за?
 
     return error;
 }
@@ -59,7 +72,12 @@ void Scene::go()
                                this->camera);
     this->objects.removeBackSurfaces(this->camera);
 
-    this->drawer.draw_objects(this->objects);
+    this->drawer->draw_objects(this->objects);
+}
+
+void Scene::clear()
+{
+    this->drawer->clear();
 }
 
 // Запуск конвейера

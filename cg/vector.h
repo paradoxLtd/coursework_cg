@@ -6,7 +6,7 @@
 
 class Point;
 
-#include "Point.h"
+#include "point.h"
 
 #define EPS 1e-6
 
@@ -55,10 +55,16 @@ public:
 
     // Переопределение + и +=
     Vector& operator+
-    (Vector& other)noexcept;
+    (Vector other)noexcept;
+
+    Vector &operator-
+    (Vector other)noexcept;
 
     Vector& operator+=
-    (Vector& other)noexcept;
+    (Vector other)noexcept;
+
+    Vector &operator-=
+    (Vector other)noexcept;
 
     // Умножения
 
@@ -73,12 +79,16 @@ public:
     Vector operator*
     (const Vector &v1) noexcept;
 
+    Vector & operator*
+    (const double num) noexcept;
+
     friend std::ostream& operator<<
     (std::ostream& os, const Vector& p);
 
     Point asPoint();
 
     void normalize();
+    double length();
 
     static void debug();
 };

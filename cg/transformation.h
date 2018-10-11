@@ -41,7 +41,7 @@ class Move : public Action
             const Options &opt) const override;
 };
 
-class Rotate : public Action
+class RotateX : public Action
 {
 //private:
     //Vector rotateX(const Vector &v, double angle) const;
@@ -58,6 +58,25 @@ public:
             Object &obj,
             const Options &opt) const override;
 };
+
+class RotateY : public Action
+{
+//private:
+    //Vector rotateX(const Vector &v, double angle) const;
+    //Vector rotateY(const Vector &v, double angle) const;
+    //Vector rotateZ(const Vector &v, double angle) const;
+public:
+    Vector apply(
+            const Vector &v,
+            const Options &opt) const override;
+    void apply(
+            Camera &cam,
+            const Options &opt) const override;
+    void apply(
+            Object &obj,
+            const Options &opt) const override;
+};
+
 
 class Scale : public Action
 {
@@ -86,14 +105,14 @@ public:
                           const Action &act,
                           const Options &opt);
 
-    static void fullTransform(Object &object,
+    /*static void fullTransform(Object &object,
                                const MoveOptions &mop,
                                const RotateOptions &rop,
                                const ScaleOptions &sop);
     static void fullTransform(Camera &cam,
                                const MoveOptions &mop,
                                const RotateOptions &rop,
-                               const ScaleOptions &sop);
+                               const ScaleOptions &sop);*/
 };
 
 #endif // TRANSFORMATION_H

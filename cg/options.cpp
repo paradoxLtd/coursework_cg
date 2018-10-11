@@ -1,4 +1,4 @@
-#include "Options.h"
+#include "options.h"
 
 void Options::init(
         double a,

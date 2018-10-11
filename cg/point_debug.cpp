@@ -1,5 +1,5 @@
-#include "Point.h"
-#include "Debug.h"
+#include "point.h"
+#include "debug.h"
 
 #include <QDebug>
 

@@ -1,8 +1,8 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "Point.h"
-#include "Options.h"
+#include "point.h"
+#include "options.h"
 #include "plane.h"
 #include "matrix.h"
 #include <cmath>
@@ -15,13 +15,10 @@ class Camera
 {
 public:
     Camera(int attr = 0,
-           Point position = Point(0,0,-50,1),
-           Vector u = Vector(1,0,0),
-           Vector v = Vector(0,1,0),
-           Vector n = Vector(0,0,1),
-           Point target = Point(1,1,0,1),
-           double n_plane = 50,
-           double f_plane = 500,
+           Point position = Point(0,0,0,1),
+           Point target = Point(0,0,1,1),
+           double n_plane = 400,
+           double f_plane = 600,
            double viewp_w = 600,
            double viewp_h = 600);
 
@@ -33,7 +30,18 @@ public:
 
     void build_cam_matrix();
 
-    double viewplane_width, viewplane_height;
+    //Из-за чего тут произошла путаница, параметры viewplane_width и viewplane_height
+    //могут быть нормированными, а могут соответствовать размерам экрана
+    //отсюда и dst тоже тоже может быть как нормированным, так и нет
+    //если они нормированны, то здесь то и нужны view_dst_hor, чтобы в аксонометрии работать
+    //с фактическим размером
+
+    //что мы делаем, viewplane_width соответствуют размерам экрана, поэтому
+    //view_dst_hor и view_dst_ver убираются, далее, с учетом того, что у нас fov = 90 гр, то
+    //начальный dst будет равен 1/2 viewplane_width.
+    double viewplane_width, viewplane_height; // ширина и высота области, на которую производится
+                                                                        // проецирование
+
     double dst;
     // Ближняяи дальние плоскости отсечения
     double near_plane, far_plane;
@@ -42,7 +50,7 @@ public:
     // расстояния по горизонтали и вертикали,
     // используемые при аксонометрическом
     // преобразовании
-    double view_dst_hor, view_dst_ver;
+    //double view_dst_hor, view_dst_ver;
 
     double asp_ratio;
     int state; //Состояние камеры
@@ -58,6 +66,7 @@ public:
     //, для дальнейшего простого отсечения
     double fov;
 
+    //Эти плоскости по сути нафиг не нужны
     Plane left_plane, right_plane;
     Plane top_plane, bottom_plane;
 

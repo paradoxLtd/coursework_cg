@@ -1,4 +1,4 @@
-#include "Transformation.h"
+#include "transformation.h"
 #include <cmath>
 
 // Преобразования над векторами
@@ -134,15 +134,21 @@ ux', uy', uz'. Вычисляем матрицу перехода от стар�
 новому, а после перемножаем все точки на матрицу перехода и получаем
 новые координаты. Если есть альтернативные предложения, то your welcome*/
 
-Vector Rotate::apply( const Vector &v,
+Vector RotateX::apply( const Vector &v,
                     const Options &opt)const
 {
     // не вызывать
     return v;
 }
 
+
+Vector RotateY::apply(const Vector &v, const Options &opt) const
+{
+
+}
+
 // Новый поворот объекта
-void Rotate::apply(Object &obj,
+void RotateX::apply(Object &obj,
                    const Options &opt) const
 {
     if (fabs(opt[0] + opt[1] + opt[2]) < 0.001)
@@ -189,6 +195,11 @@ void Rotate::apply(Object &obj,
     obj.uz = n_uz;
 }
 
+void RotateY::apply(Object &obj, const Options &opt) const
+{
+
+}
+
 // Движение объекта
 void Move::apply(Object &obj,
                  const Options &opt) const
@@ -210,16 +221,51 @@ void Scale::apply(Object &obj,
 }
 
 
-// Преобразования камеры
 
-// Поворот
-void Rotate::apply(Camera &cam,
-                   const Options &opt) const
+// Преобразования камеры
+// Для работы с плоскостями также надо производить изменение значений
+
+//Тут была допущена ошибочка ранее, смещением по осям мы неправильно поворачиваем,
+//необходимо применить привычный поворот, т.е. поворачиваем таргет, после переносим его относително
+//позишн, так как камера смотрит на ось Z, то повороты будут производиться вокруг осей OY и OX
+//подробнее как направлена камера на стр 584
+
+
+//С плоскостями пока ничего не делаю, так как не совсем понятно где они
+//используются, как только станет ясно, соотв преобразования добавятся
+void RotateX::apply(Camera &cam, const Options &opt) const
 {
-    Point p = Point(opt[0], opt[1], opt[2], 1.);
-    cam.target += p;
-    // Для работы с плоскостями также надо производить изменение значений
+    float angle = opt[0];
+
+    Matrix rotate_matrix({
+        { 1,	0,				0,			0 },
+        { 0,	cos(angle),		-sin(angle), 0 },
+        { 0,	sin(angle),	cos(angle), 0 },
+        { 0,	 0,				0,			1 }
+    });
+
+    cam.target -= cam.position;
+    cam.target = Matrix::multiplicate(cam.target, rotate_matrix);
+    cam.target += cam.position;
 }
+
+void RotateY::apply(Camera &cam, const Options &opt) const
+{
+    float angle = opt[1];
+
+    Matrix rotate_matrix(
+    {
+        { cos(angle), 0,	 sin(angle), 0 },
+        { 0,		  1,	 0,			  0 },
+        { -sin(angle), 0,	 cos(angle),  0 },
+        { 0,		  0,	 0,			  1 }
+    });
+
+    cam.target -= cam.position;
+    cam.target = Matrix::multiplicate(cam.target, rotate_matrix);
+    cam.target += cam.position;
+}
+
 
 // Движение
 void Move::apply(
@@ -229,15 +275,19 @@ void Move::apply(
     cam.position += p;
     cam.target += p;
 
-    // Для работы с плоскостями также надо производить изменение значений
+    cam.near_plane += p.z;
+    cam.far_plane += p.z;
 }
 
-// Масштабирование не задано!
+
 void Scale::apply(Camera &cam,
                        const Options &opt) const
 {
+    cam.dst *= opt[2];
+
 
     // Для работы с плоскостями также надо производить изменение значений
+    // А разве оно нужно для масштабирования?
 }
 
 
@@ -280,10 +330,12 @@ void Transformation::transform(Object &obj,
     act.apply(obj, opt);
 }
 
+
+//Этот подход неправильный см. комментарии к повороту камеры
 // Применение полных преобразований
 
 // к объекту
-void Transformation::fullTransform(Object &object,
+/*void Transformation::fullTransform(Object &object,
                                    const MoveOptions &mop,
                                    const RotateOptions &rop,
                                    const ScaleOptions &sop)
@@ -310,4 +362,4 @@ void Transformation::fullTransform(Camera &camera,
     transform(camera, move, mop);
     transform(camera, rotate, rop);
     transform(camera, scale, sop);
-}
+}*/

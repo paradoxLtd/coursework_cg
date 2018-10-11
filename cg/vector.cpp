@@ -1,4 +1,4 @@
-#include "Vector.h"
+#include "vector.h"
 
 void Vector::init(double x,
                   double y,
@@ -98,6 +98,15 @@ Vector Vector::operator*
     return vectorMultiplication(*this, v1);
 }
 
+Vector & Vector::operator*(const double num) noexcept
+{
+    this->x *= num;
+    this->y *= num;
+    this->z *= num;
+
+    return *this;
+}
+
 double Vector::scalarMultiplication
     (const Vector &vec1,
      const Vector &vec2) noexcept
@@ -135,7 +144,7 @@ bool Vector::operator!=
 }
 
 Vector &Vector::operator+=
-    (Vector &other) noexcept
+    (Vector other) noexcept
 {
     this->x += other.x;
     this->y += other.y;
@@ -145,13 +154,28 @@ Vector &Vector::operator+=
 }
 
 Vector &Vector::operator+
-    (Vector &other) noexcept
+    (Vector other) noexcept
 {
     this->x += other.x;
     this->y += other.y;
     this->z += other.z;
 
     return *this;
+}
+
+Vector &Vector::operator-(Vector other) noexcept
+{
+    this->x -= other.x;
+    this->y -= other.y;
+    this->z -= other.z;
+
+    return *this;
+}
+
+Vector &Vector::operator-=
+    (Vector other) noexcept
+{
+    return *this - other;
 }
 
 // Преобразование к типу Point
@@ -172,6 +196,11 @@ void Vector::normalize()
         this->y /= denom;
         this->z /= denom;
     }
+}
+
+double Vector::length()
+{
+    return sqrt(this->x * this->x + this->y * this->y + this->z * this->z);
 }
 
 // Переопределение ввывода

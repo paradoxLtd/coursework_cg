@@ -3,8 +3,10 @@
 
 class Options;
 
-#include "Resource.h"
-#include "Options.h"
+#include "resource.h"
+#include "options.h"
+#include "vector.h"
+#include <QColor>
 
 #define NO_POINT 0
 
@@ -14,6 +16,7 @@ class Point
     void create();
     void init(double a, double b, double c, double d);
     void init(const Point &p);
+
 public:
     double x, y, z, w;
     std::string name; //для дебагинга
@@ -49,10 +52,17 @@ public:
     Point & operator+=
     (Point &other);
 
+    Point & operator-
+    (Point &other);
+
+    Point & operator-=
+    (Point &other);
+
     friend std::ostream& operator<<
     (std::ostream& os, const Point& p);
 
     static void debug();
+
 };
 
 #endif // POINT_H

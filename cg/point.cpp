@@ -1,4 +1,4 @@
-#include "Point.h"
+#include "point.h"
 #include <iostream>
 
 void Point::init(double a, double b, double c, double d)
@@ -109,6 +109,25 @@ Point &Point::operator+=(Point &p)
     this->x += p.x;
     this->y += p.y;
     this->z += p.z;
+
+    return  *this;
+}
+
+Point &Point::operator -(Point &p)
+{
+    this->x -= p.x;
+    this->y -= p.y;
+    this->z -= p.z;
+
+    return  *this;
+}
+
+// Переопределение +=
+Point &Point::operator-=(Point &p)
+{
+    this->x -= p.x;
+    this->y -= p.y;
+    this->z -= p.z;
 
     return  *this;
 }

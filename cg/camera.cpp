@@ -1,7 +1,7 @@
 #include "camera.h"
 
 Camera::Camera(int attr, Point position,
-               Vector u, Vector v, Vector n,
+               //Vector u, Vector v, Vector n,
                Point target,
                double n_plane,
                double f_plane,
@@ -63,12 +63,13 @@ void Camera::_init(int attr, Point &position,
     this->mper.eye(); // Эти пока не сильно важны
     this->mscr.eye();
 
-    // Это странно!
+    // Это странно! Все норм теперь, см. заголовочный файл
     this->viewplane_width = VIEWPLANE_WIDTH;
     this->viewplane_height = VIEWPLANE_WIDTH / this->asp_ratio;
 
     double tg = tan(fov * (M_PI / 180.) / 2.); //Меняем на ходу
     this->dst = 0.5 * this->viewplane_width * tg;
+    //this->dst = 200;
 
     //Будем исходить из позиции, что  fov равен 90 для упрощения работы с отсечениями
 
@@ -169,8 +170,8 @@ std::ostream& operator<<
      os << "\n Camera(attributes:" << p.attr <<
            ", viewplane_width: " << p.viewplane_width <<
            ", viewplane_height: " << p.viewplane_height <<
-           ", view_dst_hor: " << p.view_dst_hor <<
-           ", view_dst_ver" << p.view_dst_ver <<
+           //", view_dst_hor: " << p.view_dst_hor <<
+           //", view_dst_ver" << p.view_dst_ver <<
            ", asp_ratio: " << p.asp_ratio <<
            ")" << p.position << p.u << p.v << p.n <<
            p.target << "\n";

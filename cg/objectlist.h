@@ -8,10 +8,10 @@
 // последовательная работа со всеми объектами и
 // обращение по индексу использоваться не будет
 
-#include "Object.h"
-#include "Transformation.h"
-#include "Camera.h"
-#include "Bit.h"
+#include "object.h"
+#include "transformation.h"
+#include "camera.h"
+#include "bit.h"
 
 //Общие флаги отсечения
 // Отсечение по оси х

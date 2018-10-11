@@ -9,8 +9,8 @@
 class Object;
 
 #include "indexes.h"
-#include "Point.h"
-#include "Object.h"
+#include "point.h"
+#include "object.h"
 #include "errors.h"
 
 // 754
@@ -102,3 +102,8 @@ public:
 };
 
 #endif // TRIANGLE_H
+
+
+// c763
+// 800
+//затенение по гуро 823

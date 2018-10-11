@@ -6,14 +6,21 @@
 #include <ctype.h>
 #include <fstream>
 #include <sstream>
-#include <direct.h>
+
+//Это действия, касающиеся директивы загрузчика
+#if defined (_WIN32) || defined (_WIN64)
+    #include <direct.h>
+#elif defined (__APPLE__) || defined(__MACH__)
+    #include <unistd.h>
+
+#endif
 #include <regex>
 
-#include "Transformation.h"
-#include "Object.h"
-#include "Bit.h"
+#include "transformation.h"
+#include "object.h"
+#include "bit.h"
 #include "resource.h"
-#include "Scene.h"
+#include "scene.h"
 #include <string>
 
 // Маска извлечения цвета в формате RGB или в виде индекса

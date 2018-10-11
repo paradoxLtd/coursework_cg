@@ -58,7 +58,9 @@ void ObjectList::prepareForConveyor
         // обновление радиусов, сброс статусов(отсечен)
         // копирование исходных массивов в основные
         obj.update();
-        Transformation::fullTransform(obj, mop, rop, sop);
+
+        //тут надо пересмотреть работу трансформации
+        //Transformation::fullTransform(obj, mop, rop, sop);
     }
 }
 
@@ -97,11 +99,11 @@ void ObjectList::worldToCam(Camera &cam)
            point = Matrix::multiplicate(point, cam.mcam);
        }
 
-       obj.center = Matrix::multiplicate(obj.center, cam.mcam);
-       obj.dir = Matrix::multiplicate(obj.dir, cam.mcam);
-       obj.ux = Matrix::multiplicate(obj.ux, cam.mcam);
-       obj.uy = Matrix::multiplicate(obj.uy, cam.mcam);
-       obj.uz = Matrix::multiplicate(obj.uz, cam.mcam);
+       //obj.center = Matrix::multiplicate(obj.center, cam.mcam);
+       //obj.dir = Matrix::multiplicate(obj.dir, cam.mcam);
+       //obj.ux = Matrix::multiplicate(obj.ux, cam.mcam);
+       //obj.uy = Matrix::multiplicate(obj.uy, cam.mcam);
+       //obj.uz = Matrix::multiplicate(obj.uz, cam.mcam);
    }
    std::cout << *this;
 }
@@ -341,10 +343,13 @@ void ObjectList::camToAxonometricAndScreenObject(const Camera &cam)
 
     // нужно обсуждение, но...
 
-    double alpha = (0.5 * cam.viewport_w - 0.5);
-    double beta = (0.5 * cam.viewport_h - 0.5);
-    int dst = cam.dst;
+    double alpha = (cam.dst - 0.5);
+    double beta = (cam.dst - 0.5);
+    //int dst = cam.dst;
+
     // Добавил чтобы работало
+
+
 
     std::cout << "\nalpha " << cam.viewplane_width << ", beta " <<
                 cam.viewplane_height << ", cam->dst " << cam.dst;
@@ -363,15 +368,18 @@ void ObjectList::camToAxonometricAndScreenObject(const Camera &cam)
             // to axon
             if (fabs(z) > 0.00001)
             {
-                point.x = 100 * point.x;// / z;
-                point.y = 100 * point.y * cam.asp_ratio;// / z;
-            }
+                point.x = cam.dst * point.x;// / z;
+                point.y = cam.dst * point.y * cam.asp_ratio;// / z;
+
 
             // to screen
             point.x += alpha;
             point.y = -point.y + beta;
-            std::cout << "EBANINA\n";
-            std::cout << point << "\n";
+            //std::cout << "EBANINA\n";
+            //std::cout << point << "\n";
+            /*point.x *= dst / z;
+            point.y *= dst * cam.asp_ratio / z;*/
+            }
         }
     }
 }

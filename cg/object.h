@@ -3,9 +3,9 @@
 
 class Triangle;
 
-#include "Triangle.h"
-#include "Vector.h"
-#include "Bit.h"
+#include "triangle.h"
+#include "vector.h"
+#include "bit.h"
 
 #include <cmath>
 #include <vector>

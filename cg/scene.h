@@ -4,6 +4,7 @@
 #include "camera.h"
 #include "objectlist.h"
 #include "drawer.h"
+#include "bitmap.h"
 
 // Сцена
 class Scene
@@ -14,17 +15,23 @@ private:
               const RotateOptions &rop);
     int steady();
     void go();
+
+    void clear();
 public:
     Camera camera;
     ObjectList objects;
-    Drawer drawer;
+    Drawer* drawer;
 
     // Из конструктора убрана инициализация ObjectList
     // Все равно готовый ObjectList никто кидать не будет
     // + загрузчик загружает не в ObjectList, а в сцену
     // + конструктор ObjectList вызывает краш программы...
-    Scene(QGraphicsScene* graphics_scene = nullptr,
-          Camera camera = Camera());
+    /*Scene(QGraphicsScene* graphics_scene = nullptr,
+          Camera camera = Camera());*/
+
+    Scene() = default;
+    Scene(Bitmap *bitmap, Camera camera = Camera());
+
 
     ~Scene()
     {
@@ -47,6 +54,8 @@ public:
                       const ScaleOptions &sop = ScaleOptions(),
                       const RotateOptions &rop = RotateOptions()
                        );
+
+    void updateScene();
 
     void clearObjects();
 

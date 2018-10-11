@@ -1,6 +1,7 @@
 #include "loader.h"
 #include "qDebug"
 
+
 //Хранить объекты надо в папке сборки ../cgg/build-cg.../objs/my_file.obj
 int Loader::_load(Object *object, const char* filename)
 {
@@ -8,14 +9,25 @@ int Loader::_load(Object *object, const char* filename)
 
     // https://ru.stackoverflow.com/questions/414690/Как-узнать-директорию-исполняемого-файла-в-windows
     char current_work_dir[FILENAME_MAX];
-    _getcwd(current_work_dir, sizeof(current_work_dir));
+    char* (*fget)(char *, size_t);
+
+    #if defined (_WIN32) || defined (_WIN64)
+        fget = &_getcwd();
+        char folders[10] = "\\objs\\";
+    #elif defined (__APPLE__) && defined(__MACH__) || defined (__linux__)
+        fget = &getcwd;
+        char folders[10] = "/objs/";
+    #endif
+
+    fget(current_work_dir, sizeof(current_work_dir));
 
     // http://qaru.site/questions/124663/how-to-concatenate-two-strings-in-c
     char rfilename[sizeof(current_work_dir) +
-            sizeof(filename) + sizeof("\\objs\\")];
+            sizeof(filename) + sizeof(folders)];
     strcpy (rfilename, current_work_dir) ;
-    strcat (rfilename, "\\objs\\") ;
+    strcat (rfilename, folders) ;
     strcat (rfilename, filename) ;
+
     in.open(rfilename, std::ifstream::in);
     qDebug()  << rfilename;
     if (in.fail())
@@ -120,6 +132,10 @@ int Loader::_load(Object *object, const char* filename)
     object->polygons = polygons;
     object->state = OBJECT_STATE_ACTIVE;
     object->updateRad();
+
+    //!!!У объекта должен быть свой центр
+    //0,0,0 не является самым удачным выбором, так как там камера стоит, например
+    object->center = Point(0, 0, 10);
     in.close();
     return 0;
 }

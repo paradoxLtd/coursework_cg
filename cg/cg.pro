@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui widgets
+QT       += core gui widgets opengl
 
 TARGET = cg
 TEMPLATE = app
@@ -25,7 +25,6 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    indexes.cpp \
     object.cpp \
     options.cpp \
     point.cpp \
@@ -37,7 +36,6 @@ SOURCES += \
     camera.cpp \
     point_debug.cpp \
     vector_debug.cpp \
-    matrix.cpp \
     plane.cpp \
     triangle_debug.cpp \
     object_debug.cpp \
@@ -46,10 +44,19 @@ SOURCES += \
     drawer.cpp \
     camera_debug.cpp \
     objectlist_debug.cpp \
-    scene_debug.cpp
+    scene_debug.cpp \
+    light/light.cpp \
+    light/material.cpp \
+    indexes.cpp \
+    matrix.cpp \
+    textures/textures.cpp \
+    bitmap.cpp \
+    textures/gradient.cpp \
+    edge.cpp \
+    vertex.cpp
+
 
 HEADERS += \
-        mainwindow.h \
     bit.h \
     camera.h \
     loader.h \
@@ -65,10 +72,20 @@ HEADERS += \
     indexes.h \
     objectlist.h \
     debug.h \
-    matrix.h \
     plane.h \
     errors.h \
-    drawer.h
+    drawer.h \
+    light/light.h \
+    light/material.h \
+    mainwindow.h \
+    matrix.h \
+    textures/textures.h \
+    bitmap.h \
+    fixed.h \
+    textures/gradient.h \
+    edge.h \
+    vertex.h
+
 
 FORMS += \
         mainwindow.ui
