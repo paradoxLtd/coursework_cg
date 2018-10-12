@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->widget->setImage(*image);
 
     this->scene = new Scene(ui->widget);
+
 }
 
 void MainWindow::on_pushButton_clicked()

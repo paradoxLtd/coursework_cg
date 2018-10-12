@@ -17,7 +17,7 @@ Edge::Edge(Gradient gr, Vertex minYPoint, Vertex maxYPoint, int min_idx)
 
 
     if (fabs(y_dst) < 1e-6)
-        x_step = 0;
+        x_step = 0.;
     else
         x_step = x_dst / y_dst;
 
@@ -48,6 +48,11 @@ int Edge::get_y_end()
 Vector Edge::get_color()
 {
     return  this->color;
+}
+
+void Edge::set_x(double x)
+{
+    this->x = x;
 }
 
 void Edge::step()

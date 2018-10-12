@@ -54,10 +54,10 @@ public:
     (const Vector &B)noexcept;
 
     // Переопределение + и +=
-    Vector& operator+
+    Vector operator+
     (Vector other)noexcept;
 
-    Vector &operator-
+    Vector operator-
     (Vector other)noexcept;
 
     Vector& operator+=
@@ -79,7 +79,7 @@ public:
     Vector operator*
     (const Vector &v1) noexcept;
 
-    Vector & operator*
+    Vector operator*
     (const double num) noexcept;
 
     friend std::ostream& operator<<

@@ -22,8 +22,8 @@ public:
 private:
     std::vector <Vector> m_color;
 
-    Vector m_color_x_step;
-    Vector m_color_y_step;
+    Vector color_x_step;
+    Vector color_y_step;
 
 
 };

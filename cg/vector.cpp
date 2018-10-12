@@ -98,13 +98,9 @@ Vector Vector::operator*
     return vectorMultiplication(*this, v1);
 }
 
-Vector & Vector::operator*(const double num) noexcept
+Vector  Vector::operator*(const double num) noexcept
 {
-    this->x *= num;
-    this->y *= num;
-    this->z *= num;
-
-    return *this;
+    return Vector(this->x * num, this->y * num, this->z * num);
 }
 
 double Vector::scalarMultiplication
@@ -153,29 +149,24 @@ Vector &Vector::operator+=
     return *this;
 }
 
-Vector &Vector::operator+
-    (Vector other) noexcept
+Vector Vector::operator+(Vector other) noexcept
 {
-    this->x += other.x;
-    this->y += other.y;
-    this->z += other.z;
-
-    return *this;
+    return Vector(this->x + other.x, this->y + other.y, this->z + other.z);
 }
 
-Vector &Vector::operator-(Vector other) noexcept
+Vector Vector::operator-(Vector other) noexcept
+{
+    return Vector(this->x - other.x, this->y - other.y, this->z - other.z);
+}
+
+Vector &Vector::operator-=
+    (Vector other) noexcept
 {
     this->x -= other.x;
     this->y -= other.y;
     this->z -= other.z;
 
     return *this;
-}
-
-Vector &Vector::operator-=
-    (Vector other) noexcept
-{
-    return *this - other;
 }
 
 // Преобразование к типу Point

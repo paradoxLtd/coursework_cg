@@ -18,6 +18,7 @@ public:
     int get_y_end();
     Vector get_color();
 
+    void set_x(double x);
     void step();
 
 private:
