@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QWidget>
 #include <QPainter>
-#include <QtOpenGL>
+//#include <QtOpenGL>
 
 class Bitmap : public QWidget
 {

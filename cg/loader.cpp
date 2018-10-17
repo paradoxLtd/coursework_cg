@@ -9,10 +9,10 @@ int Loader::_load(Object *object, const char* filename)
 
     // https://ru.stackoverflow.com/questions/414690/Как-узнать-директорию-исполняемого-файла-в-windows
     char current_work_dir[FILENAME_MAX];
-    char* (*fget)(char *, size_t);
+    char* (*fget)(char *, int);
 
     #if defined (_WIN32) || defined (_WIN64)
-        fget = &_getcwd();
+        fget = &_getcwd;
         char folders[10] = "\\objs\\";
     #elif defined (__APPLE__) && defined(__MACH__) || defined (__linux__)
         fget = &getcwd;

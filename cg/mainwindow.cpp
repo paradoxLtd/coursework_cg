@@ -38,8 +38,13 @@ void MainWindow::on_pushButton_clicked()
     SET_BIT(object.state, OBJECT_DETAILED);
     std::cout << "error:" << err << " and " << object.state << "\n ";
     //std::cout << object;
+    std::cout << object;
 
     scene->pushObject(object);
+
+    Transformation::transform(scene->camera, Move(), MoveOptions(2,2));
+    Transformation::transform(scene->camera, Scale(), ScaleOptions(0,0,0.3));
+
     scene->updateCamera();
     scene->draw();
 }
