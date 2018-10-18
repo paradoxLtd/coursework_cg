@@ -25,12 +25,12 @@ public:
     void clear();
 
 
-    void RasterizeTriangle(Vertex minYPoint, Vertex middleYPoint, Vertex maxYPoint);
-    void ScanTriangle(Vertex minYPoint, Vertex middleYPoint, Vertex maxYPoint, bool handedness);
-    void ScanEdges(Gradient gr, Edge &a, Edge &b, bool handedness);
-    void DrawScanLine(Gradient gr, Edge left, Edge right, int j);
+    void RasterizeTriangle(Vertex minYPoint, Vertex middleYPoint, Vertex maxYPoint, QImage &texture);
+    void ScanTriangle(Vertex minYPoint, Vertex middleYPoint, Vertex maxYPoint, bool handedness, QImage &texture);
+    void ScanEdges(Gradient gr, Edge &a, Edge &b, bool handedness, QImage &texture);
+    void DrawScanLine(Gradient gr, Edge left, Edge right, int j, QImage &texture);
 
-
+    void copyPixel(int destX, int destY, int srcX, int srcY, QImage &texture);
     void set_color(QColor color);
     void ClearDepthBuffer();
     static QColor multuply_color(QColor color, double num);

@@ -3,36 +3,47 @@
 
 #include "point.h"
 
-class Vertex : public Point
+class Vertex
 {
 public:
-    Vertex(Vertex *p) : Point(p) { v_color = p->v_color; }
-    Vertex(const Vertex &point) : Point(point) { v_color = point.v_color; }
-    Vertex(double x = 0, double y = 0,
-           double z = 0, double w = 1, Vector color = Vector(255, 255, 255)) : Point(x, y, z, w) { v_color = color; }
+    Vertex(Point m_pos, Point m_texCoords){
+        this->m_pos = m_pos;
+        this->m_texCoords = m_texCoords;
+    }
+    float GetX() { return m_pos.x; }
+    float GetY() { return m_pos.y; }
+    float GetZ() { return m_pos.z; }
+
+    Vertex(const Vertex &point) {
+        this->m_pos = point.m_pos;
+        this->m_texCoords = point.m_texCoords;
+    }
+
 
     //с opt пока вопрос
-    Vertex(Options opt) : Point(opt) {}
 
-    Vertex(Vertex &&point) noexcept : Point(point) { v_color = point.v_color; }
+    Vertex(Vertex &&point) noexcept {
+        this->m_pos = point.m_pos;
+        this->m_texCoords = point.m_texCoords;
+    }
 
 
     Vertex& operator=
     (const Vertex& other)noexcept
     {
-        Point::operator =(other);
-        this->v_color = other.v_color;
+        this->m_pos = other.m_pos;
+        this->m_texCoords = other.m_texCoords;
 
         return *this;
     }
-
+    /*
     Vertex& operator=
     (const Point& other)noexcept
     {
         Point::operator =(other);
 
         return *this;
-    }
+    }*/
 
 
     //как нибудь позже надо будет вернуться сюда
@@ -63,9 +74,13 @@ public:
 
     void set_p_color(const Vector &color);
     Vector get_p_color();
+    Point GetTexCoords();
+    Point get_pos(){ return m_pos; }
 
 private:
-    Vector v_color;
+    Point m_pos;
+    Vector v_color; // не используется при текстурах
+    Point m_texCoords;
 };
 
 #endif // VERTEX_H

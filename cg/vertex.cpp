@@ -9,3 +9,8 @@ Vector Vertex::get_p_color()
 {
     return this->v_color;
 }
+
+Point Vertex::GetTexCoords()
+{
+    return this->m_texCoords;
+}

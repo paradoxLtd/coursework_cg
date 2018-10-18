@@ -7,9 +7,9 @@ float Gradient::CalcXStep(std::vector<float> values, Vertex minYVert, Vertex mid
 {
     return
         (((values[1] - values[2]) *
-        (minYVert.y - maxYVert.y)) -
+        (minYVert.GetY() - maxYVert.GetY())) -
         ((values[0] - values[2]) *
-        (midYVert.y - maxYVert.y))) * dX;
+        (midYVert.GetY() - maxYVert.GetY()))) * dX;
 }
 
 float Gradient::CalcYStep(std::vector<float> values, Vertex minYVert, Vertex midYVert,
@@ -17,9 +17,9 @@ float Gradient::CalcYStep(std::vector<float> values, Vertex minYVert, Vertex mid
 {
     return
         (((values[1] - values[2]) *
-        (minYVert.x - maxYVert.x)) -
+        (minYVert.GetX() - maxYVert.GetX())) -
         ((values[0] - values[2]) *
-        (midYVert.x - maxYVert.x))) * dY;
+        (midYVert.GetX() - maxYVert.GetX()))) * dY;
 }
 
 Gradient::Gradient(Vertex minYPoint, Vertex middleYPoint, Vertex maxYPoint)
@@ -33,28 +33,50 @@ Gradient::Gradient(Vertex minYPoint, Vertex middleYPoint, Vertex maxYPoint)
     qDebug() << m_color[1].x << " " << m_color[1].y << " " << m_color[1].z;
     qDebug() << m_color[2].x << " " << m_color[2].y << " " << m_color[2].z;*/
 
-    float dx = 1.0f/((middleYPoint.x - maxYPoint.x) *
-                     (minYPoint.y - maxYPoint.y) +
-                     (maxYPoint.x - minYPoint.x) *
-                     (middleYPoint.y - maxYPoint.y));
+    float dx = 1.0f/((middleYPoint.GetX() - maxYPoint.GetX()) *
+                     (minYPoint.GetY() - maxYPoint.GetY()) +
+                     (maxYPoint.GetX() - minYPoint.GetX()) *
+                     (middleYPoint.GetY() - maxYPoint.GetY()));
 
-    color_x_step = ((m_color[1] - m_color[2]) *
+    /*color_x_step = ((m_color[1] - m_color[2]) *
             (minYPoint.y  - maxYPoint.y) +
             (m_color[2] -m_color[0]) *
-            (middleYPoint.y - maxYPoint.y)) * dx;
+            (middleYPoint.y - maxYPoint.y)) * dx;*/
 
 
     float dy = -dx;
     //double dy = (minYPoint.x - maxYPoint.x) * (middleYPoint.y - maxYPoint.y) - (middleYPoint.x - maxYPoint.x) * (minYPoint.y - maxYPoint.y);
 
-    color_y_step = ((m_color[1] - m_color[2]) *
+    /*color_y_step = ((m_color[1] - m_color[2]) *
             (minYPoint.x - maxYPoint.x) -
             (m_color[0] - m_color[2]) *
-            (middleYPoint.x - maxYPoint.x)) * dy;
+            (middleYPoint.x - maxYPoint.x)) * dy;*/
 
-    m_depth.push_back(minYPoint.z);
-    m_depth.push_back(middleYPoint.z);
-    m_depth.push_back(maxYPoint.z);
+
+
+    m_texCoordX.resize(3);
+    m_texCoordY.resize(3);
+
+    m_texCoordX[0] = minYPoint.GetTexCoords().x;
+    m_texCoordX[1] = middleYPoint.GetTexCoords().x;
+    m_texCoordX[2] = maxYPoint.GetTexCoords().x;
+
+    m_texCoordY[0] = minYPoint.GetTexCoords().y;
+    m_texCoordY[1] = middleYPoint.GetTexCoords().y;
+    m_texCoordY[2] = maxYPoint.GetTexCoords().z;
+
+    m_texCoordXXStep = CalcXStep(m_texCoordX, minYPoint, middleYPoint, maxYPoint, dx);
+
+    m_texCoordXYStep = CalcYStep(m_texCoordX, minYPoint, middleYPoint, maxYPoint, dy);;
+
+    m_texCoordYXStep = CalcXStep(m_texCoordY, minYPoint, middleYPoint, maxYPoint, dx);
+
+    m_texCoordYYStep = CalcYStep(m_texCoordY, minYPoint, middleYPoint, maxYPoint, dy);
+
+    qDebug() << "kjljljpk "<< m_texCoordXXStep << " " << m_texCoordXYStep;
+    m_depth.push_back(minYPoint.GetZ());
+    m_depth.push_back(middleYPoint.GetZ());
+    m_depth.push_back(maxYPoint.GetZ());
 
     m_depthXStep = CalcXStep(m_depth, minYPoint, middleYPoint, maxYPoint, dx);
     m_depthYStep = CalcYStep(m_depth, minYPoint, middleYPoint, maxYPoint, dy);

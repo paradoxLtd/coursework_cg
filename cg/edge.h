@@ -21,6 +21,8 @@ public:
     void set_x(double x);
     void step();
     float getDepth();
+    float GetTexCoordX() { return m_texCoordX; }
+    float GetTexCoordY() { return m_texCoordY; }
 
 private:
     double x;
@@ -32,8 +34,15 @@ private:
     int y_start;
     int y_end;
 
+
+    float m_texCoordX;
+    float m_texCoordXStep;
+    float m_texCoordY;
+    float m_texCoordYStep;
+
     Vector color;
     Vector color_step;
+
     float m_depth;
     float m_depthStep;
 };

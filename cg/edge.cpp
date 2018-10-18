@@ -1,19 +1,21 @@
 #include "edge.h"
+#include <qDebug>
 
 Edge::Edge(Gradient gr, Vertex minYPoint, Vertex maxYPoint, int min_idx)
 {
-    y_start = static_cast<int> (std::ceil(minYPoint.y));
-    y_end = static_cast<int> (std::ceil(maxYPoint.y));
+    y_start = static_cast<int> (std::ceil(minYPoint.GetY()));
+    y_end = static_cast<int> (std::ceil(maxYPoint.GetY()));
+
 
     assert(y_end >= y_start);
 
-    double y_dst = maxYPoint.y - minYPoint.y;
+    double y_dst = maxYPoint.GetY() - minYPoint.GetY();
 
     //assert(y_dst != 0);
 
-    double x_dst = maxYPoint.x - minYPoint.x;
+    double x_dst = maxYPoint.GetX() - minYPoint.GetX();
 
-    double y_prestep = y_start - minYPoint.y;
+    double y_prestep = y_start - minYPoint.GetY();
 
 
     if (fabs(y_dst) < 1e-6)
@@ -21,12 +23,24 @@ Edge::Edge(Gradient gr, Vertex minYPoint, Vertex maxYPoint, int min_idx)
     else
         x_step = x_dst / y_dst;
 
-    x = minYPoint.x + y_prestep * x_step;
+    x = minYPoint.GetX() + y_prestep * x_step;
 
-    double x_prestep = x - minYPoint.x;
+    double x_prestep = x - minYPoint.GetX();
 
     color = gr.get_color_idx(min_idx) + (gr.get_color_y_step() * y_prestep) + (gr.get_color_x_step() * x_prestep);
     color_step = gr.get_color_y_step() + (gr.get_color_x_step() * x_step);
+
+
+    m_texCoordX = gr.GetTexCoordX(min_idx) +
+        gr.GetTexCoordXXStep() * x_prestep +
+        gr.GetTexCoordXYStep() * y_prestep;
+    m_texCoordXStep = gr.GetTexCoordXYStep() + gr.GetTexCoordXXStep() * x_step;
+
+    m_texCoordY = gr.GetTexCoordY(min_idx) +
+        gr.GetTexCoordYXStep() * x_prestep +
+        gr.GetTexCoordYYStep() * y_prestep;
+    m_texCoordYStep = gr.GetTexCoordYYStep() + gr.GetTexCoordYXStep() * x_step;
+
 
     m_depth = gr.GetDepth(min_idx) +
                 gr.GetDepthXStep() * x_prestep +
@@ -63,6 +77,8 @@ void Edge::set_x(double x)
 void Edge::step()
 {
     x += x_step;
+    m_texCoordX += m_texCoordXStep;
+    m_texCoordY += m_texCoordYStep;
     color += color_step;
     m_depth += m_depthStep;
 }
