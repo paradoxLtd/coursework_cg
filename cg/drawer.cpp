@@ -2,11 +2,21 @@
 #include <qDebug>
 
 #include "fixed.h"
+#include "float.h"
 
 Drawer::Drawer(Bitmap *bitmap)
 {
     this->bitmap = bitmap;
     this->color = Qt::black;
+    m_zBuffer.resize(WIDTH_WIN * HEIGHT_WIN);
+}
+void Drawer::ClearDepthBuffer()
+{
+    for(int i = 0; i < m_zBuffer.size(); i++)
+    {
+        m_zBuffer[i] = FLT_MAX;
+
+    }
 }
 
 void Drawer::draw_objects(const ObjectList &objs)
@@ -152,17 +162,26 @@ void Drawer::DrawScanLine(Gradient gr, Edge left, Edge right, int j)
     int x_max = std::ceil(right.get_x());
 
     double x_prestep = x_min - left.get_x();
+    float xDist = right.get_x() - left.get_x();
+
+    float depthXStep = (right.getDepth() - left.getDepth())/xDist;
+    float depth = left.getDepth() + depthXStep * x_prestep;
 
     Vector color = left.get_color() + gr.get_color_x_step() * x_prestep;
 
     for(int i = x_min; i < x_max; i++)
     {
-        int r = color.x * 255.0f ;
-        int g = color.y * 255.0f ;
-        int b =  color.z * 255.0f ;
+        int index = i + j * WIDTH_WIN;
+        if (depth < this->m_zBuffer[index]) {
+            m_zBuffer[index] = depth;
+            int r = color.x * 255.0f ;
+            int g = color.y * 255.0f ;
+            int b =  color.z * 255.0f ;
+            setPixel(i, j, QColor(r, g, b));
+        }
 
-        setPixel(i, j, QColor(r, g, b));
-        color = color + gr.get_color_x_step();
+        color += gr.get_color_x_step();
+        depth += depthXStep;
     }
 }
 

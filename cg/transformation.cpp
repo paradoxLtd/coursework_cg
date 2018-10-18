@@ -1,5 +1,6 @@
 #include "transformation.h"
 #include <cmath>
+#include <qDebug>
 
 // Преобразования над векторами
 
@@ -154,6 +155,8 @@ void RotateX::apply(Object &obj,
     if (fabs(opt[0] + opt[1] + opt[2]) < 0.001)
         return;
     /*В качестве параметров идут dx,dy,dz для */
+
+    qDebug() << "HGJHGHJGJGJ";
     Vector d_p = Vector(opt[0], opt[1], opt[2]);
     Vector n_dir = obj.dir + d_p;
     Vector n_ux = n_dir;

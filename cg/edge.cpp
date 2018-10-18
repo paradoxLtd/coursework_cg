@@ -27,6 +27,11 @@ Edge::Edge(Gradient gr, Vertex minYPoint, Vertex maxYPoint, int min_idx)
 
     color = gr.get_color_idx(min_idx) + (gr.get_color_y_step() * y_prestep) + (gr.get_color_x_step() * x_prestep);
     color_step = gr.get_color_y_step() + (gr.get_color_x_step() * x_step);
+
+    m_depth = gr.GetDepth(min_idx) +
+                gr.GetDepthXStep() * x_prestep +
+                gr.GetDepthYStep() * y_prestep;
+    m_depthStep = gr.GetDepthYStep() + gr.GetDepthXStep() * x_step;
 }
 
 
@@ -59,5 +64,11 @@ void Edge::step()
 {
     x += x_step;
     color += color_step;
+    m_depth += m_depthStep;
+}
+
+float Edge::getDepth()
+{
+    return m_depth;
 }
 

@@ -12,6 +12,8 @@
 #include "transformation.h"
 
 #include "bitmap.h"
+#include "defines.h"
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -19,15 +21,32 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    image = new QImage(600, 600, QImage::Format_RGB32);
+    image = new QImage(WIDTH_WIN, HEIGHT_WIN, QImage::Format_RGB32);
     image->fill(Qt::white);
     ui->widget = new Bitmap(ui->widget);
     ui->widget->resize(600, 600);
     ui->widget->setImage(*image);
+    tmr = new QTimer(this); // Создаем объект класса QTimer и передаем адрес переменной
+    tmr->setInterval(500); // Задаем интервал таймера
+    connect(tmr, SIGNAL(timeout()), this, SLOT(rot_fig_timer())); // Подключаем сигнал таймера к нашему слоту
 
     this->scene = new Scene(ui->widget);
-
 }
+
+float angle = 0;
+void MainWindow::rot_fig_timer()
+{
+    qDebug() << scene->objects.objects.size();
+    const RotateOptions rot(angle, 0, 0);
+    const RotateX act;
+    Transformation::transform(scene->objects.objects[0], act, rot);
+
+    scene->updateCamera();
+    scene->updateScene();
+    angle+=20;
+}
+
+
 
 void MainWindow::on_pushButton_clicked()
 {
@@ -40,13 +59,18 @@ void MainWindow::on_pushButton_clicked()
     //std::cout << object;
     std::cout << object;
 
+
     scene->pushObject(object);
+
+
+
 
     Transformation::transform(scene->camera, Move(), MoveOptions(2,2));
     Transformation::transform(scene->camera, Scale(), ScaleOptions(0,0,0.3));
 
     scene->updateCamera();
-    scene->draw();
+    scene->updateScene();
+    //tmr->start();
 }
 
 
@@ -57,12 +81,14 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_camera_left_clicked()
 {
+
     const RotateOptions rot(0, -M_PI / 36, 0);
     const RotateY act;
     Transformation::transform(scene->camera, act, rot);
 
     scene->updateCamera();
     scene->updateScene();
+
 }
 
 void MainWindow::on_camera_right_clicked()
@@ -114,6 +140,8 @@ void MainWindow::on_camera_move_right_clicked()
 
     scene->updateCamera();
     scene->updateScene();
+
+
 }
 
 void MainWindow::on_camera_move_down_clicked()
@@ -156,3 +184,4 @@ void MainWindow::on_cam_scale_higher_clicked()
     scene->updateCamera();
     scene->updateScene();
 }
+

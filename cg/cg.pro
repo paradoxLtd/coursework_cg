@@ -84,7 +84,8 @@ HEADERS += \
     fixed.h \
     textures/gradient.h \
     edge.h \
-    vertex.h
+    vertex.h \
+    defines.h
 
 
 FORMS += \

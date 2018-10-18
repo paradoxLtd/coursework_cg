@@ -37,6 +37,7 @@ void Scene::updateCamera(const MoveOptions &mop,
 
 void Scene::updateScene()
 {
+    this->drawer->ClearDepthBuffer();
     this->clear();
     this->draw();
 }

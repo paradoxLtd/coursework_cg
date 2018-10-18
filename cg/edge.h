@@ -20,6 +20,7 @@ public:
 
     void set_x(double x);
     void step();
+    float getDepth();
 
 private:
     double x;
@@ -33,8 +34,8 @@ private:
 
     Vector color;
     Vector color_step;
-
-
+    float m_depth;
+    float m_depthStep;
 };
 
 #endif // EDGE_H

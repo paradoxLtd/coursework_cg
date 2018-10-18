@@ -6,7 +6,7 @@
 
 #include "scene.h"
 #include "bitmap.h"
-
+#include <QTimer>
 namespace Ui {
 class MainWindow;
 }
@@ -20,6 +20,7 @@ public:
     ~MainWindow();
 
     Scene *scene;
+    QTimer *tmr;
 
 private slots:
     void on_pushButton_clicked();
@@ -49,6 +50,9 @@ private:
     QImage *image;
     Bitmap *bmap;
     Ui::MainWindow *ui;
+private slots:
+    void rot_fig_timer();
+
 };
 
 #endif // MAINWINDOW_H

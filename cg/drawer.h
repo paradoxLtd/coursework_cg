@@ -1,6 +1,8 @@
 #ifndef DRAWER_H
 #define DRAWER_H
 
+#include "defines.h"
+
 #include "objectlist.h"
 #include <QGraphicsScene>
 
@@ -9,6 +11,8 @@
 #include "vertex.h"
 #include <cmath>
 #include <algorithm>
+
+
 
 class Drawer
 {
@@ -28,7 +32,7 @@ public:
 
 
     void set_color(QColor color);
-
+    void ClearDepthBuffer();
     static QColor multuply_color(QColor color, double num);
 
 
@@ -37,8 +41,9 @@ private:
     Bitmap *bitmap;
     QPainter painter;
     QPen pen;
-
+    std::vector <float> m_depth;
     QColor color;
+    std::vector<float> m_zBuffer;
 
     void update();
     void draw_line(int x1, int y1,

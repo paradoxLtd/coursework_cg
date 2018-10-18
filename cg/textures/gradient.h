@@ -18,12 +18,23 @@ public:
 
     Vector get_color_x_step();
     Vector get_color_y_step();
+    float GetDepth(int ind);
+    float GetDepthXStep();
+    float GetDepthYStep();
 
 private:
     std::vector <Vector> m_color;
-
+    std::vector <float> m_depth;
+    float m_depthXStep;
+    float m_depthYStep;
     Vector color_x_step;
     Vector color_y_step;
+
+    float CalcXStep(std::vector<float> values, Vertex minYVert, Vertex midYVert,
+            Vertex maxYVert, float dX);
+
+    float CalcYStep(std::vector<float> values, Vertex minYVert, Vertex midYVert,
+            Vertex maxYVert, float dY);
 
 
 };
