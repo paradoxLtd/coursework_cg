@@ -23,12 +23,14 @@ public:
     float GetDepthYStep();
     float GetTexCoordX(int loc) { return m_texCoordX[loc]; }
     float GetTexCoordY(int loc) { return m_texCoordY[loc]; }
+    float GetOneOverZ(int loc) { return m_oneOverZ[loc]; }
 
     float GetTexCoordXXStep() { return m_texCoordXXStep; }
     float GetTexCoordXYStep() { return m_texCoordXYStep; }
     float GetTexCoordYXStep() { return m_texCoordYXStep; }
     float GetTexCoordYYStep() { return m_texCoordYYStep; }
-
+    float GetOneOverZXStep() { return m_oneOverZXStep; }
+    float GetOneOverZYStep() { return m_oneOverZYStep; }
 
 private:
     std::vector <Vector> m_color;
@@ -36,13 +38,14 @@ private:
     std::vector <float> m_depth;
     std::vector <float> m_texCoordX;
     std::vector <float> m_texCoordY;
+    std::vector <float> m_oneOverZ;
 
     float m_texCoordXXStep;
     float m_texCoordXYStep;
     float m_texCoordYXStep;
     float m_texCoordYYStep;
-
-
+    float m_oneOverZXStep;
+    float m_oneOverZYStep;
 
     float m_depthXStep;
     float m_depthYStep;

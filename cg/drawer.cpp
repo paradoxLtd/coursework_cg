@@ -120,11 +120,11 @@ void Drawer::ScanTriangle(Vertex minYPoint, Vertex middleYPoint, Vertex maxYPoin
     Edge topToMiddle  =  Edge(gr, minYPoint, middleYPoint, 0);
     Edge middleToBottom =  Edge(gr, middleYPoint, maxYPoint, 1);
 
-    ScanEdges(gr, topToBottom, topToMiddle, handedness, texture);
-    ScanEdges(gr, topToBottom, middleToBottom, handedness, texture);
+    ScanEdges(topToBottom, topToMiddle, handedness, texture);
+    ScanEdges(topToBottom, middleToBottom, handedness, texture);
 }
 
-void Drawer::ScanEdges(Gradient gr, Edge &a, Edge &b, bool handedness, QImage &texture)
+void Drawer::ScanEdges(Edge &a, Edge &b, bool handedness, QImage &texture)
 {
 
     int y_start = b.get_y_start();
@@ -145,7 +145,7 @@ void Drawer::ScanEdges(Gradient gr, Edge &a, Edge &b, bool handedness, QImage &t
     for(int j = y_start; j < y_end; j++)
     {
 
-        DrawScanLine(gr, left, right, j, texture);
+        DrawScanLine(left, right, j, texture);
         a.step();
         b.step();
         left.step();
@@ -154,7 +154,7 @@ void Drawer::ScanEdges(Gradient gr, Edge &a, Edge &b, bool handedness, QImage &t
     }
 }
 
-void Drawer::DrawScanLine(Gradient gr, Edge left, Edge right, int j, QImage &texture)
+void Drawer::DrawScanLine(Edge left, Edge right, int j, QImage &texture)
 {
     int x_min = std::ceil(left.get_x());
     int x_max = std::ceil(right.get_x());
@@ -165,9 +165,16 @@ void Drawer::DrawScanLine(Gradient gr, Edge left, Edge right, int j, QImage &tex
     float depthXStep = (right.getDepth() - left.getDepth())/xDist;
     float depth = left.getDepth() + depthXStep * x_prestep;
 
-    float texCoordX = left.GetTexCoordX() + gr.GetTexCoordXXStep() * x_prestep;
-    float texCoordY = left.GetTexCoordY() + gr.GetTexCoordYXStep() * x_prestep;
+    //float texCoordX = left.GetTexCoordX() + gr.GetTexCoordXXStep() * x_prestep;
+    //float texCoordY = left.GetTexCoordY() + gr.GetTexCoordYXStep() * x_prestep;
     //Vector color = left.get_color() + gr.get_color_x_step() * x_prestep;
+
+    float texCoordXXStep = (right.GetTexCoordX() - left.GetTexCoordX())/xDist;
+    float texCoordYXStep = (right.GetTexCoordY() - left.GetTexCoordY())/xDist;
+    float oneOverZXStep = (right.GetOneOverZ() - left.GetOneOverZ())/xDist;
+    float texCoordX = left.GetTexCoordX() + texCoordXXStep * x_prestep;
+    float texCoordY = left.GetTexCoordY() + texCoordYXStep * x_prestep;
+    float oneOverZ = left.GetOneOverZ() + oneOverZXStep * x_prestep;
 
     for(int i = x_min; i < x_max; i++)
     {
@@ -178,17 +185,21 @@ void Drawer::DrawScanLine(Gradient gr, Edge left, Edge right, int j, QImage &tex
             //int g = color.y * 255.0f ;
             //int b =  color.z * 255.0f ;
             //setPixel(i, j, QColor(r, g, b));
-            int srcX = (int)(texCoordX * (texture.size().width() - 1) + 0.5f);
+            //int srcX = (int)(texCoordX * (texture.size().width() - 1) + 0.5f);
 
             //Point out that this was changed to get height in video 16
-            int srcY = (int)(texCoordY * (texture.size().height() - 1) + 0.5f);
+            //int srcY = (int)(texCoordY * (texture.size().height() - 1) + 0.5f);
 
+            float z = 1.0f/oneOverZ;
+            int srcX = (int)((texCoordX * z) * (float)(texture.width() - 1) + 0.5f);
+            int srcY = (int)((texCoordY * z) * (float)(texture.height() - 1) + 0.5f);
             //setPixel(i, j, Qt::red);
 
             copyPixel(i, j, srcX, srcY, texture);
             //qDebug() << texCoordX << " " << texCoordY;
-            texCoordX += gr.GetTexCoordXXStep();
-            texCoordY += gr.GetTexCoordYXStep();
+            oneOverZ += oneOverZXStep;
+            texCoordX += texCoordXXStep;
+            texCoordY += texCoordYXStep;
         }
 
         //color += gr.get_color_x_step();

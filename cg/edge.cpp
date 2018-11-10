@@ -42,6 +42,11 @@ Edge::Edge(Gradient gr, Vertex minYPoint, Vertex maxYPoint, int min_idx)
     m_texCoordYStep = gr.GetTexCoordYYStep() + gr.GetTexCoordYXStep() * x_step;
 
 
+    m_oneOverZ = gr.GetOneOverZ(min_idx) +
+                gr.GetOneOverZXStep() * x_prestep +
+                gr.GetOneOverZYStep() * y_prestep;
+    m_oneOverZStep = gr.GetOneOverZYStep() + gr.GetOneOverZXStep() * x_step;
+
     m_depth = gr.GetDepth(min_idx) +
                 gr.GetDepthXStep() * x_prestep +
                 gr.GetDepthYStep() * y_prestep;
@@ -81,6 +86,7 @@ void Edge::step()
     m_texCoordY += m_texCoordYStep;
     color += color_step;
     m_depth += m_depthStep;
+    m_oneOverZ += m_oneOverZStep;
 }
 
 float Edge::getDepth()

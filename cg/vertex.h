@@ -75,6 +75,7 @@ public:
     void set_p_color(const Vector &color);
     Vector get_p_color();
     Point GetTexCoords();
+    Point GetPosition() { return m_pos; }
     Point get_pos(){ return m_pos; }
 
 private:

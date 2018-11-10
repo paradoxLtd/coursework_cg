@@ -23,6 +23,7 @@ public:
     float getDepth();
     float GetTexCoordX() { return m_texCoordX; }
     float GetTexCoordY() { return m_texCoordY; }
+    float GetOneOverZ() { return m_oneOverZ; }
 
 private:
     double x;
@@ -39,6 +40,8 @@ private:
     float m_texCoordXStep;
     float m_texCoordY;
     float m_texCoordYStep;
+    float m_oneOverZ;
+    float m_oneOverZStep;
 
     Vector color;
     Vector color_step;

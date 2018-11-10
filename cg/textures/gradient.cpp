@@ -56,6 +56,7 @@ Gradient::Gradient(Vertex minYPoint, Vertex middleYPoint, Vertex maxYPoint)
 
     m_texCoordX.resize(3);
     m_texCoordY.resize(3);
+    m_oneOverZ.resize(3);
 
     m_texCoordX[0] = minYPoint.GetTexCoords().x;
     m_texCoordX[1] = middleYPoint.GetTexCoords().x;
@@ -65,13 +66,17 @@ Gradient::Gradient(Vertex minYPoint, Vertex middleYPoint, Vertex maxYPoint)
     m_texCoordY[1] = middleYPoint.GetTexCoords().y;
     m_texCoordY[2] = maxYPoint.GetTexCoords().z;
 
+
+    m_oneOverZ[0] = 1.0f/minYPoint.GetPosition().w;
+    m_oneOverZ[1] = 1.0f/middleYPoint.GetPosition().w;
+    m_oneOverZ[2] = 1.0f/maxYPoint.GetPosition().w;
+
     m_texCoordXXStep = CalcXStep(m_texCoordX, minYPoint, middleYPoint, maxYPoint, dx);
-
     m_texCoordXYStep = CalcYStep(m_texCoordX, minYPoint, middleYPoint, maxYPoint, dy);;
-
     m_texCoordYXStep = CalcXStep(m_texCoordY, minYPoint, middleYPoint, maxYPoint, dx);
-
     m_texCoordYYStep = CalcYStep(m_texCoordY, minYPoint, middleYPoint, maxYPoint, dy);
+    m_oneOverZXStep = CalcXStep(m_oneOverZ, minYPoint, middleYPoint, maxYPoint, dx);
+    m_oneOverZYStep = CalcYStep(m_oneOverZ, minYPoint, middleYPoint, maxYPoint, dy);
 
     qDebug() << "kjljljpk "<< m_texCoordXXStep << " " << m_texCoordXYStep;
     m_depth.push_back(minYPoint.GetZ());
