@@ -1,0 +1,13 @@
+INPUT(
+./release\main.o
+./release\mainwindow.o
+./release\rendercontext.o
+./release\bitmap.o
+./release\vector4f.o
+./release\vertex.o
+./release\gradient.o
+./release\edge.o
+./release\mesh.o
+./release\moc_mainwindow.o
+./release\moc_bitmap.o
+);
