@@ -33,7 +33,7 @@ private:
     Vector4f m_texCoords;
     Vector4f m_normal;
 
-}
+};
 
 
 #endif // VERTEX_H

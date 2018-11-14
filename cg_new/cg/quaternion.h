@@ -2,6 +2,8 @@
 #define QUATERNION_H
 
 #include <cmath>
+#include "vector4f.h"
+#include "matrix4f.h"
 
 #define EPSILON  1e3;
 

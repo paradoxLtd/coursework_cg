@@ -1,4 +1,4 @@
-#include <qDebug>
+#include <QDebug>
 #include "rendercontext.h"
 
 RenderContext::RenderContext(Bitmap *bitmap, int width, int height )

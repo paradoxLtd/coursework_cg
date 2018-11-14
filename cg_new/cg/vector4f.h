@@ -6,6 +6,8 @@
 
 class Vector4f
 {
+
+public:
     Vector4f(float x, float y, float z, float w);
 
     Vector4f(float x, float y, float z);

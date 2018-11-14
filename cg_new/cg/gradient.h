@@ -49,7 +49,7 @@ private:
     float m_depthYStep;
     float m_lightAmtXStep;
     float m_lightAmtYStep;
-}
+};
 
 
 #endif // GRADIENT_H
