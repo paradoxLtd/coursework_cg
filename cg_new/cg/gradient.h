@@ -40,6 +40,7 @@ private:
     std::vector<float> m_oneOverZ;
     std::vector<float> m_depth;
     std::vector<float> m_lightAmt;
+
     float m_texCoordXXStep;
     float m_texCoordXYStep;
     float m_texCoordYXStep;

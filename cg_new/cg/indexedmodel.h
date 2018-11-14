@@ -2,6 +2,8 @@
 #define INDEXEDMODEL_H
 
 #include <vector>
+#include <math.h>
+
 #include "vector4f.h"
 
 class IndexedModel

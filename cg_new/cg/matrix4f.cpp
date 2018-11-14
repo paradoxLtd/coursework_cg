@@ -111,7 +111,7 @@ Matrix4f Matrix4f::InitRotation(Vector4f forward, Vector4f up)
 }
 
 Matrix4f Matrix4f::InitRotation(Vector4f forward,
-                                Vector4f up, Vector4f &right)
+                                Vector4f up, Vector4f right)
 {
     Vector4f f = forward;
     Vector4f r = right;
@@ -172,7 +172,7 @@ Matrix4f Matrix4f::InitOrthographic(double left, double right,
     return *this;
 }
 
-Vector4f Matrix4f::Transform(Vector4f &r)
+Vector4f Matrix4f::Transform(Vector4f r)
 {
     return Vector4f(_mtx[0][0] * r.GetX() + _mtx[0][1] * r.GetY() +
                         _mtx[0][2] * r.GetZ() + _mtx[0][3] * r.GetW(),

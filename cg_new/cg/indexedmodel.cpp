@@ -40,7 +40,7 @@ void IndexedModel::calcTangents() {
         float deltaV2 = m_texCoords[i2].GetY() - m_texCoords[i0].GetY();
 
         float dividend = (deltaU1*deltaV2 - deltaU2*deltaV1);
-        float f = dividend == 0 ? 0.0f : 1.0f/dividend;
+        float f = (fabsf(dividend) < 0.001f) ? 0.0f : 1.0f/dividend;
 
         Vector4f tangent = Vector4f(
                 f * (deltaV2 * edge1.GetX() - deltaV1 * edge2.GetX()),

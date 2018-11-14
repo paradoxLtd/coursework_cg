@@ -1,6 +1,6 @@
 #include "quaternion.h"
 
-Quaternion::Quaternion(double x, double y, double z, double w)
+Quaternion::Quaternion(float x, float y, float z, float w)
 {
     this->m_x = x;
     this->m_y = y;
@@ -8,10 +8,10 @@ Quaternion::Quaternion(double x, double y, double z, double w)
     this->m_w = w;
 }
 
-Quaternion::Quaternion(Vector4f &axis, double angle)
+Quaternion::Quaternion(Vector4f axis, float angle)
 {
-    double sinHalfAngle =  sin(angle / 2);
-    double cosHalfAngle = cos(angle / 2);
+    float sinHalfAngle =  sinf(angle / 2);
+    float cosHalfAngle = cosf(angle / 2);
 
     this->m_x = axis.GetX() * sinHalfAngle;
     this->m_y = axis.GetY() * sinHalfAngle;
@@ -19,13 +19,13 @@ Quaternion::Quaternion(Vector4f &axis, double angle)
     this->m_w = cosHalfAngle;
 }
 
-Quaternion::Quaternion(Matrix4f &rot)
+Quaternion::Quaternion(Matrix4f rot)
 {
-    double trace = rot.Get(0, 0) + rot.Get(1, 1) + rot.Get(2, 2);
+    float trace = rot.Get(0, 0) + rot.Get(1, 1) + rot.Get(2, 2);
 
     if(trace > 0)
     {
-        double s = 0.5f / sqrt(trace+ 1.0f);
+        float s = 0.5f / sqrtf(trace+ 1.0f);
         m_w = 0.25f / s;
         m_x = (rot.Get(1, 2) - rot.Get(2, 1)) * s;
         m_y = (rot.Get(2, 0) - rot.Get(0, 2)) * s;
@@ -36,7 +36,9 @@ Quaternion::Quaternion(Matrix4f &rot)
         if(rot.Get(0, 0) > rot.Get(1, 1) &&
                 rot.Get(0, 0) > rot.Get(2, 2))
         {
-            double s = 2.0f * (double)sqrt(1.0f + rot.Get(0, 0) - rot.Get(1, 1) - rot.Get(2, 2));
+            float s = 2.0f * static_cast<float>(
+                        sqrtf(1.0f + rot.Get(0, 0) -
+                             rot.Get(1, 1) - rot.Get(2, 2)));
             m_w = (rot.Get(1, 2) - rot.Get(2, 1)) / s;
             m_x = 0.25f * s;
             m_y = (rot.Get(1, 0) + rot.Get(0, 1)) / s;
@@ -44,7 +46,7 @@ Quaternion::Quaternion(Matrix4f &rot)
         }
         else if(rot.Get(1, 1) > rot.Get(2, 2))
         {
-            double s = 2.0f * sqrt(1.0f + rot.Get(1, 1) - rot.Get(0, 0) - rot.Get(2, 2));
+            float s = 2.0f * sqrtf(1.0f + rot.Get(1, 1) - rot.Get(0, 0) - rot.Get(2, 2));
             m_w = (rot.Get(2, 0) - rot.Get(0, 2)) / s;
             m_x = (rot.Get(1, 0) + rot.Get(0, 1)) / s;
             m_y = 0.25f * s;
@@ -52,7 +54,7 @@ Quaternion::Quaternion(Matrix4f &rot)
         }
         else
         {
-            double s = 2.0f * sqrt(1.0f + rot.Get(2, 2) -
+            float s = 2.0f * sqrtf(1.0f + rot.Get(2, 2) -
                                    rot.Get(0, 0) - rot.Get(1, 1));
             m_w = (rot.Get(0, 1) - rot.Get(1, 0) ) / s;
             m_x = (rot.Get(2, 0) + rot.Get(0, 2) ) / s;
@@ -61,7 +63,7 @@ Quaternion::Quaternion(Matrix4f &rot)
         }
     }
 
-    double length = sqrt(m_x * m_x + m_y * m_y +
+    float length = sqrtf(m_x * m_x + m_y * m_y +
                          m_z * m_z + m_w * m_w);
     m_x /= length;
     m_y /= length;
@@ -69,15 +71,15 @@ Quaternion::Quaternion(Matrix4f &rot)
     m_w /= length;
 }
 
-double Quaternion::Length()
+float Quaternion::Length()
 {
-    return sqrt(m_x * m_x + m_y * m_y +
+    return sqrtf(m_x * m_x + m_y * m_y +
                 m_z * m_z + m_w * m_w);
 }
 
 Quaternion Quaternion::Normalized()
 {
-    double length = Length();
+    float length = Length();
 
     return Quaternion(m_x / length, m_y / length,
                       m_z / length, m_w / length);
@@ -88,20 +90,20 @@ Quaternion Quaternion::Conjugate()
     return Quaternion(-m_x, -m_y, -m_z, m_w);
 }
 
-Quaternion Quaternion::Mul(double r)
+Quaternion Quaternion::Mul(float r)
 {
     return  Quaternion(m_x * r, m_y * r, m_z * r, m_w * r);
 }
 
 Quaternion Quaternion::Mul(Quaternion r)
 {
-    double w_ = m_w * r.GetW() - m_x * r.GetX() -
+    float w_ = m_w * r.GetW() - m_x * r.GetX() -
             m_y * r.GetY() - m_z * r.GetZ();
-    double x_ = m_x * r.GetW() + m_w * r.GetX() +
+    float x_ = m_x * r.GetW() + m_w * r.GetX() +
             m_y * r.GetZ() - m_z * r.GetY();
-    double y_ = m_y * r.GetW() + m_w * r.GetY() +
+    float y_ = m_y * r.GetW() + m_w * r.GetY() +
             m_z * r.GetX() - m_x * r.GetZ();
-    double z_ = m_z * r.GetW() + m_w * r.GetZ() +
+    float z_ = m_z * r.GetW() + m_w * r.GetZ() +
             m_x * r.GetY() - m_y * r.GetX();
 
     return Quaternion(x_, y_, z_, w_);
@@ -109,10 +111,10 @@ Quaternion Quaternion::Mul(Quaternion r)
 
 Quaternion Quaternion::Mul(Vector4f r)
 {
-    double w_ = -m_x * r.GetX() - m_y * r.GetY() - m_z * r.GetZ();
-    double x_ =  m_w * r.GetX() + m_y * r.GetZ() - m_z * r.GetY();
-    double y_ =  m_w * r.GetY() + m_z * r.GetX() - m_x * r.GetZ();
-    double z_ =  m_w * r.GetZ() + m_x * r.GetY() - m_y * r.GetX();
+    float w_ = -m_x * r.GetX() - m_y * r.GetY() - m_z * r.GetZ();
+    float x_ =  m_w * r.GetX() + m_y * r.GetZ() - m_z * r.GetY();
+    float y_ =  m_w * r.GetY() + m_z * r.GetX() - m_x * r.GetZ();
+    float z_ =  m_w * r.GetZ() + m_x * r.GetY() - m_y * r.GetX();
 
     return Quaternion(x_, y_, z_, w_);
 }
@@ -141,14 +143,14 @@ Matrix4f Quaternion::toRotationMatrix()
     return Matrix4f().InitRotation(forward, up, right);
 }
 
-double Quaternion::dot(Quaternion r)
+float Quaternion::dot(Quaternion r)
 {
     return m_x * r.GetX() + m_y * r.GetY() +
             m_z * r.GetZ() + m_w * r.GetW();
 }
 
 Quaternion Quaternion::NLerp(Quaternion dest,
-                             double lerpFactor, bool shortest)
+                             float lerpFactor, bool shortest)
 {
     Quaternion correctedDest = dest;
 
@@ -161,10 +163,10 @@ Quaternion Quaternion::NLerp(Quaternion dest,
             Add(*this).Normalized();
 }
 
-Quaternion Quaternion::SLerp(Quaternion dest, double lerpFactor,
+Quaternion Quaternion::SLerp(Quaternion dest, float lerpFactor,
                              bool shortest)
 {
-    double cos = this->dot(dest);
+    float cos = this->dot(dest);
     Quaternion correctedDest = dest;
 
     if(shortest && cos < 0)
@@ -174,15 +176,15 @@ Quaternion Quaternion::SLerp(Quaternion dest, double lerpFactor,
                                    -dest.GetZ(), -dest.GetW());
     }
 
-    if(fabs(cos) > (1 - EPSILON))
+    if(fabsf(cos - 1) > EPSILON)
         return NLerp(correctedDest, lerpFactor, false);
 
-    double sinus = sqrt(1.0f - cos * cos);
-    double angle = atan2(sinus, cos); //what is this?)
-    double invSin =  1.0f/sinus;
+    float sinus = sqrtf(1.0f - cos * cos);
+    float angle = atan2f(sinus, cos); //what is this?)
+    float invSin =  1.0f/sinus;
 
-    double srcFactor = sin((1.0f - lerpFactor) * angle) * invSin;
-    double destFactor = sin((lerpFactor) * angle) * invSin;
+    float srcFactor = sinf((1.0f - lerpFactor) * angle) * invSin;
+    float destFactor = sinf((lerpFactor) * angle) * invSin;
 
     return this->Mul(srcFactor).Add(correctedDest.Mul(destFactor));
 }
@@ -217,27 +219,30 @@ Vector4f Quaternion::GetLeft()
     return Vector4f(-1,0,0,1).Rotate(this);
 }
 
-double Quaternion::GetX()
+float Quaternion::GetX()
 {
     return this->m_x;
 }
 
-double Quaternion::GetY()
+float Quaternion::GetY()
 {
     return this->m_y;
 }
 
-double Quaternion::GetZ()
+float Quaternion::GetZ()
 {
     return this->m_z;
 }
 
-double Quaternion::GetW()
+float Quaternion::GetW()
 {
     return this->m_w;
 }
 
 bool Quaternion::equals(Quaternion &r)
 {
-    return m_x == r.GetX() && m_y == r.GetY() && m_z == r.GetZ() && m_w == r.GetW();
+    return (fabsf(m_x - r.GetX()) < EPSILON &&
+            fabsf(m_y - r.GetY()) < EPSILON &&
+            fabsf(m_z - r.GetZ()) < EPSILON &&
+            fabsf(m_w - r.GetW()) < EPSILON);
 }

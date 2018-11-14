@@ -62,5 +62,6 @@ float Vertex::Get(int index)
             return m_pos.GetW();
         default:
             std::cout << "overflow in Vertex::Get\n";
+            return 0;
     }
 }

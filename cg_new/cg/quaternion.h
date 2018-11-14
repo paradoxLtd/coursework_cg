@@ -5,30 +5,32 @@
 #include "vector4f.h"
 #include "matrix4f.h"
 
-#define EPSILON  1e-3
+#define EPSILON  1e-3f
 
 class Quaternion
 {
 public:
     Quaternion() = default;
-    Quaternion(double x, double y, double z, double w);
-    Quaternion(Vector4f axis, double angle);
+    Quaternion(float x, float y, float z, float w);
+    Quaternion(Vector4f axis, float angle);
 
     Quaternion(Matrix4f rot);
 
-    double Length();
+    float Length();
     Quaternion Normalized();
     Quaternion Conjugate();
-    Quaternion Mul(double r);
+    Quaternion Mul(float r);
     Quaternion Mul(Quaternion r);
     Quaternion Mul(Vector4f r);
     Quaternion Sub(Quaternion r);
     Quaternion Add(Quaternion r);
 
     Matrix4f toRotationMatrix();
-    double dot(Quaternion r);
-    Quaternion NLerp(Quaternion dest, double lerpFactor, bool shortest);
-    Quaternion SLerp(Quaternion dest, double lerpFactor, bool shortest);
+    float dot(Quaternion r);
+    Quaternion NLerp(Quaternion dest, float lerpFactor,
+                     bool shortest);
+    Quaternion SLerp(Quaternion dest, float lerpFactor,
+                     bool shortest);
 
     Vector4f GetForward();
     Vector4f GetBack();
@@ -36,15 +38,15 @@ public:
     Vector4f GetDown();
     Vector4f GetRight();
     Vector4f GetLeft();
-    double GetX();
-    double GetY();
-    double GetZ();
-    double GetW();
+    float GetX();
+    float GetY();
+    float GetZ();
+    float GetW();
 
     bool equals(Quaternion &r);
 
 private:
-    double m_x, m_y, m_z, m_w;
+    float m_x, m_y, m_z, m_w;
 };
 
 #endif // QUATERNION_H
