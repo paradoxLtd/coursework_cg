@@ -177,9 +177,9 @@ Matrix4f Matrix4f::InitOrthographic(float left, float right,
 Vector4f Matrix4f::Transform(Vector4f r)
 {
     Vector4f tmp;
-    qDebug() << "TR befire";
-    qDebug() << r.GetX() << " " << r.GetY() << " " << r.GetZ() <<" " << r.GetW();
-    tmp = Vector4f(_mtx[0][0] * r.GetX() + _mtx[0][1] * r.GetY() +
+    //qDebug() << "TR befire";
+    //qDebug() << r.GetX() << " " << r.GetY() << " " << r.GetZ() <<" " << r.GetW();
+    /*tmp = Vector4f(_mtx[0][0] * r.GetX() + _mtx[0][1] * r.GetY() +
             _mtx[0][2] * r.GetZ() + _mtx[0][3] * r.GetW(),
 
         _mtx[1][0] * r.GetX() + _mtx[1][1] * r.GetY() +
@@ -191,8 +191,8 @@ Vector4f Matrix4f::Transform(Vector4f r)
         _mtx[3][0] * r.GetX() + _mtx[3][1] * r.GetY() +
             _mtx[3][2] * r.GetZ() + _mtx[3][3] * r.GetW());
 
-    qDebug() << "TR after";
-    qDebug() << tmp.GetX() << " " << tmp.GetY() << " " << tmp.GetZ() <<" " << tmp.GetW();
+    *///qDebug() << "TR after";
+    //qDebug() << tmp.GetX() << " " << tmp.GetY() << " " << tmp.GetZ() <<" " << tmp.GetW();
     return Vector4f(_mtx[0][0] * r.GetX() + _mtx[0][1] * r.GetY() +
                         _mtx[0][2] * r.GetZ() + _mtx[0][3] * r.GetW(),
 

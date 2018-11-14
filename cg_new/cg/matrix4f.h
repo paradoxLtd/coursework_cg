@@ -29,12 +29,33 @@ public:
     Vector4f Transform(Vector4f r);
     Matrix4f Mul(Matrix4f r);
 
+
     std::vector <std::vector <float>> GetMtx();
     void SetMtx(std::vector <std::vector <float>> mtx);
 
 
     float Get(int x, int y);
     void Set(int x, int y, float value);
+
+    Matrix4f(const Matrix4f &other) {
+        this->_mtx = other._mtx;
+    }
+
+    Matrix4f(Matrix4f &&other) {
+        this->_mtx = other._mtx;
+    }
+
+    Matrix4f operator=
+    (const Matrix4f& other) {
+        this->_mtx = other._mtx;
+        return *this;
+    }
+
+    Matrix4f operator=
+    (Matrix4f&& other) {
+        this->_mtx = other._mtx;
+        return *this;
+    }
 
 
 private:

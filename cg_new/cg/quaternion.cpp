@@ -214,6 +214,7 @@ Vector4f Quaternion::GetRight()
     return Vector4f(1,0,0,1).Rotate(this);
 }
 
+#include <iostream>
 Vector4f Quaternion::GetLeft()
 {
     return Vector4f(-1,0,0,1).Rotate(this);

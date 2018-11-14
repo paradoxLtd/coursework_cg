@@ -20,17 +20,27 @@ void Mesh::Draw(RenderContext context, Matrix4f viewProjection, Matrix4f transfo
 
     Matrix4f mvp = viewProjection.Mul(transform);
 
-    /*for (auto row: mvp.GetMtx()) {
-        for (auto c: row) {
-            std::cout << c << " ";
-        }
-        std::cout << "\n";
-    }*/
+
 
     for(int i = 0; i < m_indices.size(); i += 3)
     {
-        //qDebug() << "befire";
-        //qDebug() << m_vertices[m_indices[i]].GetX() << " " << m_vertices[m_indices[i]].GetY();
+
+        //qDebug() << "--------------------x:";
+        /*
+        qDebug() << m_vertices[m_indices[i]].GetX() << " y:"
+                 << m_vertices[m_indices[i]].GetY() << " z:" <<
+                    m_vertices[m_indices[i]].GetZ();
+        qDebug() << "i + 1" << m_vertices[m_indices[i + 1]].GetX() << " y:"
+                 << m_vertices[m_indices[i + 1]].GetY() << " z:" <<
+                    m_vertices[m_indices[i + 1]].GetZ();
+                    */
+
+        qDebug() << "index:" << m_indices[i];
+        qDebug() << "!!!!!!!!!!!!!!!!!!!!x:";
+        qDebug() << m_vertices[m_indices[i]].Transform(mvp, transform).GetX() << " y:"
+                 << m_vertices[m_indices[i]].Transform(mvp, transform).GetY() << " z:" <<
+                    m_vertices[m_indices[i]].Transform(mvp, transform).GetZ();
+
         context.DrawTriangle(
                 m_vertices[m_indices[i]].Transform(mvp, transform),
                 m_vertices[m_indices[i + 1]].Transform(mvp, transform),

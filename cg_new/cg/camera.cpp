@@ -1,6 +1,8 @@
 #include "camera.h"
 
-Camera::Camera(Matrix4f projection) : m_projection(projection){}
+Camera::Camera(Matrix4f projection) : m_projection(projection){
+    //m_transform = Transform();
+}
 
 Matrix4f Camera::GetViewProjection() {
     Matrix4f cameraRotation = GetTransform().GetTransformedRot().Conjugate().toRotationMatrix();
@@ -47,9 +49,24 @@ Transform Camera::GetTransform() {
      return m_transform;
 }
 
+#include <iostream>
 void Camera::Move(Vector4f dir, float amt) {
+    /*
+    std::cout << "before\n";
+    std::cout << "x:" << dir.GetX() <<
+                 "y:" << dir.GetY() <<
+                 "z:" << dir.GetZ() <<
+                 "w:" << dir.GetW();*/
+
     m_transform = m_transform.SetPos(
-                GetTransform().GetPos().Add(dir.Mul(amt)));
+                m_transform.GetPos().Add(dir.Mul(amt)));
+    /*
+    std::cout << "after\n";
+    std::cout << "x:" << dir.Mul(amt).GetX() <<
+                 "y:" << dir.Mul(amt).GetY() <<
+                 "z:" << dir.Mul(amt).GetZ() <<
+                 "w:" << dir.Mul(amt).GetW();
+                 */
 }
 
 void Camera::Rotate(Vector4f axis, float angle) {

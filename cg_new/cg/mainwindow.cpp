@@ -28,17 +28,27 @@ MainWindow::MainWindow(QWidget *parent) :
     //qDebug() << QDir::currentPath().append("/objs/cube.obj");
 
     //Display display = new Display(800, 600, "Software Rendering");
-    RenderContext target(ui->widget, WIDTH_WIN, HEIGHT_WIN);
+     target = RenderContext(ui->widget, WIDTH_WIN, HEIGHT_WIN);
 
     //image2 = new QImage(QImage::Format_RGB32);
 
 
-    Texture texture(QImage(QDir::currentPath().append("/objs/bricks.jpg")));
-    Mesh monkeyMesh = Mesh(QDir::currentPath().append("/objs/smoothMonkey0.obj").toStdString());
-    Transform monkeyTransform = Transform(Vector4f(0,0.0f,3.0f));
+    texture = Texture(QImage(QDir::currentPath().append("/objs/bricks.jpg")));
+    mesh = Mesh(QDir::currentPath().append("/objs/cube.obj").toStdString());
+    trans = Transform(Vector4f(0,0.0f,3.0f));
 
-    Camera camera = Camera( Matrix4f().InitPerspective(toRadians(70.0f),
-                    target.GetWidth()/ target.GetHeight(), 0.1f, 1000.0f));
+    camera = Camera( Matrix4f().InitPerspective(
+                         toRadians(70.0f),
+                         target.GetWidth()/ target.GetHeight(),
+                         0.1f, 1000.0f));
+
+    /*
+    std::cout << "lol\n";
+    std::cout << "x:" << camera.GetTransform().GetRot().GetX() <<
+                 "y:" << camera.GetTransform().GetRot().GetY() <<
+                 "z:" << camera.GetTransform().GetRot().GetZ() <<
+                 "w:" << camera.GetTransform().GetRot().GetW();
+    */
 
     /*Camera camera = Camera( Matrix4f().InitOrthographic(0,
                     600, 0, 1000.0f));*/
@@ -47,17 +57,19 @@ MainWindow::MainWindow(QWidget *parent) :
     std::vector <std::vector <float>> proj = Matrix4f().InitPerspective(toRadians(70.0f),
                                                                         target.GetWidth()/ target.GetHeight(), 0.1f, 1000.0f).GetMtx();
 
-    for (auto row: proj) {
+
+    Matrix4f vp = camera.GetViewProjection();
+    /*for (auto row: vp.GetMtx()) {
         for (auto c: row) {
             std::cout << c << " ";
         }
         std::cout << "\n";
-    }
+    }*/
 
-    Matrix4f vp = camera.GetViewProjection();
+    //target.Clear((byte)0x00);
+    target.ClearDepthBuffer();
 
-
-    monkeyMesh.Draw(target, vp, monkeyTransform.GetTransformation(), texture);
+    mesh.Draw(target, vp, trans.GetTransformation(), texture);
 
     //float rotCounter = 0.0f;
     //long previousTime = System.nanoTime();
@@ -92,4 +104,138 @@ MainWindow::~MainWindow()
 void MainWindow::on_pushButton_clicked()
 {
 
+}
+
+void MainWindow::on_camera_left_clicked()
+{
+    const float movAmt = 1.0f;
+    camera.Move(camera.GetTransform().GetRot().GetLeft(), movAmt);
+    target.ClearDepthBuffer();
+    image->fill(Qt::white);
+    ui->widget->setImage(*image);
+    Matrix4f vp = camera.GetViewProjection();
+    mesh.Draw(target, vp, trans.GetTransformation(), texture);
+
+}
+
+void MainWindow::on_camera_top_clicked()
+{
+    const float movAmt = 1.0f;
+    camera.Move(camera.GetTransform().GetRot().GetForward(), movAmt);
+    target.ClearDepthBuffer();
+    image->fill(Qt::white);
+    ui->widget->setImage(*image);
+    Matrix4f vp = camera.GetViewProjection();
+    mesh.Draw(target, vp, trans.GetTransformation(), texture);
+}
+
+void MainWindow::on_camera_bottom_clicked()
+{
+    const float movAmt = 1.0f;
+    camera.Move(camera.GetTransform().GetRot().GetForward(), -movAmt);
+    target.ClearDepthBuffer();
+    image->fill(Qt::white);
+    ui->widget->setImage(*image);
+    Matrix4f vp = camera.GetViewProjection();
+    mesh.Draw(target, vp, trans.GetTransformation(), texture);
+}
+
+
+void MainWindow::on_camera_right_clicked()
+{
+    const float movAmt = 1.0f;
+    camera.Move(camera.GetTransform().GetRot().GetRight(), movAmt);
+    target.ClearDepthBuffer();
+    image->fill(Qt::white);
+    ui->widget->setImage(*image);
+    Matrix4f vp = camera.GetViewProjection();
+    mesh.Draw(target, vp, trans.GetTransformation(), texture);
+}
+
+void MainWindow::on_camera_move_right_clicked()
+{
+    const float movAmt = 0.1f;
+    camera.Rotate(Camera::Y_AXIS, -movAmt);
+    target.ClearDepthBuffer();
+    image->fill(Qt::white);
+    ui->widget->setImage(*image);
+    Matrix4f vp = camera.GetViewProjection();
+    mesh.Draw(target, vp, trans.GetTransformation(), texture);
+
+}
+
+void MainWindow::on_camera_move_up_clicked()
+{
+    const float movAmt = 0.1f;
+    camera.Rotate(camera.GetTransform().GetRot().GetRight(), movAmt);
+    target.ClearDepthBuffer();
+    image->fill(Qt::white);
+    ui->widget->setImage(*image);
+    Matrix4f vp = camera.GetViewProjection();
+    mesh.Draw(target, vp, trans.GetTransformation(), texture);
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *e)
+{
+    const float movAmt = 0.2f;
+
+    switch (e->key()) {
+    case Qt::Key_W:
+        camera.Move(camera.GetTransform().GetRot().
+                    GetForward(), movAmt);
+        break;
+    case Qt::Key_S:
+        camera.Move(camera.GetTransform().GetRot().
+                    GetForward(), -movAmt);
+        break;
+    case Qt::Key_A:
+        camera.Move(camera.GetTransform().GetRot().
+                    GetLeft(), movAmt);
+        break;
+    case Qt::Key_D:
+        camera.Move(camera.GetTransform().GetRot().
+                    GetRight(), movAmt);
+        break;
+    case Qt::Key_I:
+        camera.Rotate(camera.GetTransform().GetRot().
+                      GetRight(), movAmt);
+        break;
+    case Qt::Key_J:
+        camera.Rotate(Camera::Y_AXIS, movAmt);
+        break;
+    case Qt::Key_K:
+        camera.Move(camera.GetTransform().GetRot().
+                    GetForward(), -movAmt);
+        break;
+    case Qt::Key_L:
+         camera.Rotate(Camera::Y_AXIS, -movAmt);
+        break;
+    }
+    target.ClearDepthBuffer();
+    image->fill(Qt::white);
+    ui->widget->setImage(*image);
+    Matrix4f vp = camera.GetViewProjection();
+    mesh.Draw(target, vp, trans.GetTransformation(), texture);
+}
+
+void MainWindow::on_camera_move_left_clicked()
+{
+    const float movAmt = 0.1f;
+    camera.Rotate(Camera::Y_AXIS, movAmt);
+    target.ClearDepthBuffer();
+    image->fill(Qt::white);
+    ui->widget->setImage(*image);
+    Matrix4f vp = camera.GetViewProjection();
+    mesh.Draw(target, vp, trans.GetTransformation(), texture);
+}
+
+void MainWindow::on_camera_move_down_clicked()
+{
+    const float movAmt = 0.1f;
+    camera.Rotate(camera.GetTransform().GetRot().GetRight(), -movAmt);
+    target.ClearDepthBuffer();
+    image->fill(Qt::white);
+    ui->widget->setImage(*image);
+    Matrix4f vp = camera.GetViewProjection();
+    mesh.Draw(target, vp, trans.GetTransformation(), texture);
 }

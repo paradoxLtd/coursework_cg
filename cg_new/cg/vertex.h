@@ -41,6 +41,7 @@ public:
 
     float GetX() { return m_pos.GetX(); }
     float GetY() { return m_pos.GetY(); }
+    float GetZ() { return m_pos.GetZ(); }
 
 private:
     Vector4f m_pos;

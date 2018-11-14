@@ -13,6 +13,7 @@
 class Mesh
 {
 public:
+    Mesh() = default;
     Mesh(std::string fileName);
     void Draw(RenderContext context, Matrix4f viewProjection,
               Matrix4f transform, Texture texture);

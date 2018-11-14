@@ -59,12 +59,25 @@ Vector4f Vector4f::Rotate(Vector4f axis, float angle)
     //Rotation on local Y
 }
 
+#include <iostream>
 Vector4f Vector4f::Rotate(Quaternion *rotation)
 {
     Quaternion conjugate = rotation->Conjugate();
 
     Quaternion w = rotation->Mul(*this).Mul(conjugate);
+    /*
+    std::cout << "this\n";
+    std::cout << "x:" << this->GetX() <<
+                 "y:" << this->GetY() <<
+                 "z:" << this->GetZ() <<
+                 "w:" << this->GetW();
 
+    std::cout << "conjugate\n";
+    std::cout << "x:" << rotation->GetX() <<
+                 "y:" << rotation->GetY() <<
+                 "z:" << rotation->GetZ() <<
+                 "w:" << rotation->GetW();
+    */
     return Vector4f(w.GetX(),
                     w.GetY(),
                     w.GetZ(),
@@ -78,10 +91,10 @@ Vector4f Vector4f::Lerp(Vector4f dest, float lerpFactor)
 
 Vector4f Vector4f::Add(Vector4f r)
 {
-    return Vector4f(x + r.GetX(),
-                    y + r.GetY(),
-                    z + r.GetZ(),
-                    w + r.GetW());
+    return Vector4f(Vector4f(x + r.GetX(),
+                        y + r.GetY(),
+                        z + r.GetZ(),
+                        w + r.GetW()));
 }
 
 Vector4f Vector4f::Add(float r)

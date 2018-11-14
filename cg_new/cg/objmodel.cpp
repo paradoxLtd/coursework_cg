@@ -19,25 +19,15 @@ bool OBJIndex::equals(OBJIndex obj) {
 
 bool OBJIndex::operator==(const OBJIndex &other) const
 {
-    return this->m_normalIndex == other.m_normalIndex;
+    return (this->hashCode() == other.hashCode());
 }
 
 bool OBJIndex::operator<(const OBJIndex &other) const
 {
-    return this->m_normalIndex < other.m_normalIndex;
+    return this->hashCode() < other.hashCode();
 }
 
-bool OBJIndex::operator>(const OBJIndex &other) const
-{
-    return this->m_normalIndex > other.m_normalIndex;
-}
-
-bool OBJIndex::operator!=(const OBJIndex &other) const
-{
-    return this->m_normalIndex != other.m_normalIndex;
-}
-
-int OBJIndex::hashCode() {
+int OBJIndex::hashCode() const {
     // было 2 final
     const int BASE = 17;
     const int MULTIPLIER = 31;
@@ -58,33 +48,33 @@ OBJModel::OBJModel(std::string fileName)// throws IOException
 
     std::ifstream in;
 
-    char current_work_dir[FILENAME_MAX];
-    char* (*fget)(char *, size_t);
+    //char current_work_dir[FILENAME_MAX];
+    //char* (*fget)(char *, size_t);
 
-    #if defined (_WIN32) || defined (_WIN64)
-        fget = &_getcwd;
-        char folders[10] = "\\objs\\";
-    #elif defined (__APPLE__) && defined(__MACH__) || defined (__linux__)
-        fget = &getcwd;
-        char folders[10] = "";
-    #endif
+    //#if defined (_WIN32) || defined (_WIN64)
+    //    fget = &_getcwd;
+    //    char folders[10] = "\\objs\\";
+    //#elif defined (__APPLE__) && defined(__MACH__) || defined (__linux__)
+    //    fget = &getcwd;
+    //    char folders[10] = "";
+    //#endif
 
-    fget(current_work_dir, sizeof(current_work_dir));
+    //fget(current_work_dir, sizeof(current_work_dir));
 
     // http://qaru.site/questions/124663/how-to-concatenate-two-strings-in-c
-    char rfilename[sizeof(current_work_dir) +
-            sizeof(fileName) + sizeof(folders)];
+    //char rfilename[sizeof(current_work_dir) +
+    //       sizeof(fileName) + sizeof(folders)];
 
 
     //qDebug() <<  "bull shit"<<rfilename;
-    strcpy (rfilename, current_work_dir) ;
-    strcat (rfilename, folders) ;
-    strcat (rfilename, fileName.c_str()) ;
+    //strcpy (rfilename, current_work_dir) ;
+    //strcat (rfilename, folders) ;
+    //strcat (rfilename, fileName.c_str()) ;
 
     in.open(fileName, std::ifstream::in);
     //qDebug() << "\n objmodel.h. rfilename:" << rfilename;
     if (in.fail()) {
-        //qDebug() << "Fail";
+        qDebug() << fileName.c_str();
         return;
     }
 
@@ -129,7 +119,7 @@ OBJModel::OBJModel(std::string fileName)// throws IOException
             }
         }
     }
-    //qDebug() << "in the end";
+    qDebug() << "in the end";
     in.close();
 }
 
@@ -185,6 +175,10 @@ IndexedModel OBJModel::ToIndexedModel() {
             if(m_hasNormals)
                 result.PushNormal(currentNormal); // Нормали
         } else {
+            //qDebug() << " !normal:" << resultIndexMap[currentIndex].GetNormalIndex() <<
+            //            " !text:" << resultIndexMap[currentIndex].GetTexCoordIndex() <<
+            //            " !vertex:" << resultIndexMap[currentIndex].GetVertexIndex();
+
            modelVertexIndex = resultIndexMap[currentIndex];
         }
 
@@ -206,7 +200,12 @@ IndexedModel OBJModel::ToIndexedModel() {
 
         result.PushIndice(static_cast<int>(modelVertexIndex));      // индексы в готовую
         normalModel.PushIndice(static_cast<int>(normalModelIndex)); // индексы в подготовительную
-        indexMap.insert(std::make_pair(modelVertexIndex, normalModelIndex));
+        indexMap.insert(std::pair<int,int> (modelVertexIndex, normalModelIndex)); //std::make_pair(modelVertexIndex, normalModelIndex));
+        //qDebug() << " l:" << modelVertexIndex << " r:" << normalModelIndex;
+        //qDebug() << "size:" << result.GetIndices().size();
+        //qDebug() << " normal:" << currentIndex.GetNormalIndex() <<
+        //            " text:" << currentIndex.GetTexCoordIndex() <<
+        //            " vertex:" << currentIndex.GetVertexIndex();
 
     }
 
@@ -260,4 +259,32 @@ OBJIndex OBJModel::ParseOBJIndex(std::string token) {
         }
     }
     return result;
+}
+
+OBJIndex::OBJIndex(const OBJIndex &other) {
+    this->m_vertexIndex = other.m_vertexIndex;
+    this->m_texCoordIndex = other.m_texCoordIndex;
+    this->m_normalIndex = other.m_normalIndex;
+}
+
+OBJIndex::OBJIndex(OBJIndex &&other) {
+    this->m_vertexIndex = other.m_vertexIndex;
+    this->m_texCoordIndex = other.m_texCoordIndex;
+    this->m_normalIndex = other.m_normalIndex;
+}
+
+OBJIndex OBJIndex::operator=
+(const OBJIndex& other) {
+    this->m_vertexIndex = other.m_vertexIndex;
+    this->m_texCoordIndex = other.m_texCoordIndex;
+    this->m_normalIndex = other.m_normalIndex;
+    return *this;
+}
+
+OBJIndex OBJIndex::operator=
+(OBJIndex&& other) {
+    this->m_vertexIndex = other.m_vertexIndex;
+    this->m_texCoordIndex = other.m_texCoordIndex;
+    this->m_normalIndex = other.m_normalIndex;
+    return *this;
 }

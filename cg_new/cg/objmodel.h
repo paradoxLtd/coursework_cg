@@ -35,6 +35,8 @@ import java.util.Map;
 class OBJIndex
 {
 public:
+    OBJIndex() = default;
+
     int GetVertexIndex();
     int GetTexCoordIndex();
     int GetNormalIndex();
@@ -60,7 +62,17 @@ public:
     bool operator>(const OBJIndex& other) const;
     bool operator!=(const OBJIndex& other) const;
 
-    int hashCode();
+    int hashCode() const;
+
+    OBJIndex(const OBJIndex &other);
+
+    OBJIndex(OBJIndex &&other);
+
+    OBJIndex operator=
+    (const OBJIndex& other);
+
+    OBJIndex operator=
+    (OBJIndex&& other);
 
     // В оригинале нет конструктора, странно
     //OBJIndex()

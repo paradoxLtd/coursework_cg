@@ -4,6 +4,7 @@ Transform::Transform()
 {
     this->m_pos = Vector4f(0, 0, 0, 0);
     this->m_scale = Vector4f(1, 1, 1, 1);
+    this->m_rot = Quaternion(0, 0, 0, 1);
 }
 
 Transform::Transform(Vector4f pos)

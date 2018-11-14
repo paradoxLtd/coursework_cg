@@ -112,10 +112,26 @@ void RenderContext::FillTriangle(Vertex v1, Vertex v2,
     Vertex midYVert = v2.Transform(screenSpaceTransform, identity).PerspectiveDivide();
     Vertex maxYVert = v3.Transform(screenSpaceTransform, identity).PerspectiveDivide();
 
+    /*
+    qDebug() << "v1 x:" << v1.GetX() << " y:"
+             << v1.GetY() << " z:" <<
+                v1.GetZ();
+    qDebug() << "v2 x:" << v2.GetX() << " y:"
+             << v2.GetY() << " z:" <<
+                v2.GetZ();
+    qDebug() << "v3 x:" << v3.GetX() << " y:"
+             << v3.GetY() << " z:" <<
+                v3.GetZ();
+
+    qDebug() << "TriangleAreaTimesTwo: " << minYVert.TriangleAreaTimesTwo(maxYVert, midYVert);
+
+     */
     if(minYVert.TriangleAreaTimesTwo(maxYVert, midYVert) >= 0) {
-        qDebug() << "we re in ret";
+        //qDebug() << "we re in ret";
         return;
     }
+
+    //qDebug() << "+++";
 
     if(maxYVert.GetY() < midYVert.GetY()) {
         Vertex temp = maxYVert;
@@ -135,8 +151,6 @@ void RenderContext::FillTriangle(Vertex v1, Vertex v2,
         maxYVert = midYVert;
         midYVert = temp;
     }
-
-
 
     ScanTriangle(minYVert, midYVert, maxYVert,
             minYVert.TriangleAreaTimesTwo(maxYVert, midYVert) >= 0,
@@ -184,6 +198,7 @@ void RenderContext::ScanEdges(Gradients gradients,
 void RenderContext::copyPixel(int destX, int destY,
                               int srcX, int srcY, Texture &texture)
 {
+
     setPixel(destX, destY, QColor(texture.pixel(srcX, srcY)));
 }
 
@@ -199,7 +214,7 @@ int RenderContext::GetHeight()
 
 void RenderContext::setPixel(int x, int y, QColor color)
 {
-    qDebug() << "X Y" << x << " " << y;
+    //qDebug() << "X Y" << x << " " << y;
 
     this->bitmap->get_image_ref().setPixelColor(x, y, color);
 }

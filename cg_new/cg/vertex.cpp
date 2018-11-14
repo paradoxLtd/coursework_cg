@@ -1,5 +1,6 @@
 #include "vertex.h"
 #include "math.h"
+#include <QDebug>
 
 Vertex::Vertex(Vector4f pos, Vector4f texCoords, Vector4f normal)
 {
@@ -27,6 +28,8 @@ Vertex Vertex::operator=(const Vertex &other)
     this->m_normal = other.m_normal;
     this->m_pos = other.m_pos;
     this->m_texCoords = other.m_texCoords;
+
+    return *this;
 }
 
 Vertex Vertex::operator=(Vertex &&other)
@@ -34,6 +37,8 @@ Vertex Vertex::operator=(Vertex &&other)
     this->m_normal = other.m_normal;
     this->m_pos = other.m_pos;
     this->m_texCoords = other.m_texCoords;
+
+    return *this;
 }
 
 Vertex Vertex::Transform(Matrix4f transform, Matrix4f normalTransform) {
@@ -51,11 +56,21 @@ Vertex Vertex::PerspectiveDivide() {
 }
 
 float Vertex::TriangleAreaTimesTwo(Vertex b, Vertex c) {
+
+    qDebug() << "b x:" << b.GetX() << " y:"
+             << b.GetY() << " z:" <<
+                b.GetZ();
+    qDebug() << "c x:" << c.GetX() << " y:"
+             << c.GetY() << " z:" <<
+                c.GetZ();
+
     float x1 = b.GetX() - m_pos.GetX();
     float y1 = b.GetY() - m_pos.GetY();
 
     float x2 = c.GetX() - m_pos.GetX();
     float y2 = c.GetY() - m_pos.GetY();
+
+    qDebug() << "ddd:" << (x1 * y2 - x2 * y1);
 
     return (x1 * y2 - x2 * y1);
 }

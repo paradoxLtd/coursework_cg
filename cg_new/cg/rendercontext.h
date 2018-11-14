@@ -17,6 +17,7 @@
 class RenderContext
 {
 public:
+    RenderContext() = default;
     RenderContext(Bitmap *bitmap, int width, int height);
 
     void ClearDepthBuffer();

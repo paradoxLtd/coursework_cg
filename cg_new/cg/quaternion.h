@@ -45,6 +45,38 @@ public:
 
     bool equals(Quaternion &r);
 
+    Quaternion(const Quaternion &other) {
+        this->m_x = other.m_x;
+        this->m_y = other.m_y;
+        this->m_z = other.m_z;
+        this->m_w = other.m_w;
+    }
+
+    Quaternion(Quaternion &&other ) {
+        this->m_x = other.m_x;
+        this->m_y = other.m_y;
+        this->m_z = other.m_z;
+        this->m_w = other.m_w;
+    }
+
+    Quaternion operator=
+    (const Quaternion& other) {
+        this->m_x = other.m_x;
+        this->m_y = other.m_y;
+        this->m_z = other.m_z;
+        this->m_w = other.m_w;
+        return *this;
+    }
+
+    Quaternion operator=
+    (Quaternion&& other) {
+        this->m_x = other.m_x;
+        this->m_y = other.m_y;
+        this->m_z = other.m_z;
+        this->m_w = other.m_w;
+        return *this;
+    }
+
 private:
     float m_x, m_y, m_z, m_w;
 };
