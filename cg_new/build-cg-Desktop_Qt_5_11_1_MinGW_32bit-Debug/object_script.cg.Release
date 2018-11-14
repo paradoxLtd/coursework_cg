@@ -13,6 +13,7 @@ INPUT(
 ./release\quaternion.o
 ./release\matrix4f.o
 ./release\transform.o
+./release\indexedmodel.o
 ./release\moc_mainwindow.o
 ./release\moc_bitmap.o
 );

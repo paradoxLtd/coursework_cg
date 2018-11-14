@@ -209,10 +209,10 @@ public:
                  */
                 resultIndexMap.insert(std::make_pair(currentIndex, modelVertexIndex));
 
-                result.GetPositions().add(currentPosition);
-                result.GetTexCoords().add(currentTexCoord);
+                result.PushPosition(currentPosition); // Вершины
+                result.PushTexCoords(currentTexCoord); // Тектуры
                 if(m_hasNormals)
-                    result.GetNormals().add(currentNormal);
+                    result.PushNormal(currentNormal); // Нормали
             } else {
                modelVertexIndex = resultIndexMap[currentIndex];
             }
@@ -225,31 +225,27 @@ public:
                 normalModelIndex = normalModel.GetPositions().size();
                 normalIndexMap.insert(std::make_pair(currentIndex.GetVertexIndex(), normalModelIndex));
 
-                normalModel.GetPositions().add(currentPosition);
-                normalModel.GetTexCoords().add(currentTexCoord);
-                normalModel.GetNormals().add(currentNormal);
-                normalModel.GetTangents().add(new Vector4f(0,0,0,0));
+                normalModel.PushPosition(currentPosition); // вершины в подготовительной модели
+                normalModel.PushTexCoords(currentTexCoord); // текстуры в подготовительной
+                normalModel.PushNormal(currentNormal);     // нормали в подготовительной
+                normalModel.PushTangent(Vector4f(0,0,0,0));// касательные в подготовительной
             } else {
                 normalModelIndex = normalIndexMap[currentIndex.GetVertexIndex()];
             }
 
-            result.GetIndices().add(modelVertexIndex);
-            normalModel.GetIndices().add(normalModelIndex);
-            indexMap.put(modelVertexIndex, normalModelIndex);
+            result.PushIndice(modelVertexIndex);      // индексы в готовую
+            normalModel.PushIndice(normalModelIndex); // индексы в подготовительную
+            indexMap.insert(std::make_pair(modelVertexIndex, normalModelIndex));
+
         }
 
         if(!m_hasNormals) {
-            normalModel.CalcNormals();
-
-            for(int i = 0; i < result.GetPositions().size(); i++)
-                result.GetNormals().add(normalModel.GetNormals().get(indexMap.get(i)));
+            normalModel.calcNormals();
+            result.setNormals(normalModel.GetNormals());
         }
 
-        normalModel.CalcTangents();
-
-        for(int i = 0; i < result.GetPositions().size(); i++) {
-            result.GetTangents().add(normalModel.GetTangents().get(indexMap.get(i)));
-        }
+        normalModel.calcTangents();
+        result.SetTangents(normalModel.GetTangents());
 
         return result;
     }

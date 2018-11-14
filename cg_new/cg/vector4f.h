@@ -2,7 +2,7 @@
 #define VECTOR4F_H
 #include <string>
 
-class Quaternion{};
+class Quaternion;
 //#include "quaternion.h"
 
 class Vector4f
@@ -24,7 +24,7 @@ public:
 
     Vector4f Rotate(Vector4f axis, float angle);
 
-    Vector4f Rotate(Quaternion rotation);
+    Vector4f Rotate(Quaternion *rotation);
 
     Vector4f Lerp(Vector4f dest, float lerpFactor);
 

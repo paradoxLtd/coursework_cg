@@ -427,3 +427,5 @@ FORCE:
 
 $(MAKEFILE).Debug: Makefile
 $(MAKEFILE).Release: Makefile
+ Makefile
+$(MAKEFILE).Release: Makefile

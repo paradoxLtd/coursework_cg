@@ -33,7 +33,8 @@ Quaternion::Quaternion(Matrix4f &rot)
     }
     else
     {
-        if(rot.Get(0, 0) > rot.Get(1, 1) && rot.Get(0, 0) > rot.Get(2, 2))
+        if(rot.Get(0, 0) > rot.Get(1, 1) &&
+                rot.Get(0, 0) > rot.Get(2, 2))
         {
             double s = 2.0f * (double)sqrt(1.0f + rot.Get(0, 0) - rot.Get(1, 1) - rot.Get(2, 2));
             m_w = (rot.Get(1, 2) - rot.Get(2, 1)) / s;
@@ -51,7 +52,8 @@ Quaternion::Quaternion(Matrix4f &rot)
         }
         else
         {
-            double s = 2.0f * sqrt(1.0f + rot.Get(2, 2) - rot.Get(0, 0) - rot.Get(1, 1));
+            double s = 2.0f * sqrt(1.0f + rot.Get(2, 2) -
+                                   rot.Get(0, 0) - rot.Get(1, 1));
             m_w = (rot.Get(0, 1) - rot.Get(1, 0) ) / s;
             m_x = (rot.Get(2, 0) + rot.Get(0, 2) ) / s;
             m_y = (rot.Get(1, 2) + rot.Get(2, 1) ) / s;
@@ -59,7 +61,8 @@ Quaternion::Quaternion(Matrix4f &rot)
         }
     }
 
-    double length = sqrt(m_x * m_x + m_y * m_y + m_z * m_z + m_w * m_w);
+    double length = sqrt(m_x * m_x + m_y * m_y +
+                         m_z * m_z + m_w * m_w);
     m_x /= length;
     m_y /= length;
     m_z /= length;
@@ -68,14 +71,16 @@ Quaternion::Quaternion(Matrix4f &rot)
 
 double Quaternion::Length()
 {
-    return sqrt(m_x * m_x + m_y * m_y + m_z * m_z + m_w * m_w);
+    return sqrt(m_x * m_x + m_y * m_y +
+                m_z * m_z + m_w * m_w);
 }
 
 Quaternion Quaternion::Normalized()
 {
     double length = Length();
 
-    return Quaternion(m_x / length, m_y / length, m_z / length, m_w / length);
+    return Quaternion(m_x / length, m_y / length,
+                      m_z / length, m_w / length);
 }
 
 Quaternion Quaternion::Conjugate()
@@ -90,10 +95,14 @@ Quaternion Quaternion::Mul(double r)
 
 Quaternion Quaternion::Mul(Quaternion r)
 {
-    double w_ = m_w * r.GetW() - m_x * r.GetX() - m_y * r.GetY() - m_z * r.GetZ();
-    double x_ = m_x * r.GetW() + m_w * r.GetX() + m_y * r.GetZ() - m_z * r.GetY();
-    double y_ = m_y * r.GetW() + m_w * r.GetY() + m_z * r.GetX() - m_x * r.GetZ();
-    double z_ = m_z * r.GetW() + m_w * r.GetZ() + m_x * r.GetY() - m_y * r.GetX();
+    double w_ = m_w * r.GetW() - m_x * r.GetX() -
+            m_y * r.GetY() - m_z * r.GetZ();
+    double x_ = m_x * r.GetW() + m_w * r.GetX() +
+            m_y * r.GetZ() - m_z * r.GetY();
+    double y_ = m_y * r.GetW() + m_w * r.GetY() +
+            m_z * r.GetX() - m_x * r.GetZ();
+    double z_ = m_z * r.GetW() + m_w * r.GetZ() +
+            m_x * r.GetY() - m_y * r.GetX();
 
     return Quaternion(x_, y_, z_, w_);
 }
@@ -110,12 +119,14 @@ Quaternion Quaternion::Mul(Vector4f r)
 
 Quaternion Quaternion::Sub(Quaternion r)
 {
-    return Quaternion(m_x - r.GetX(), m_y - r.GetY(), m_z - r.GetZ(), m_w - r.GetW());
+    return Quaternion(m_x - r.GetX(), m_y - r.GetY(),
+                      m_z - r.GetZ(), m_w - r.GetW());
 }
 
 Quaternion Quaternion::Add(Quaternion r)
 {
-    return Quaternion(m_x + r.GetX(), m_y + r.GetY(), m_z + r.GetZ(), m_w + r.GetW());
+    return Quaternion(m_x + r.GetX(), m_y + r.GetY(),
+                      m_z + r.GetZ(), m_w + r.GetW());
 }
 
 Matrix4f Quaternion::toRotationMatrix()
@@ -130,12 +141,13 @@ Matrix4f Quaternion::toRotationMatrix()
     return Matrix4f().InitRotation(forward, up, right);
 }
 
-double Quaternion::dot(Quaternion &r)
+double Quaternion::dot(Quaternion r)
 {
-    return m_x * r.GetX() + m_y * r.GetY() + m_z * r.GetZ() + m_w * r.GetW();
+    return m_x * r.GetX() + m_y * r.GetY() +
+            m_z * r.GetZ() + m_w * r.GetW();
 }
 
-Quaternion Quaternion::NLerp(Quaternion &dest,
+Quaternion Quaternion::NLerp(Quaternion dest,
                              double lerpFactor, bool shortest)
 {
     Quaternion correctedDest = dest;
@@ -149,7 +161,7 @@ Quaternion Quaternion::NLerp(Quaternion &dest,
             Add(*this).Normalized();
 }
 
-Quaternion Quaternion::SLerp(Quaternion &dest, double lerpFactor,
+Quaternion Quaternion::SLerp(Quaternion dest, double lerpFactor,
                              bool shortest)
 {
     double cos = this->dot(dest);

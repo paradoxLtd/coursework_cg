@@ -1,11 +1,9 @@
 #include "indexedmodel.h"
 
-void IndexedModel::calcNormals()
-{
+void IndexedModel::calcNormals() {
     size_t i0, i1, i2;
 
-    for(size_t i = 0; i < m_indices.size(); i += 3)
-    {
+    for(size_t i = 0; i < m_indices.size(); i += 3) {
         i0 = m_indices[i];
         i1 = m_indices[i + 1];
         i2 = m_indices[i + 2];
@@ -25,12 +23,10 @@ void IndexedModel::calcNormals()
     }
 }
 
-void IndexedModel::calcTangents()
-{
+void IndexedModel::calcTangents() {
     int i0, i1, i2;
 
-    for(int i = 0; i < m_indices.size(); i += 3)
-    {
+    for(int i = 0; i < m_indices.size(); i += 3) {
         i0 = m_indices[i];
         i1 = m_indices[i + 1];
         i2 = m_indices[i + 2];
@@ -62,29 +58,56 @@ void IndexedModel::calcTangents()
     }
 }
 
-std::vector<Vector4f> IndexedModel::GetPositions()
-{
+std::vector<Vector4f> IndexedModel::GetPositions() const {
     return this->m_positions;
 }
 
-std::vector<Vector4f> IndexedModel::GetTexCoords()
-{
+std::vector<Vector4f> IndexedModel::GetTexCoords() const {
     return this->m_texCoords;
 }
 
-std::vector<Vector4f> IndexedModel::GetNormals()
-{
+std::vector<Vector4f> IndexedModel::GetNormals() const {
     return this->m_normals;
 }
 
-std::vector<Vector4f> IndexedModel::GetTangents()
-{
+std::vector<Vector4f> IndexedModel::GetTangents() const {
     return this->m_tangents;
 }
 
-std::vector<int> IndexedModel::GetIndices()
-{
+std::vector<int> IndexedModel::GetIndices() const {
     return this->m_indices;
+}
+
+void IndexedModel::PushPosition(Vector4f vector) {
+    m_positions.push_back(vector);
+}
+void IndexedModel::PushTexCoords(Vector4f vector) {
+    m_texCoords.push_back(vector);
+}
+void IndexedModel::PushNormal(Vector4f vector) {
+    m_normals.push_back(vector);
+}
+void IndexedModel::PushTangent(Vector4f vector) {
+    m_tangents.push_back(vector);
+}
+void IndexedModel:: PushIndice(int index) {
+    m_indices.push_back(index);
+}
+
+void IndexedModel::SetPositions(std::vector <Vector4f> vectors) {
+    m_positions = vectors;
+}
+void IndexedModel::SetTexCoords(std::vector <Vector4f> vectors) {
+    m_texCoords = vectors;
+}
+void IndexedModel::SetNormals(std::vector <Vector4f> vectors) {
+    m_normals = vectors;
+}
+void IndexedModel::SetTangents(std::vector <Vector4f> vectors) {
+    m_tangents = vectors;
+}
+void IndexedModel::SetIndices(std::vector <int> indexes) {
+    m_indices = indexes;
 }
 
 

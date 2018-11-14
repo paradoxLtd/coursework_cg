@@ -2,14 +2,14 @@
 
 Mesh::Mesh(std::string fileName)
 {
-    IndexedModel model = new OBJModel(fileName).ToIndexedModel();
+    IndexedModel model = OBJModel(fileName).ToIndexedModel();
 
     for(int i = 0; i < model.GetPositions().size(); i++)
     {
-        m_vertices.push_back(new Vertex(
-                    model.GetPositions().get(i),
-                    model.GetTexCoords().get(i),
-                    model.GetNormals().get(i)));
+        m_vertices.push_back(Vertex(
+                    model.GetPositions()[i],
+                    model.GetTexCoords()[i],
+                    model.GetNormals()[i]));
     }
 
     m_indices = model.GetIndices();

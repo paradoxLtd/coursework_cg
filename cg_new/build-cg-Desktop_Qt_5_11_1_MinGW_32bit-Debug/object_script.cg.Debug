@@ -13,6 +13,7 @@ INPUT(
 ./debug\quaternion.o
 ./debug\matrix4f.o
 ./debug\transform.o
+./debug\indexedmodel.o
 ./debug\moc_mainwindow.o
 ./debug\moc_bitmap.o
 );

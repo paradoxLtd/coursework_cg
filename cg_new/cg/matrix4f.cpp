@@ -98,7 +98,7 @@ Matrix4f Matrix4f::InitRotation(double x, double y, double z)
     return *this;
 }
 
-Matrix4f Matrix4f::InitRotation(Vector4f &forward, Vector4f &up)
+Matrix4f Matrix4f::InitRotation(Vector4f forward, Vector4f up)
 {
     Vector4f f = forward.Normalized();
 
@@ -110,8 +110,8 @@ Matrix4f Matrix4f::InitRotation(Vector4f &forward, Vector4f &up)
     return InitRotation(f, u, r);
 }
 
-Matrix4f Matrix4f::InitRotation(Vector4f &forward,
-                                Vector4f &up, Vector4f &right)
+Matrix4f Matrix4f::InitRotation(Vector4f forward,
+                                Vector4f up, Vector4f &right)
 {
     Vector4f f = forward;
     Vector4f r = right;

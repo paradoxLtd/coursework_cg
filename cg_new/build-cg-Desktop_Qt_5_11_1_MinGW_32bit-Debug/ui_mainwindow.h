@@ -30,7 +30,7 @@ public:
     QPushButton *camera_top;
     QPushButton *camera_right;
     QPushButton *cam_scale_less;
-    bitmap *widget;
+    Bitmap *widget;
     QPushButton *camera_move_down;
     QPushButton *pushButton;
     QPushButton *camera_move_up;
@@ -63,7 +63,7 @@ public:
         cam_scale_less = new QPushButton(centralWidget);
         cam_scale_less->setObjectName(QStringLiteral("cam_scale_less"));
         cam_scale_less->setGeometry(QRect(630, 490, 41, 31));
-        widget = new bitmap(centralWidget);
+        widget = new Bitmap(centralWidget);
         widget->setObjectName(QStringLiteral("widget"));
         widget->setGeometry(QRect(20, 10, 600, 600));
         camera_move_down = new QPushButton(centralWidget);
