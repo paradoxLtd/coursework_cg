@@ -19,7 +19,7 @@ import java.util.Map;
 #include <regex>
 #include <fstream> //ifstream
 
-#include "Vector4f.h"
+#include "vector4f.h"
 #include "indexedmodel.h"
 
 //Это действия, касающиеся директивы загрузчика
@@ -54,6 +54,11 @@ public:
      */
     //@Override
     bool equals(OBJIndex obj);
+
+    bool operator==(const OBJIndex& other) const;
+    bool operator<(const OBJIndex& other) const;
+    bool operator>(const OBJIndex& other) const;
+    bool operator!=(const OBJIndex& other) const;
 
     int hashCode();
 

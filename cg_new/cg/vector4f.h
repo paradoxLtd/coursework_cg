@@ -8,6 +8,7 @@ class Quaternion;
 class Vector4f
 {
 public:
+    //Vector4f(float x, float y, float z);
     Vector4f(float x, float y, float z, float w);
 
     Vector4f(float x = 0, float y = 0, float z = 0);
@@ -64,10 +65,10 @@ public:
 
     Vector4f(Vector4f &&other);
 
-    Vector4f& operator=
+    Vector4f operator=
     (const Vector4f& other);
 
-    Vector4f& operator=
+    Vector4f operator=
     (Vector4f&& other);
     //
 

@@ -3,6 +3,7 @@
 
 RenderContext::RenderContext(Bitmap *bitmap,
                              int width, int height) {
+    this->bitmap = bitmap;
     this->width = width;
     this->height = height;
     m_zBuffer.resize(width * height);
@@ -10,16 +11,26 @@ RenderContext::RenderContext(Bitmap *bitmap,
 
 void RenderContext::ClearDepthBuffer() {
     for(int i = 0; i < m_zBuffer.size(); i++) {
-        m_zBuffer[i] = FLT_MAX;
+        m_zBuffer[i] = std::numeric_limits<float>::max();
     }
 }
 
 void RenderContext::DrawTriangle(Vertex v1, Vertex v2,
-                                 Vertex v3, Bitmap& texture) {
+                                 Vertex v3, Texture &texture) {
+
+    /*
+    qDebug() << v1.GetX() << v1.GetY();
+    qDebug() << v2.GetX() << v2.GetY();
+    qDebug() << v3.GetX() << v3.GetY();
+    qDebug() << "--------";*/
+
     if(v1.IsInsideViewFrustum() &&
             v2.IsInsideViewFrustum() &&
             v3.IsInsideViewFrustum()) {
         FillTriangle(v1, v2, v3, texture);
+
+        //qDebug() << "Returned";
+
         return;
     }
 
@@ -71,7 +82,7 @@ void RenderContext::ClipPolygonComponent(std::vector<Vertex> vertices,
     for(int i = 0; i < vertices.size(); i++)//while(it.hasNext())
     {
         Vertex currentVertex = vertices[i];//it.next();
-        float currentComponent = currentVertex[componentIndex] * componentFactor;
+        float currentComponent = currentVertex.Get(componentIndex) * componentFactor;
         bool currentInside = currentComponent <= currentVertex.GetPosition().GetW();
 
         if(currentInside ^ previousInside) {
@@ -93,16 +104,16 @@ void RenderContext::ClipPolygonComponent(std::vector<Vertex> vertices,
 }
 
 void RenderContext::FillTriangle(Vertex v1, Vertex v2,
-                                 Vertex v3, Bitmap& texture)
+                                 Vertex v3, Texture &texture)
 {
-    Matrix4f screenSpaceTransform =
-            Matrix4f().InitScreenSpaceTransform(GetWidth()/2, GetHeight()/2);
+    Matrix4f screenSpaceTransform = Matrix4f().InitScreenSpaceTransform(this->width / 2, this->height / 2);
     Matrix4f identity = Matrix4f().InitIdentity();
     Vertex minYVert = v1.Transform(screenSpaceTransform, identity).PerspectiveDivide();
     Vertex midYVert = v2.Transform(screenSpaceTransform, identity).PerspectiveDivide();
     Vertex maxYVert = v3.Transform(screenSpaceTransform, identity).PerspectiveDivide();
 
     if(minYVert.TriangleAreaTimesTwo(maxYVert, midYVert) >= 0) {
+        qDebug() << "we re in ret";
         return;
     }
 
@@ -125,14 +136,17 @@ void RenderContext::FillTriangle(Vertex v1, Vertex v2,
         midYVert = temp;
     }
 
+
+
     ScanTriangle(minYVert, midYVert, maxYVert,
             minYVert.TriangleAreaTimesTwo(maxYVert, midYVert) >= 0,
             texture);
 }
 
 void RenderContext::ScanTriangle(Vertex minYVert, Vertex midYVert,
-        Vertex maxYVert, bool handedness, Bitmap &texture)
+        Vertex maxYVert, bool handedness, Texture &texture)
 {
+
     Gradients gradients(minYVert, midYVert, maxYVert);
     Edge topToBottom(gradients, minYVert, maxYVert, 0);
     Edge topToMiddle(gradients, minYVert, midYVert, 0);
@@ -146,7 +160,7 @@ void RenderContext::ScanTriangle(Vertex minYVert, Vertex midYVert,
 
 void RenderContext::ScanEdges(Gradients gradients,
                               Edge a, Edge b, bool handedness,
-                              Bitmap &texture)
+                              Texture &texture)
 {
     Edge left = a;
     Edge right = b;
@@ -168,18 +182,30 @@ void RenderContext::ScanEdges(Gradients gradients,
 }
 
 void RenderContext::copyPixel(int destX, int destY,
-                              int srcX, int srcY, Bitmap &texture)
+                              int srcX, int srcY, Texture &texture)
 {
     setPixel(destX, destY, QColor(texture.pixel(srcX, srcY)));
 }
 
+int RenderContext::GetWidth()
+{
+    return this->width;
+}
+
+int RenderContext::GetHeight()
+{
+    return this->height;
+}
+
 void RenderContext::setPixel(int x, int y, QColor color)
 {
+    qDebug() << "X Y" << x << " " << y;
+
     this->bitmap->get_image_ref().setPixelColor(x, y, color);
 }
 
 void RenderContext::DrawScanLine(Gradients gradients, Edge left,
-                                 Edge right, int j, Bitmap &texture)
+                                 Edge right, int j, Texture &texture)
 {
     int xMin = (int)ceil(left.GetX());
     int xMax = (int)ceil(right.GetX());
@@ -199,7 +225,7 @@ void RenderContext::DrawScanLine(Gradients gradients, Edge left,
 
     for(int i = xMin; i < xMax; i++)
     {
-        int index = i + j * GetWidth();
+        int index = i + j * this->width;
         if(depth < m_zBuffer[index])
         {
             m_zBuffer[index] = depth;
@@ -207,7 +233,8 @@ void RenderContext::DrawScanLine(Gradients gradients, Edge left,
             int srcX = (int)((texCoordX * z) * (float)(texture.GetWidth() - 1) + 0.5f);
             int srcY = (int)((texCoordY * z) * (float)(texture.GetHeight() - 1) + 0.5f);
 
-            CopyPixel(i, j, srcX, srcY, texture, lightAmt);
+            //CopyPixel(i, j, srcX, srcY, texture, lightAmt); Пока забудем про свет
+            copyPixel(i, j, srcX, srcY, texture);
         }
 
         oneOverZ += oneOverZXStep;

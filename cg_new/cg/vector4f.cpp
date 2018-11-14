@@ -1,8 +1,9 @@
 #include "vector4f.h"
 #include "quaternion.h"
 
-Vector4f::Vector4f(float x, float y, float z,
-                   float w = 1) : x(x), y(y), z(z), w(w) {}
+Vector4f::Vector4f(float x, float y, float z) : x(x), y(y), z(z), w(1) {}
+
+Vector4f::Vector4f(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) {}
 
 float Vector4f::Length()
 {
@@ -198,7 +199,7 @@ Vector4f::Vector4f(Vector4f &&other) {
     this->w = other.w;
 }
 
-Vector4f& Vector4f::operator=
+Vector4f Vector4f::operator=
 (const Vector4f& other) {
     this->x = other.x;
     this->y = other.y;
@@ -207,7 +208,7 @@ Vector4f& Vector4f::operator=
     return *this;
 }
 
-Vector4f& Vector4f::operator=
+Vector4f Vector4f::operator=
 (Vector4f&& other) {
     this->x = other.x;
     this->y = other.y;

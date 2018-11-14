@@ -42,7 +42,7 @@ Quaternion Transform::GetLookAtRotation(Vector4f point,
                           up));
 }
 
-Matrix4f Transform::GetTransform() {
+Matrix4f Transform::GetTransformation() {
     Matrix4f mtx;
 
     Matrix4f translationMatrix = mtx.InitTranslation(
@@ -56,6 +56,11 @@ Matrix4f Transform::GetTransform() {
     return translationMatrix.Mul(
                 rotationMatrix.Mul(
                     scaleMatrix));
+}
+
+Vector4f Transform::GetTransformedPos()
+{
+    return this->m_pos;
 }
 
 Quaternion Transform::GetTransformedRot() {

@@ -8,6 +8,34 @@ Vertex::Vertex(Vector4f pos, Vector4f texCoords, Vector4f normal)
     m_normal = normal;
 }
 
+Vertex::Vertex(const Vertex &other)
+{
+    this->m_normal = other.m_normal;
+    this->m_pos = other.m_pos;
+    this->m_texCoords = other.m_texCoords;
+}
+
+Vertex::Vertex(Vertex &&other)
+{
+    this->m_normal = other.m_normal;
+    this->m_pos = other.m_pos;
+    this->m_texCoords = other.m_texCoords;
+}
+
+Vertex Vertex::operator=(const Vertex &other)
+{
+    this->m_normal = other.m_normal;
+    this->m_pos = other.m_pos;
+    this->m_texCoords = other.m_texCoords;
+}
+
+Vertex Vertex::operator=(Vertex &&other)
+{
+    this->m_normal = other.m_normal;
+    this->m_pos = other.m_pos;
+    this->m_texCoords = other.m_texCoords;
+}
+
 Vertex Vertex::Transform(Matrix4f transform, Matrix4f normalTransform) {
     return Vertex(transform.Transform(m_pos),
                   m_texCoords,

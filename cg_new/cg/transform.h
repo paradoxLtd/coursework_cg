@@ -15,7 +15,7 @@ public:
     Transform Rotate(Quaternion rotation);
     Transform LookAt(Vector4f point, Vector4f up);
     Quaternion GetLookAtRotation(Vector4f point, Vector4f up);
-    Matrix4f GetTransform();
+    Matrix4f GetTransformation();
     Vector4f GetTransformedPos();
     Quaternion GetTransformedRot();
     Vector4f GetPos();

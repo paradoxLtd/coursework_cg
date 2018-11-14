@@ -9,14 +9,23 @@
 class Vertex
 {
 public:
-    float GetX() { return m_pos.GetX(); }
-    float GetY() { return m_pos.GetY(); }
+
 
     Vector4f GetPosition() { return m_pos; }
     Vector4f GetTexCoords() { return m_texCoords; }
     Vector4f GetNormal() { return m_normal; }
 
     Vertex(Vector4f pos, Vector4f texCoords, Vector4f normal);
+
+    Vertex(const Vertex &other);
+
+    Vertex(Vertex &&other);
+
+    Vertex operator=
+    (const Vertex& other);
+
+    Vertex operator=
+    (Vertex&& other);
 
     Vertex Transform(Matrix4f transform, Matrix4f normalTransform);
 
@@ -29,6 +38,9 @@ public:
     bool IsInsideViewFrustum();
 
     float Get(int index);
+
+    float GetX() { return m_pos.GetX(); }
+    float GetY() { return m_pos.GetY(); }
 
 private:
     Vector4f m_pos;

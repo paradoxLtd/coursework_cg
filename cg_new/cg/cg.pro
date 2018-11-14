@@ -37,7 +37,8 @@ SOURCES += \
     quaternion.cpp \
     matrix4f.cpp \
     transform.cpp \
-    indexedmodel.cpp
+    indexedmodel.cpp \
+    texture.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -54,7 +55,8 @@ HEADERS += \
     quaternion.h \
     matrix4f.h \
     transform.h \
-    indexedmodel.h
+    indexedmodel.h \
+    texture.h
 
 FORMS += \
         mainwindow.ui

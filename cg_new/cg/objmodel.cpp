@@ -1,4 +1,5 @@
 #include "objmodel.h"
+#include <QDebug>
 
 int OBJIndex::GetVertexIndex()   { return m_vertexIndex; }
 int OBJIndex::GetTexCoordIndex() { return m_texCoordIndex; }
@@ -12,6 +13,28 @@ bool OBJIndex::equals(OBJIndex obj) {
     return m_vertexIndex == obj.m_vertexIndex
             && m_texCoordIndex == obj.m_texCoordIndex
             && m_normalIndex == obj.m_normalIndex;
+}
+
+
+
+bool OBJIndex::operator==(const OBJIndex &other) const
+{
+    return this->m_normalIndex == other.m_normalIndex;
+}
+
+bool OBJIndex::operator<(const OBJIndex &other) const
+{
+    return this->m_normalIndex < other.m_normalIndex;
+}
+
+bool OBJIndex::operator>(const OBJIndex &other) const
+{
+    return this->m_normalIndex > other.m_normalIndex;
+}
+
+bool OBJIndex::operator!=(const OBJIndex &other) const
+{
+    return this->m_normalIndex != other.m_normalIndex;
 }
 
 int OBJIndex::hashCode() {
@@ -36,14 +59,14 @@ OBJModel::OBJModel(std::string fileName)// throws IOException
     std::ifstream in;
 
     char current_work_dir[FILENAME_MAX];
-    char* (*fget)(char *, int);
+    char* (*fget)(char *, size_t);
 
     #if defined (_WIN32) || defined (_WIN64)
         fget = &_getcwd;
         char folders[10] = "\\objs\\";
     #elif defined (__APPLE__) && defined(__MACH__) || defined (__linux__)
         fget = &getcwd;
-        char folders[10] = "/objs/";
+        char folders[10] = "";
     #endif
 
     fget(current_work_dir, sizeof(current_work_dir));
@@ -51,21 +74,26 @@ OBJModel::OBJModel(std::string fileName)// throws IOException
     // http://qaru.site/questions/124663/how-to-concatenate-two-strings-in-c
     char rfilename[sizeof(current_work_dir) +
             sizeof(fileName) + sizeof(folders)];
+
+
+    //qDebug() <<  "bull shit"<<rfilename;
     strcpy (rfilename, current_work_dir) ;
     strcat (rfilename, folders) ;
     strcat (rfilename, fileName.c_str()) ;
 
-    in.open(rfilename, std::ifstream::in);
-    qDebug() << "\n objmodel.h. rfilename:" << rfilename;
+    in.open(fileName, std::ifstream::in);
+    //qDebug() << "\n objmodel.h. rfilename:" << rfilename;
     if (in.fail()) {
+        //qDebug() << "Fail";
         return;
     }
 
     std::string line;
 
     while (!in.eof()) {
+        //qDebug() << "in cycle";
         std::getline(in, line);
-        std::istringstream iss(line.c_str());
+        //std::istringstream iss(line.c_str());
 
         std::vector<std::string> tokens = split(line, " ");
 
@@ -101,6 +129,7 @@ OBJModel::OBJModel(std::string fileName)// throws IOException
             }
         }
     }
+    //qDebug() << "in the end";
     in.close();
 }
 

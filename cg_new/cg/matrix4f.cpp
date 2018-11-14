@@ -2,7 +2,7 @@
 
 Matrix4f::Matrix4f()
 {
-    this->_mtx.resize(4, std::vector<double>(4));
+    this->_mtx.resize(4, std::vector<float>(4, 0));
 }
 
 Matrix4f Matrix4f::InitIdentity()
@@ -17,12 +17,12 @@ Matrix4f Matrix4f::InitIdentity()
     return *this;
 }
 
-Matrix4f Matrix4f::InitScreenSpaceTransform(double halfWidth,
-                                            double halfHeight)
+Matrix4f Matrix4f::InitScreenSpaceTransform(float halfWidth,
+                                            float halfHeight)
 {
     this->_mtx = {
-        {halfWidth, 0, 0, halfWidth - 0.5},
-        {0, -halfHeight, 0, halfHeight - 0.5},
+        {halfWidth, 0, 0, halfWidth - 0.5f},
+        {0, -halfHeight, 0, halfHeight - 0.5f},
         {0, 0, 1, 0},
         {0, 0, 0, 1}
     };
@@ -30,7 +30,7 @@ Matrix4f Matrix4f::InitScreenSpaceTransform(double halfWidth,
     return *this;
 }
 
-Matrix4f Matrix4f::InitTranslation(double x, double y, double z)
+Matrix4f Matrix4f::InitTranslation(float x, float y, float z)
 {
     this->_mtx = {
         {1, 0, 0, x},
@@ -42,11 +42,11 @@ Matrix4f Matrix4f::InitTranslation(double x, double y, double z)
     return *this;
 }
 
-Matrix4f Matrix4f::InitRotation(double x, double y, double z,
-                                double angle)
+Matrix4f Matrix4f::InitRotation(float x, float y, float z,
+                                float angle)
 {
-    double sinus = sin(angle);
-    double cosin = cos(angle);
+    float sinus = sin(angle);
+    float cosin = cos(angle);
 
     this->_mtx = {
         {cosin+x*x*(1-cosin),
@@ -66,7 +66,7 @@ Matrix4f Matrix4f::InitRotation(double x, double y, double z,
 
 }
 
-Matrix4f Matrix4f::InitRotation(double x, double y, double z)
+Matrix4f Matrix4f::InitRotation(float x, float y, float z)
 {
     Matrix4f rx;
     Matrix4f ry;
@@ -127,7 +127,7 @@ Matrix4f Matrix4f::InitRotation(Vector4f forward,
     return *this;
 }
 
-Matrix4f Matrix4f::InitScale(double x, double y, double z)
+Matrix4f Matrix4f::InitScale(float x, float y, float z)
 {
     this->_mtx = {
         {x, 0, 0, 0},
@@ -139,41 +139,60 @@ Matrix4f Matrix4f::InitScale(double x, double y, double z)
     return *this;
 }
 
-Matrix4f Matrix4f::InitPerspective(double fov, double aspectRatio, double zNear, double zFar)
+Matrix4f Matrix4f::InitPerspective(float fov, float aspectRatio, float zNear, float zFar)
 {
-    double tanHalfFOV = tan(fov / 2);
-    double zRange = zNear - zFar;
+    float tanHalfFOV = tan(fov / 2);
+    float zRange = zNear - zFar;
 
     this->_mtx = {
-        { 1. / (tanHalfFOV * aspectRatio), 0, 0, 0},
-        { 0, 1. / tanHalfFOV, 0, 0},
-        {0, 0, (-zNear -zFar)/zRange, 2 * zFar * zNear / zRange},
-        {0, 0, 1, 0}
+        { 1.f / (tanHalfFOV * aspectRatio), 0, 0, 0},
+        { 0, 1.f / tanHalfFOV, 0, 0},
+        {0, 0, (-zNear -zFar)/zRange, 2.f * zFar * zNear / zRange},
+        {0, 0, 1.f, 0}
     };
 
     return *this;
 }
 
-Matrix4f Matrix4f::InitOrthographic(double left, double right,
-                                    double bottom, double top,
-                                    double near, double far)
+Matrix4f Matrix4f::InitOrthographic(float left, float right,
+                                    float bottom, float top,
+                                    float near, float far)
 {
-    double width = right - left;
-    double height = top - bottom;
-    double depth = far - near;
+    float width = right - left;
+    float height = top - bottom;
+    float depth = far - near;
 
     this->_mtx = {
-        {2. / width, 0, 0, -(right + left)/width},
-        {0, 2. / height, 0, -(top + bottom)/height},
-        {0, 0, -2/depth, -(far + near)/depth},
+        {2.f / width, 0, 0, -(right + left)/width},
+        {0, 2.f / height, 0, -(top + bottom)/height},
+        {0, 0, -2.f/depth, -(far + near)/depth},
         {0, 0, 0, 1}
     };
 
     return *this;
 }
 
+#include <QDebug>
+
 Vector4f Matrix4f::Transform(Vector4f r)
 {
+    Vector4f tmp;
+    qDebug() << "TR befire";
+    qDebug() << r.GetX() << " " << r.GetY() << " " << r.GetZ() <<" " << r.GetW();
+    tmp = Vector4f(_mtx[0][0] * r.GetX() + _mtx[0][1] * r.GetY() +
+            _mtx[0][2] * r.GetZ() + _mtx[0][3] * r.GetW(),
+
+        _mtx[1][0] * r.GetX() + _mtx[1][1] * r.GetY() +
+            _mtx[1][2] * r.GetZ() + _mtx[1][3] * r.GetW(),
+
+        _mtx[2][0] * r.GetX() + _mtx[2][1] * r.GetY() +
+            _mtx[2][2] * r.GetZ() + _mtx[2][3] * r.GetW(),
+
+        _mtx[3][0] * r.GetX() + _mtx[3][1] * r.GetY() +
+            _mtx[3][2] * r.GetZ() + _mtx[3][3] * r.GetW());
+
+    qDebug() << "TR after";
+    qDebug() << tmp.GetX() << " " << tmp.GetY() << " " << tmp.GetZ() <<" " << tmp.GetW();
     return Vector4f(_mtx[0][0] * r.GetX() + _mtx[0][1] * r.GetY() +
                         _mtx[0][2] * r.GetZ() + _mtx[0][3] * r.GetW(),
 
@@ -205,22 +224,22 @@ Matrix4f Matrix4f::Mul(Matrix4f r)
     return res;
 }
 
-std::vector<std::vector<double> > Matrix4f::GetMtx()
+std::vector<std::vector<float> > Matrix4f::GetMtx()
 {
     return this->_mtx;
 }
 
-void Matrix4f::SetMtx(std::vector<std::vector<double>> mtx)
+void Matrix4f::SetMtx(std::vector<std::vector<float>> mtx)
 {
     this->_mtx = mtx;
 }
 
-double Matrix4f::Get(int x, int y)
+float Matrix4f::Get(int x, int y)
 {
     return this->_mtx[x][y];
 }
 
-void Matrix4f::Set(int x, int y, double value)
+void Matrix4f::Set(int x, int y, float value)
 {
     this->_mtx[x][y] = value;
 }
