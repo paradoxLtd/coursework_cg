@@ -1,13 +1,15 @@
 #include "vector4f.h"
-#include <cmath>
-#include <algorithm>
+#include "quaternion.h"
 
 Vector4f::Vector4f(float x, float y, float z,
                    float w = 1) : x(x), y(y), z(z), w(w) {}
 
 float Vector4f::Length()
 {
-    return static_cast<float>(sqrt(x * x + y * y + z * z + w * w));
+    return static_cast<float>(sqrtf(x * x +
+                                   y * y +
+                                   z * z +
+                                   w * w));
 }
 
 float Vector4f::Max()
@@ -17,7 +19,8 @@ float Vector4f::Max()
 
 float Vector4f::Dot(Vector4f r)
 {
-    return x * r.GetX() + y * r.GetY() + z * r.GetZ() + w * r.GetW();
+    return x * r.GetX() + y * r.GetY() + z * r.GetZ() +
+            w * r.GetW();
 }
 
 Vector4f Vector4f::Cross(Vector4f r)
@@ -40,21 +43,31 @@ Vector4f Vector4f::Normalized()
 
 Vector4f Vector4f::Rotate(Vector4f axis, float angle)
 {
-    float sinAngle = (float)sin(-angle);
-    float cosAngle = (float)cos(-angle);
+    float sinAngle = sinf(-angle);
+    float cosAngle = cosf(-angle);
 
-    this->Cross(axis.Mul(sinAngle)).Add(           //Rotation on local X
-            (this->Mul(cosAngle)).Add(                     //Rotation on local Z
-                    axis.Mul(this->Dot(axis.Mul(1 - cosAngle))))); //Rotation on local Y
+    return this->Cross(axis.Mul(sinAngle)).
+            Add(
+                (this->Mul(cosAngle)).
+                    Add( //Rotation on local Z
+                        axis.Mul(
+                             this->Dot(
+                                 axis.Mul(1 - cosAngle)))));
+    //Rotation on local X
+    //Rotation on local Z
+    //Rotation on local Y
 }
-#include "quaternion.h"
+
 Vector4f Vector4f::Rotate(Quaternion *rotation)
 {
     Quaternion conjugate = rotation->Conjugate();
 
     Quaternion w = rotation->Mul(*this).Mul(conjugate);
 
-    return Vector4f(w.GetX(), w.GetY(), w.GetZ(), 1.0f);
+    return Vector4f(w.GetX(),
+                    w.GetY(),
+                    w.GetZ(),
+                    1.0f);
 }
 
 Vector4f Vector4f::Lerp(Vector4f dest, float lerpFactor)
@@ -64,53 +77,82 @@ Vector4f Vector4f::Lerp(Vector4f dest, float lerpFactor)
 
 Vector4f Vector4f::Add(Vector4f r)
 {
-    return Vector4f(x + r.GetX(), y + r.GetY(), z + r.GetZ(), w + r.GetW());
+    return Vector4f(x + r.GetX(),
+                    y + r.GetY(),
+                    z + r.GetZ(),
+                    w + r.GetW());
 }
 
 Vector4f Vector4f::Add(float r)
 {
-    return Vector4f(x + r, y + r, z + r, w + r);
+    return Vector4f(x + r,
+                    y + r,
+                    z + r,
+                    w + r);
 }
 
 Vector4f Vector4f::Sub(Vector4f r)
 {
-    return Vector4f(x - r.GetX(), y - r.GetY(), z - r.GetZ(), w - r.GetW());
+    return Vector4f(x - r.GetX(),
+                    y - r.GetY(),
+                    z - r.GetZ(),
+                    w - r.GetW());
 }
 
 Vector4f Vector4f::Sub(float r)
 {
-    return Vector4f(x - r, y - r, z - r, w - r);
+    return Vector4f(x - r,
+                    y - r,
+                    z - r,
+                    w - r);
 }
 
 Vector4f Vector4f::Mul(Vector4f r)
 {
-    return Vector4f(x * r.GetX(), y * r.GetY(), z * r.GetZ(), w * r.GetW());
+    return Vector4f(x * r.GetX(),
+                    y * r.GetY(),
+                    z * r.GetZ(),
+                    w * r.GetW());
 }
 
 Vector4f Vector4f::Mul(float r)
 {
-    return Vector4f(x * r, y * r, z * r, w * r);
+    return Vector4f(x * r,
+                    y * r,
+                    z * r,
+                    w * r);
 }
 
 Vector4f Vector4f::Div(Vector4f r)
 {
-    return Vector4f(x / r.GetX(), y / r.GetY(), z / r.GetZ(), w / r.GetW());
+    return Vector4f(x / r.GetX(),
+                    y / r.GetY(),
+                    z / r.GetZ(),
+                    w / r.GetW());
 }
 
 Vector4f Vector4f::Div(float r)
 {
-    return Vector4f(x / r, y / r, z / r, w / r);
+    return Vector4f(x / r,
+                    y / r,
+                    z / r,
+                    w / r);
 }
 
 Vector4f Vector4f::Abs()
 {
-    return Vector4f(fabs(x), fabs(y), fabs(z), fabs(w));
+    return Vector4f(fabsf(x),
+                    fabsf(y),
+                    fabsf(z),
+                    fabsf(w));
 }
 
 std::string Vector4f::toString()
 {
-    return "(" + std::to_string(x) + ", " + std::to_string(y) +
-            ", " + std::to_string(z) + ", " + std::to_string(w) + ")";
+    return "(" + std::to_string(x) +
+            ", " + std::to_string(y) +
+            ", " + std::to_string(z) +
+            ", " + std::to_string(w) + ")";
 }
 
 float Vector4f::GetX()
@@ -135,7 +177,11 @@ float Vector4f::GetW()
 
 bool Vector4f::equals(Vector4f r)
 {
-    return x == r.GetX() && y == r.GetY() && z == r.GetZ() && w == r.GetW();
+    float eps = 0.00001f;
+    return fabsf(x - r.GetX()) < eps &&
+            fabsf(y - r.GetY()) < eps &&
+            fabsf(z - r.GetZ()) < eps &&
+            fabsf(w - r.GetW()) < eps;
 }
 
 Vector4f::Vector4f(const Vector4f &other) {
@@ -158,6 +204,7 @@ Vector4f& Vector4f::operator=
     this->y = other.y;
     this->z = other.z;
     this->w = other.w;
+    return *this;
 }
 
 Vector4f& Vector4f::operator=
@@ -166,4 +213,5 @@ Vector4f& Vector4f::operator=
     this->y = other.y;
     this->z = other.z;
     this->w = other.w;
+    return *this;
 }

@@ -3,14 +3,14 @@
 
 Edge::Edge(Gradients gradients, Vertex minYVert, Vertex maxYVert, int minYVertIndex)
 {
-    m_yStart = (int)ceil(minYVert.GetY());
-    m_yEnd = (int)ceil(maxYVert.GetY());
+    m_yStart = static_cast<int>(ceil(minYVert.GetY()));
+    m_yEnd = static_cast<int>(ceil(maxYVert.GetY()));
 
     float yDist = maxYVert.GetY() - minYVert.GetY();
     float xDist = maxYVert.GetX() - minYVert.GetX();
 
     float yPrestep = m_yStart - minYVert.GetY();
-    m_xStep = (float)xDist/(float)yDist;
+    m_xStep = static_cast<float>(xDist)/static_cast<float>(yDist);
     m_x = minYVert.GetX() + yPrestep * m_xStep;
     float xPrestep = m_x - minYVert.GetX();
 
