@@ -31,7 +31,11 @@ SOURCES += \
     vertex.cpp \
     gradient.cpp \
     edge.cpp \
-    mesh.cpp
+    mesh.cpp \
+    transform.cpp \
+    quaternion.cpp \
+    indexedmodel.cpp \
+    matrix4f.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -42,7 +46,11 @@ HEADERS += \
     gradient.h \
     window_size.h \
     edge.h \
-    mesh.h
+    mesh.h \
+    transform.h \
+    quaternion.h \
+    indexedmodel.h \
+    matrix4f.h
 
 FORMS += \
         mainwindow.ui

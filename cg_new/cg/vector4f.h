@@ -1,6 +1,9 @@
 #ifndef VECTOR4F_H
 #define VECTOR4F_H
+
 #include <string>
+#include "quaternion.h"
+
 class Vector4f
 {
     Vector4f(float x, float y, float z, float w);
