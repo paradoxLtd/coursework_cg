@@ -7,6 +7,7 @@
 #include "matrix4f.h"
 #include "rendercontext.h"
 #include "indexedModel.h"
+#include "OBJModel.h"
 
 class Mesh
 {

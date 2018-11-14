@@ -1,6 +1,7 @@
 #include "gradient.h"
 
-Gradients::Gradients(Vertex minYVert, Vertex midYVert, Vertex maxYVert)
+Gradients::Gradients(Vertex minYVert, Vertex midYVert,
+                     Vertex maxYVert)
 {
     float oneOverdX = 1.0f /
         (((midYVert.GetX() - maxYVert.GetX()) *
@@ -51,9 +52,9 @@ Gradients::Gradients(Vertex minYVert, Vertex midYVert, Vertex maxYVert)
     m_lightAmtYStep = CalcYStep(m_lightAmt, minYVert, midYVert, maxYVert, oneOverdY);
 }
 
-float Gradients::CalcXStep(std::vector<float> values, Vertex minYVert, Vertex midYVert,
-        Vertex maxYVert, float oneOverdX)
-{
+float Gradients::CalcXStep(std::vector<float> values,
+                           Vertex minYVert, Vertex midYVert,
+        Vertex maxYVert, float oneOverdX) {
     return
         (((values[1] - values[2]) *
         (minYVert.GetY() - maxYVert.GetY())) -
@@ -61,9 +62,9 @@ float Gradients::CalcXStep(std::vector<float> values, Vertex minYVert, Vertex mi
         (midYVert.GetY() - maxYVert.GetY()))) * oneOverdX;
 }
 
-float Gradients::CalcYStep(std::vector<float> values, Vertex minYVert, Vertex midYVert,
-        Vertex maxYVert, float oneOverdY)
-{
+float Gradients::CalcYStep(std::vector<float> values,
+                           Vertex minYVert, Vertex midYVert,
+                           Vertex maxYVert, float oneOverdY) {
     return
         (((values[1] - values[2]) *
         (minYVert.GetX() - maxYVert.GetX())) -
@@ -71,18 +72,13 @@ float Gradients::CalcYStep(std::vector<float> values, Vertex minYVert, Vertex mi
         (midYVert.GetX() - maxYVert.GetX()))) * oneOverdY;
 }
 
-float Gradients::Saturate(float val)
-{
-    if(val > 1.0f)
-    {
+float Gradients::Saturate(float val) {
+    if(val > 1.0f) {
         return 1.0f;
-    }
-    if(val < 0.0f)
-    {
+    } else if(val < 0.0f) {
         return 0.0f;
     }
     return val;
 }
-
 
 

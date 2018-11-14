@@ -1,6 +1,8 @@
 #ifndef VERTEX_H
 #define VERTEX_H
 
+#include <iostream>
+
 #include "vector4f.h"
 #include "matrix4f.h"
 

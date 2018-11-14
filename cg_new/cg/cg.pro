@@ -32,10 +32,12 @@ SOURCES += \
     gradient.cpp \
     edge.cpp \
     mesh.cpp \
-    transform.cpp \
+    camera.cpp \
+    objmodel.cpp \
     quaternion.cpp \
-    indexedmodel.cpp \
-    matrix4f.cpp
+    matrix4f.cpp \
+    transform.cpp \
+    indexedmodel.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -47,10 +49,12 @@ HEADERS += \
     window_size.h \
     edge.h \
     mesh.h \
-    transform.h \
+    camera.h \
+    objmodel.h \
     quaternion.h \
-    indexedmodel.h \
-    matrix4f.h
+    matrix4f.h \
+    transform.h \
+    indexedmodel.h
 
 FORMS += \
         mainwindow.ui

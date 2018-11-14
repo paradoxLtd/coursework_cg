@@ -2,9 +2,9 @@
 
 void IndexedModel::calcNormals()
 {
-    int i0, i1, i2;
+    size_t i0, i1, i2;
 
-    for(int i = 0; i < m_indices.size(); i += 3)
+    for(size_t i = 0; i < m_indices.size(); i += 3)
     {
         i0 = m_indices[i];
         i1 = m_indices[i + 1];
@@ -15,13 +15,14 @@ void IndexedModel::calcNormals()
 
         Vector4f normal = v1.Cross(v2).Normalized();
 
-        m_normals.set(i0, m_normals[i0].Add(normal));
-        m_normals.set(i1, m_normals[i1].Add(normal));
-        m_normals.set(i2, m_normals[i2].Add(normal));
+        m_normals[i0] = m_normals[i0].Add(normal);
+        m_normals[i1] = m_normals[i1].Add(normal);
+        m_normals[i2] = m_normals[i2].Add(normal);
     }
 
-    for(int i = 0; i < m_normals.size(); i++)
-        m_normals.set(i, m_normals[i].Normalized());
+    for(size_t i = 0; i < m_normals.size(); i++) {
+        m_normals[i] = m_normals[i].Normalized();
+    }
 }
 
 void IndexedModel::calcTangents()
@@ -45,42 +46,45 @@ void IndexedModel::calcTangents()
         float dividend = (deltaU1*deltaV2 - deltaU2*deltaV1);
         float f = dividend == 0 ? 0.0f : 1.0f/dividend;
 
-        Vector4f tangent = new Vector4f(
+        Vector4f tangent = Vector4f(
                 f * (deltaV2 * edge1.GetX() - deltaV1 * edge2.GetX()),
                 f * (deltaV2 * edge1.GetY() - deltaV1 * edge2.GetY()),
                 f * (deltaV2 * edge1.GetZ() - deltaV1 * edge2.GetZ()),
                 0);
 
-        m_tangents.set(i0, m_tangents[i0].Add(tangent));
-        m_tangents.set(i1, m_tangents[i1].Add(tangent));
-        m_tangents.set(i2, m_tangents[i2].Add(tangent));
+        m_tangents[i0] = m_tangents[i0].Add(tangent);
+        m_tangents[i1] = m_tangents[i1].Add(tangent);
+        m_tangents[i2] = m_tangents[i2].Add(tangent);
     }
 
-    for(int i = 0; i < m_tangents.size(); i++)
-        m_tangents.set(i, m_tangents[i].Normalized());
+    for(int i = 0; i < m_tangents.size(); i++) {
+        m_tangents[i] = m_tangents[i].Normalized();
+    }
 }
 
-std::vector<Vector4f> IndexedModel::getPositions()
+std::vector<Vector4f> IndexedModel::GetPositions()
 {
     return this->m_positions;
 }
 
-std::vector<Vector4f> IndexedModel::getTexCoords()
+std::vector<Vector4f> IndexedModel::GetTexCoords()
 {
     return this->m_texCoords;
 }
 
-std::vector<Vector4f> IndexedModel::getNormals()
+std::vector<Vector4f> IndexedModel::GetNormals()
 {
     return this->m_normals;
 }
 
-std::vector<Vector4f> IndexedModel::getTangents()
+std::vector<Vector4f> IndexedModel::GetTangents()
 {
     return this->m_tangents;
 }
 
-std::vector<int> IndexedModel::getIndices()
+std::vector<int> IndexedModel::GetIndices()
 {
     return this->m_indices;
 }
+
+

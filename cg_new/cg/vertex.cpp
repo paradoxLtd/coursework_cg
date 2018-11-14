@@ -8,21 +8,21 @@ Vertex::Vertex(Vector4f pos, Vector4f texCoords, Vector4f normal)
     m_normal = normal;
 }
 
-Vertex Vertex::Transform(Matrix4f transform, Matrix4f normalTransform)
-{
-    return new Vertex(transform.Transform(m_pos), m_texCoords,
-            normalTransform.Transform(m_normal).Normalized());
+Vertex Vertex::Transform(Matrix4f transform, Matrix4f normalTransform) {
+    return Vertex(transform.Transform(m_pos),
+                  m_texCoords,
+                  normalTransform.Transform(m_normal).Normalized());
 }
 
-Vertex Vertex::PerspectiveDivide()
-{
-    return new Vertex(new Vector4f(m_pos.GetX()/m_pos.GetW(), m_pos.GetY()/m_pos.GetW(),
-                    m_pos.GetZ()/m_pos.GetW(), m_pos.GetW()),
-            m_texCoords, m_normal);
+Vertex Vertex::PerspectiveDivide() {
+    return Vertex(Vector4f(m_pos.GetX()/m_pos.GetW(),
+                           m_pos.GetY()/m_pos.GetW(),
+                           m_pos.GetZ()/m_pos.GetW(),
+                           m_pos.GetW()),
+                  m_texCoords, m_normal);
 }
 
-float Vertex::TriangleAreaTimesTwo(Vertex b, Vertex c)
-{
+float Vertex::TriangleAreaTimesTwo(Vertex b, Vertex c) {
     float x1 = b.GetX() - m_pos.GetX();
     float y1 = b.GetY() - m_pos.GetY();
 
@@ -32,21 +32,20 @@ float Vertex::TriangleAreaTimesTwo(Vertex b, Vertex c)
     return (x1 * y2 - x2 * y1);
 }
 
-Vertex Vertex::Lerp(Vertex other, float lerpAmt)
-{
-    return new Vertex(
-            m_pos.Lerp(other.GetPosition(), lerpAmt),
-            m_texCoords.Lerp(other.GetTexCoords(), lerpAmt),
-            m_normal.Lerp(other.GetNormal(), lerpAmt)
-            );
+Vertex Vertex::Lerp(Vertex other, float lerpAmt) {
+    return Vertex(m_pos.Lerp(other.GetPosition(), lerpAmt),
+                  m_texCoords.Lerp(other.GetTexCoords(), lerpAmt),
+                  m_normal.Lerp(other.GetNormal(), lerpAmt));
 }
 
-bool Vertex::IsInsideViewFrustum()
-{
+/* Для работы с float используется fabsf
+ * https://en.cppreference.com/w/c/numeric/math/fabs
+ */
+bool Vertex::IsInsideViewFrustum() {
     return
-        fabs(m_pos.GetX()) <= fabs(m_pos.GetW()) &&
-        fabs(m_pos.GetY()) <= fabs(m_pos.GetW()) &&
-        fabs(m_pos.GetZ()) <= fabs(m_pos.GetW());
+        fabsf(m_pos.GetX()) <= fabsf(m_pos.GetW()) &&
+        fabsf(m_pos.GetY()) <= fabsf(m_pos.GetW()) &&
+        fabsf(m_pos.GetZ()) <= fabsf(m_pos.GetW());
 }
 
 float Vertex::Get(int index)

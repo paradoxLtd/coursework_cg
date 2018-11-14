@@ -48,11 +48,11 @@ Vector4f Vector4f::Rotate(Vector4f axis, float angle)
                     axis.Mul(this->Dot(axis.Mul(1 - cosAngle))))); //Rotation on local Y
 }
 #include "quaternion.h"
-Vector4f Vector4f::Rotate(Quaternion rotation)
+Vector4f Vector4f::Rotate(Quaternion *rotation)
 {
-    Quaternion conjugate = rotation.Conjugate();
+    Quaternion conjugate = rotation->Conjugate();
 
-    Quaternion w = rotation.Mul(this).Mul(conjugate);
+    Quaternion w = rotation->Mul(*this).Mul(conjugate);
 
     return Vector4f(w.GetX(), w.GetY(), w.GetZ(), 1.0f);
 }
@@ -109,7 +109,8 @@ Vector4f Vector4f::Abs()
 
 std::string Vector4f::toString()
 {
-    return "(" + x + ", " + y + ", " + z + ", " + w + ")";
+    return "(" + std::to_string(x) + ", " + std::to_string(y) +
+            ", " + std::to_string(z) + ", " + std::to_string(w) + ")";
 }
 
 float Vector4f::GetX()

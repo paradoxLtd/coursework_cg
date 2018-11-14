@@ -6,6 +6,7 @@
 
 class Gradients
 {
+public:
     Gradients(Vertex minYVert, Vertex midYVert, Vertex maxYVert);
 
     float GetTexCoordX(int loc) { return m_texCoordX[loc]; }
@@ -25,13 +26,13 @@ class Gradients
     float GetLightAmtXStep() { return m_lightAmtXStep; }
     float GetLightAmtYStep() { return m_lightAmtYStep; }
 
-    float CalcXStep(std::vector<float> values, Vertex minYVert, Vertex midYVert, Vertex maxYVert, float oneOverdX);
+    float CalcXStep(std::vector<float> values, Vertex minYVert,
+                    Vertex midYVert, Vertex maxYVert, float oneOverdX);
 
-    float CalcYStep(std::vector<float> values, Vertex minYVert, Vertex midYVert, Vertex maxYVert, float oneOverdY);
+    float CalcYStep(std::vector<float> values, Vertex minYVert,
+                    Vertex midYVert, Vertex maxYVert, float oneOverdY);
 
     float Saturate(float val);
-
-
 
 private:
     std::vector<float> m_texCoordX;
